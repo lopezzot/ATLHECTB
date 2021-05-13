@@ -24,6 +24,5 @@ Supervisor: Alberto Ribon (CERN EP-SFT)
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
-- Beam tests performance (NIM A482 (2002): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
 - Geant4 evaluation with test-beam data (NIM A560 (2006):  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
-
+- Beam tests performance (NIM A482 (2002): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
