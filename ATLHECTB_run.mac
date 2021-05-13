@@ -1,0 +1,49 @@
+#
+# Macro file for example run of G4ATLHECTB
+# 
+# Can be run in batch, without graphic
+# or interactively: Idle> /control/execute G4ATLTBHEC_run.mac
+#
+# Change the default number of workers (in multi-threading mode) 
+#/run/numberOfThreads 4
+#
+# Initialize kernel
+/run/initialize
+#
+#(OPTIONALS)
+# Default kinematics: 
+# Magnetic field
+# 
+#/globalField/setValue 0 0 0 tesla
+#
+# Activate/inactivate physics processes
+#
+#/process/list
+#/process/inactivate eBrem
+#
+#(END OPTIONALS)
+#
+# electron 50 MeV in direction (0.,0.,1.)
+# 1 event with tracking/verbose
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/gun/direction 0 0 1
+#
+#
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+/run/printProgress 5
+/run/beamOn 100
+#
+#
+# Magnetic field
+# 
+#/globalField/setValue 0 0 0 tesla
+#
+# Activate/inactivate physics processes
+#
+#/process/list
+#/process/inactivate eBrem
+#
