@@ -1,2 +1,4 @@
-### ATLHECTB
-A Geant4 simulation of the ATLAS hadronic end-cap calorimeter.
+# ATLHECTB
+**A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests**
+
+
