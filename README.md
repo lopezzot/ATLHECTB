@@ -24,7 +24,7 @@ Supervisor: Alberto Ribon (CERN EP-SFT)
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
-- Beam tests performance: [![NIMA482(2002)][https://www.sciencedirect.com/science/article/pii/S0168900201013389]
+- Beam tests performance: [![NIMA482(2002)]][https://www.sciencedirect.com/science/article/pii/S0168900201013389]
 
 
 
