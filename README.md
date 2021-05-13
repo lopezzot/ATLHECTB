@@ -11,7 +11,10 @@
 </details>
 
 <!--Project desription-->
-##Project description
+## Project description
+The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to performed Geant4 regression testing, physics lists comparisons and validation against data. \
+Start date: 11 May 2021
+Status: under development. 
 
 <!-- Authors and contacts-->
 ## Authors and contacts
