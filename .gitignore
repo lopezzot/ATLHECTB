@@ -1,3 +1,9 @@
+# Lorenzo Pezzotti .gitignore configuration
+*.swp #vim .swp files
+*.pyc #python *.pyc files
+
+#Standard C++ .gitignore configuration below 
+
 # Prerequisites
 *.d
 
