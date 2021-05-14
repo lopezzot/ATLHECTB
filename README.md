@@ -8,10 +8,11 @@
     <li><a href="#Project description">Project description</a></li>
     <li><a href="#Authors and contacts">Authors and contacts</a></li>
     <li>
-      <a href="How to:">How to:</a>
+      <a href="#How to:">How to:</a>
       <ul>
-        <li><a href="Build, compile and execute on Mac">Build, compile and execute on Mac</a></li>
+        <li><a href="#Build, compile and execute on Mac">Build, compile and execute on Mac</a></li>
       </ul>
+    </li>
     <li><a href="#Selected ATLAS HEC references">Selected ATLAS HEC references</a></li>
   </ol>
 </details>
@@ -31,15 +32,16 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 ## How to:
 
 ### Build, compile and execute on Mac/Linux:
-git clone the repo
-```sh
-git clone https://github.com/lopezzot/ATLHECTB.git
-```
-
-
-
-
-
+1. git clone the repo
+   ```sh
+   git clone https://github.com/lopezzot/ATLHECTB.git
+   ```
+2. cmake build directory (using geant4_10_07_p01)
+   ```sh
+   mkdir ATLHECTB-build; cd ATLHECTB-build/
+   cmake -DGeant4_DIR=/absolute_path_to/geant4_10_07_p01-install/lib/Geant4-10.7.1/ relative_path_to/ATLHECTB/
+   make
+   ```
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
