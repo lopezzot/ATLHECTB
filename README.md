@@ -1,4 +1,4 @@
-<p h1 align="center"> ATLHECTB </h1> </p> 
+# ATLHECTB
 **A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.**
 
 <!-- TABLE OF CONTENTS -->
@@ -28,9 +28,15 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 - Supervisor: Alberto Ribon (CERN EP-SFT)
 
 <!--How to:-->
-##How to:
+## How to:
 
-### Build, compile and execute on Mac
+### Build, compile and execute on Mac/Linux:
+git clone the repo
+```sh
+git clone https://github.com/lopezzot/ATLHECTB.git
+```
+
+
 
 
 
