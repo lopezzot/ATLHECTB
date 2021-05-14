@@ -36,12 +36,24 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
    ```sh
    git clone https://github.com/lopezzot/ATLHECTB.git
    ```
-2. cmake build directory (using geant4_10_07_p01)
+2. cmake build directory and make (using geant4.10.07_p01)
    ```sh
    mkdir ATLHECTB-build; cd ATLHECTB-build/
-   cmake -DGeant4_DIR=/absolute_path_to/geant4_10_07_p01-install/lib/Geant4-10.7.1/ relative_path_to/ATLHECTB/
+   cmake -DGeant4_DIR=/absolute_path_to/geant4.10.07_p01-install/lib/Geant4-10.7.1/ relative_path_to/ATLHECTB/
    make
    ```
+3. source Geant4 env
+   ```sh
+   source /relative_path_to/geant4.10.07_p01-install/bin/geant4.sh
+   ```
+4. execute (example with ATLHECTB_run.mac macro card, 2 threads and FTFP_BERT physics list)
+   ```sh
+   ./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT
+   ```
+Parser options
+   * -m macro.mac: pass a Geant4 macro card (example ATLHECTB_run.mac available in source direcotry and automatically copied in build directory) 
+   * -t integer: pass number of threads for multi-thread execution (default t=2)
+   * -pl Physics_List: select Geant4 physics list (hint: check in ATLHECTB.cc if your physics list is included via .hh file)
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
