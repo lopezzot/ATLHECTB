@@ -32,7 +32,7 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 <!--How to:-->
 ## How to
 
-### Build, compile and execute on Mac/Linux:
+### Build, compile and execute on Mac/Linux
 1. git clone the repo
    ```sh
    git clone https://github.com/lopezzot/ATLHECTB.git
