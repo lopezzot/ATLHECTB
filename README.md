@@ -14,7 +14,7 @@
         <li><a href="#Build, compile and execute on lxplus">Build, compile and execute on lxplus</a></li>
       </ul>
     </li>
-    <li><a href="#selected_ATLAS_HEC_references">Selected ATLAS HEC references</a></li>
+    <li><a href="#selected_atlas_hec_references">Selected ATLAS HEC references</a></li>
   </ol>                                           
 </details>
 
