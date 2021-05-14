@@ -10,7 +10,7 @@
     <li>
       <a href="#how-to">How to</a>
       <ul>
-        <li><a href="#build-compile-and-execute-on-mac/linux">Build, compile and execute on Mac/Linux</a></li>
+        <li><a href="#build-compile-and-execute-on-maclinux">Build, compile and execute on Mac/Linux</a></li>
         <li><a href="#build-compile-and-execute-on-lxplus">Build, compile and execute on lxplus</a></li>
       </ul>
     </li>
