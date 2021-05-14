@@ -75,7 +75,7 @@ Parser options
    ```sh
    ./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT
    ```
-Hint: cp and source the ATLHECTB_lxplus_10-7.p01 in the build directory.
+Hint: cp and source the ATLHECTB_lxplus_10.7.p01.sh file in the build directory.
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
