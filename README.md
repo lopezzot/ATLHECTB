@@ -57,6 +57,25 @@ Parser options
    * -pl Physics_List: select Geant4 physics list (hint: check in ATLHECTB.cc if your physics list is included via .hh file (default FTFP_BERT))
 
 ### Build, compile and execute on lxplus
+1. git clone the repo
+   ```sh
+   git clone https://github.com/lopezzot/ATLHECTB.git
+   ```
+2. cmake build directory and make (using geant4.10.07_p01, check for gcc and cmake dependencies for other versions)
+   ```sh
+   mkdir ATLHECTB-build; cd ATLHECTB-build/
+   source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.3.0/x86_64-centos7/setup.sh 
+   source /cvmfs/geant4.cern.ch/geant4/10.7.p01/x86_64-centos7-gcc8-optdeb-MT/CMake-setup.sh 
+   export CXX=`which g++`
+   export CC=`which gcc`
+   cmake3 -DGeant4_DIR= /cvmfs/geant4.cern.ch/geant4/10.7.p01/x86_64-centos7-gcc8-optdeb-MT/lib64/Geant4-10.7.1 ../ATLHECTB/
+   make
+   ```
+3. execute (example with ATLHECTB_run.mac macro card, 2 threads and FTFP_BERT physics list)
+   ```sh
+   ./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT
+   ```
+Hint: cp and source the ATLHECTB_lxplus_10-7.p01 in the build directory.
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
