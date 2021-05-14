@@ -10,7 +10,8 @@
     <li>
       <a href="#How to:">How to:</a>
       <ul>
-        <li><a href="#Build, compile and execute on Mac">Build, compile and execute on Mac</a></li>
+        <li><a href="#Build, compile and execute on Mac/Linux">Build, compile and execute on Mac/Linux</a></li>
+        <li><a href="#Build, compile and execute on lxplus">Build, compile and execute on lxplus</a></li>
       </ul>
     </li>
     <li><a href="#Selected ATLAS HEC references">Selected ATLAS HEC references</a></li>
@@ -53,7 +54,7 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 Parser options
    * -m macro.mac: pass a Geant4 macro card (example ATLHECTB_run.mac available in source direcotry and automatically copied in build directory) 
    * -t integer: pass number of threads for multi-thread execution (default t=2)
-   * -pl Physics_List: select Geant4 physics list (hint: check in ATLHECTB.cc if your physics list is included via .hh file)
+   * -pl Physics_List: select Geant4 physics list (hint: check in ATLHECTB.cc if your physics list is included via .hh file (default FTFP_BERT))
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
