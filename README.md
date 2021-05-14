@@ -1,4 +1,4 @@
- <h1 align="center"> ATLHECTB </h1>
+<p h1 align="center"> ATLHECTB </h1> </p> 
 **A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.**
 
 <!-- TABLE OF CONTENTS -->
