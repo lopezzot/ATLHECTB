@@ -1,4 +1,4 @@
-# ATLHECTB
+#                            ATLHECTB
 **A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.**
 
 <!-- TABLE OF CONTENTS -->
@@ -7,6 +7,11 @@
   <ol>
     <li><a href="#Project description">Project description</a></li>
     <li><a href="#Authors and contacts">Authors and contacts</a></li>
+    <li>
+      <a href="#How to">How to</a>
+      <ul>
+        <li><a href="Build, compile and execute on Mac">Build, compile and execute on Mac</a></li>
+      </ul>
     <li><a href="#Selected ATLAS HEC references">Selected ATLAS HEC references</a></li>
   </ol>
 </details>
