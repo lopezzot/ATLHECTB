@@ -8,7 +8,7 @@
     <li><a href="#Project description">Project description</a></li>
     <li><a href="#Authors and contacts">Authors and contacts</a></li>
     <li>
-      <a href="#How to:">How to:</a>
+      <a href="How to:">How to:</a>
       <ul>
         <li><a href="Build, compile and execute on Mac">Build, compile and execute on Mac</a></li>
       </ul>
