@@ -1,4 +1,4 @@
-#                            ATLHECTB
+<h3 align="center"> ATLHECTB </h3>
 **A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.**
 
 <!-- TABLE OF CONTENTS -->
@@ -8,7 +8,7 @@
     <li><a href="#Project description">Project description</a></li>
     <li><a href="#Authors and contacts">Authors and contacts</a></li>
     <li>
-      <a href="#How to">How to</a>
+      <a href="#How to:">How to:</a>
       <ul>
         <li><a href="Build, compile and execute on Mac">Build, compile and execute on Mac</a></li>
       </ul>
@@ -26,6 +26,14 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 ## Authors and contacts
 - Lorenzo Pezzotti (CERN EP-SFT) - lorenzo.pezzotti@cern.ch 
 - Supervisor: Alberto Ribon (CERN EP-SFT)
+
+<!--How to:-->
+##How to:
+
+### Build, compile and execute on Mac
+
+
+
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
