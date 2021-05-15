@@ -18,17 +18,7 @@
 #include "Randomize.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-#include "G4PhysListFactory.hh"
-#include "FTFP_BERT.hh"          //PhysicsLists
-#include "FTFP_BERT_HP.hh"
-#include "FTFP_BERT_ATL.hh"
-#include "FTFP_BERT_TRV.hh"
-#include "FTFP_INCLXX.hh"
-#include "FTFP_INCLXX_HP.hh"
-#include "QGSP_BERT.hh"
-#include "QGSP_BERT_HP.hh"
-#include "QGSP_INCLXX.hh"
-#include "QGSP_INCLXX_HP.hh"
+#include "G4PhysListFactory.hh" //no need to include PL (FTFP_BERT.hh), PL constructed with Factory
 
 //G4err output for usage error
 //
