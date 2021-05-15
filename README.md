@@ -52,9 +52,9 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
    ./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT
    ```
 Parser options
-   * -m macro.mac: pass a Geant4 macro card (example ATLHECTB_run.mac available in source directory and automatically copied in build directory) 
-   * -t integer: pass number of threads for multi-thread execution (default t=2)
-   * -pl Physics_List: select Geant4 physics list
+   * -m macro.mac: pass a Geant4 macro card (example -m ATLHECTB_run.mac available in source directory and automatically copied in build directory) 
+   * -t integer: pass number of threads for multi-thread execution (example -t 3, default t=2)
+   * -pl Physics_List: select Geant4 physics list (example -pl FTFP_BERT)
 
 ### Build, compile and execute on lxplus
 1. git clone the repo
