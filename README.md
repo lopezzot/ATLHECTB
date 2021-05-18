@@ -118,8 +118,7 @@ Parser options
    version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HENG";
    ```
    
-   Also available at the ATLAS geo web database: [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)]
-   (https://atlas-geometry-db.web.cern.ch/atlas-geometry-db/show_tagged_node.php?node_id=NjA0NA==&tag_id=MTA2MTI1&user=QVRMQVNERF9SRUFERVI=)
+   Also available at the ATLAS geo web database: [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)] (https://atlas-geometry-db.web.cern.ch/atlas-geometry-db/show_tagged_node.php?node_id=NjA0NA==&tag_id=MTA2MTI1&user=QVRMQVNERF9SRUFERVI=)
    
 3. get ATLAS HEC logitudinal block geo parameters
    ```sh
@@ -128,8 +127,7 @@ Parser options
    version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HBLO";
    ```
    
-   Also available at the ATLAS geo web database: [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)] 
-   (https://atlas-geometry-db.web.cern.ch/atlas-geometry-db/show_tagged_node.php?node_id=NjA0NQ==&tag_id=MTA2MTI2&user=QVRMQVNERF9SRUFERVI=)
+   Also available at the ATLAS geo web database: [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)] (https://atlas-geometry-db.web.cern.ch/atlas-geometry-db/show_tagged_node.php?node_id=NjA0NQ==&tag_id=MTA2MTI2&user=QVRMQVNERF9SRUFERVI=)
    
 4. get all parameters (use only to visualize each vector entry)
    ```sh
