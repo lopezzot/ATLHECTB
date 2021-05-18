@@ -13,6 +13,7 @@
         <li><a href="#build-compile-and-execute-on-maclinux">Build, compile and execute on Mac/Linux</a></li>
         <li><a href="#build-compile-and-execute-on-lxplus">Build, compile and execute on lxplus</a></li>
         <li><a href="#submit-a-job-with-htcondor-on-lxplus">Submit a job with HTCondor on lxplus</a></li>
+        <li><a href="#get-atlas-hec-parameters-from-mysql-database">Get ATLAS HEC geo parameters from mysql database</a></li>
       </ul>
     </li>
     <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a></li>
@@ -104,7 +105,21 @@ Parser options
    ```sh
    condor_wait -status log/*.log
    ```
-   
+
+### Get ATLAS HEC geo parameters from mysql database
+1. access mysql database
+   ```sh 
+   mysql --host=dbod-tbnova.cern.ch --user=reader --password=askauthor --port=5501 atlas
+   ```
+2. get first query
+   ```sh
+   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HENG";
+   ```
+3. get second query
+  ```sh
+  SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HBLO";
+  ```
+  
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
 - Geant4 evaluation with test-beam data (NIM A560 (2006)):  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
