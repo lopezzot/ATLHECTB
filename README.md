@@ -122,7 +122,7 @@ Parser options
 4. get all parameters (use only to visualize each vector entry)
    ```sh
    SELECT * FROM parameter;
-   ```sh
+   ```
   
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
