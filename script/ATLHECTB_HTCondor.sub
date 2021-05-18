@@ -1,5 +1,4 @@
 universe = vanilla 
-executable = ATLHECTB_lxplus_10.7.p01.sh
 output = output/job.$(ClusterId).$(ProcId).output 
 error = error/job.$(ClusterId).$(ProcId).error 
 log =  log/job.$(ClusterId).$(ProcId).log 
