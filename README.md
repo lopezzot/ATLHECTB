@@ -12,6 +12,7 @@
       <ul>
         <li><a href="#build-compile-and-execute-on-maclinux">Build, compile and execute on Mac/Linux</a></li>
         <li><a href="#build-compile-and-execute-on-lxplus">Build, compile and execute on lxplus</a></li>
+        <li><a href="#submit-a-job-with-htcondor-on-lxplus">Submit a job with HTCondor on lxplus</a></li>
       </ul>
     </li>
     <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a></li>
@@ -71,12 +72,39 @@ Parser options
    cmake3 -DGeant4_DIR= /cvmfs/geant4.cern.ch/geant4/10.7.p01/x86_64-centos7-gcc8-optdeb-MT/lib64/Geant4-10.7.1 ../ATLHECTB/
    make
    ```
+   Hint: cp and source the script/ATLHECTB_lxplus_10.7.p01.sh file in the build directory.
 3. execute (example with ATLHECTB_run.mac macro card, 2 threads and FTFP_BERT physics list)
    ```sh
    ./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT
    ```
-Hint: cp and source the ATLHECTB_lxplus_10.7.p01.sh file in the build directory.
-
+   
+### Submit a job with HTCondor on lxplus
+1. git clone the repo
+   ```sh
+   git clone https://github.com/lopezzot/ATLHECTB.git
+   ```
+2. prepare execution files (example with Geant4.10.07_p01, ATLHECTB_run.mac, 2 threads, FTFP_BERT physics list)
+    ```sh
+    mkdir ATLHECTB-build; cd ATLHECTB-build
+    mkdir error log output
+    cp ../ATLHECTB/script/ATLHECTB_HTCondor.sub .
+    cp ../ATLHECTB/script/ATLHECTB_lxplus_10.7.p01.sh .
+    echo "./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT" >> ATLHECTB_lxplus_10.7.p01.sh
+    sed -i '1 i executable = ATLHECTB_lxplus_10.7.p01.sh' ATLHECTB_HTCondor.sub
+    ```
+3. submit a job
+   ```sh
+   condor_submit ATLHECTB_HTCondor.sub 
+   ```
+4. monitor the job
+   ```sh
+   condor_q
+   ```
+   or (for persistency)
+   ```sh
+   condor_wait -status log/*.log
+   ```
+   
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
 - Geant4 evaluation with test-beam data (NIM A560 (2006)):  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
