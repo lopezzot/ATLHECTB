@@ -113,11 +113,15 @@ Parser options
    ```
 2. get first query
    ```sh
-   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON    directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON      version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HENG";
+   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON \
+   directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON \
+   version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HENG";
    ```
 3. get second query
    ```sh
-   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON    directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON      version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HBLO";
+   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON \
+   directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON \
+   version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HBLO";
    ```
 4. get all parameters (use only to visualize each vector entry)
    ```sh
