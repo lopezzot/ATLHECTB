@@ -13,7 +13,7 @@
         <li><a href="#build-compile-and-execute-on-maclinux">Build, compile and execute on Mac/Linux</a></li>
         <li><a href="#build-compile-and-execute-on-lxplus">Build, compile and execute on lxplus</a></li>
         <li><a href="#submit-a-job-with-htcondor-on-lxplus">Submit a job with HTCondor on lxplus</a></li>
-        <li><a href="#get-atlas-hec-parameters-from-mysql-database">Get ATLAS HEC geo parameters from mysql database</a></li>
+        <li><a href="#get-atlas-hec-geo-parameters-from-mysql-database">Get ATLAS HEC geo parameters from mysql database</a></li>
       </ul>
     </li>
     <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a></li>
@@ -113,12 +113,16 @@ Parser options
    ```
 2. get first query
    ```sh
-   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HENG";
+   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON    directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON      version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HENG";
    ```
 3. get second query
-  ```sh
-  SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HBLO";
-  ```
+   ```sh
+   SELECT version.name, version.type, version.value, version.comment FROM structure as directory LEFT JOIN structure ON    directory.ID=structure.parent LEFT JOIN relation ON structure.ID=relation.strID LEFT JOIN parameter as version ON      version.ID=relation.parID WHERE directory.name="HENDGEO" AND structure.name="HBLO";
+   ```
+4. get all parameters (use only to visualize each vector entry)
+   ```sh
+   SELECT * FROM parameter;
+   ```sh
   
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
