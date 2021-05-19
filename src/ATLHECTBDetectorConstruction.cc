@@ -208,22 +208,61 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4String depthName = "ATLHECTB::Depth";
     G4String sliceName = "ATLHECTB::Slice";
     G4double moduleRinner = moduleRinner1;
+    
+    auto SliceVisAttributes = new G4VisAttributes();
+    SliceVisAttributes->SetForceWireframe( true );
+    SliceVisAttributes->SetLineWidth(2.0);
+    SliceVisAttributes->SetColour( G4Colour::Blue() );
 
     for ( sliceNo = 0; sliceNo<3; sliceNo++ ){
         if (sliceNo>0) moduleRinner = moduleRinner2;
         solidSlice[sliceNo] = new G4Tubs(sliceName, moduleRinner, moduleRouter,
                                          gapSize/2., modulePhistart, moduleDeltaPhi);
         logicSlice[sliceNo]= new G4LogicalVolume(solidSlice[sliceNo], lArMaterial, sliceName);
+        logicSlice[sliceNo]->SetVisAttributes( SliceVisAttributes );
     }
 
+    //Absorber
+    //
+    G4int absorberNo;
+    G4String absorberName = "ATLASHECTB::Absorber";
+    G4double absorberRinner1 = moduleRinner1-1.02*cm;
+    G4double absorberRinner2 = moduleRinner2-1.02*cm;
+    G4double absorberRouter = moduleRouter-1.02*cm;
+   
+    auto AbsorberVisAttributes = new G4VisAttributes();
+    AbsorberVisAttributes->SetForceSolid( true );
+    AbsorberVisAttributes->SetLineWidth(2.0);
+    AbsorberVisAttributes->SetColour( G4Colour::Brown() );
+   
+    solidAbsorber[0] = new G4Tubs(absorberName,
+                                  absorberRinner1,absorberRouter,absorberZ1/2.,
+                                  modulePhistart,moduleDeltaPhi);                   
+    solidAbsorber[1] = new G4Tubs(absorberName,
+                                  absorberRinner2,absorberRouter,absorberZ1/2.,
+                                  modulePhistart,moduleDeltaPhi);                   
+    solidAbsorber[2] = new G4Tubs(absorberName,
+                                  absorberRinner2,absorberRouter,absorberZ2/2.,
+                                  modulePhistart,moduleDeltaPhi);                   
+    for ( absorberNo=0; absorberNo<3; absorberNo++ ){
+        logicAbsorber[absorberNo] = new G4LogicalVolume(solidAbsorber[absorberNo], CuMaterial, absorberName );
+        logicAbsorber[absorberNo]->SetVisAttributes(AbsorberVisAttributes);
+    }
 
-
-
-
+    //First Absorber
+    //
+    G4String firstAbsorbername = "ATLHECTBFirstAbsorber";
 
     //Place 7 depths in 1 HEC Module
     //
+    auto DepthVisAttributes = new G4VisAttributes();
+    DepthVisAttributes->SetForceWireframe( true );
+    DepthVisAttributes->SetLineWidth(5.0);
+    DepthVisAttributes->SetColour( G4Colour::Grey() );
+
     G4double depthPositionZ = 0;
+    G4double absorberPosY = -1.02*cm;
+
     for (G4int indexDepth = 0; indexDepth<depthNumber; indexDepth++ ){
         
         depthPositionZ += depthSize[indexDepth]/2.;
@@ -241,18 +280,56 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         logicDepth[indexDepth] = new G4LogicalVolume( solidDepths[indexDepth], 
                                                       lArMaterial,
                                                       depthName);
+        logicDepth[indexDepth]->SetVisAttributes( DepthVisAttributes );
+
         physiDepth[indexDepth] = new G4PVPlacement(0, 
                                                     G4ThreeVector(0.,0.,depthPositionZ),
                                                     depthName,
                                                     logicDepth[indexDepth],
                                                     physiModule,
-                                                    fCheckOverlaps,
-                                                    indexDepth);
-        depthPositionZ += depthSize[indexDepth]/2.0; 
-    
-    
-    
-    
+                                                    false,
+                                                    indexDepth,
+                                                    fCheckOverlaps);
+                                                   
+        depthPositionZ += depthSize[indexDepth]/2.0;
+        if ( indexDepth == 2) depthPositionZ += betweenWheel; //end of depths positioning
+        
+        G4double slicePositionZ = firstAbsorber[indexDepth]+gapSize/2.0-depthSize[indexDepth]/2.0;
+        if ( indexDepth > 0 ) sliceCopyNo += gapNumber[indexDepth-1];
+        if ( indexDepth == 0 ) { 
+            sliceNo = 0;
+            absorberNo = 0;
+        } else {
+            sliceNo = 1;
+            absorberNo = 1;
+        }
+        if ( indexDepth > 2 ) {
+            sliceNo = 2;
+            absorberNo = 2;
+        }
+        for (G4int indexSlice=0; indexSlice<gapNumber[indexDepth]; indexSlice++ ){
+        
+            physiSlice[sliceNo] = new G4PVPlacement(0, 
+                                                    G4ThreeVector(0.,0.,slicePositionZ),
+                                                    sliceName, 
+                                                    logicSlice[sliceNo],
+                                                    physiDepth[indexDepth],
+                                                    false,
+                                                    indexSlice+sliceCopyNo,
+                                                    fCheckOverlaps);
+            slicePositionZ += absorberSize + gapSize;
+        
+            physiAbsorber[absorberNo] = new G4PVPlacement(0,
+                                                          G4ThreeVector(0,absorberPosY,
+                                                             absorberPositionZ),
+                                                          absorberName,
+                                                          logicAbsorber[absorberNo],
+                                                          physiDepth[indexDepth],
+                                                          false, 
+                                                          indexSlice+sliceCopyNo+1,
+                                                          fCheckOverlaps);
+           absorberPositionZ += absorberSize+gapSize; 
+        }
     }
 
 
@@ -314,12 +391,14 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //HECVisAttributes->SetLineWidth(5.0);
     //logicHEC->SetVisAttributes( HECVisAttributes ); 
 
-    auto ModuleVisAttributes = new G4VisAttributes();
-    ModuleVisAttributes->SetForceWireframe( true );
-    ModuleVisAttributes->SetLineWidth(5.0);
-    ModuleVisAttributes->SetColour( G4Colour::Blue() );
-    ModuleVisAttributes->SetForceAuxEdgeVisible( true );
-    logicModule->SetVisAttributes( ModuleVisAttributes );
+    logicModule->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    //auto ModuleVisAttributes = new G4VisAttributes();
+    //ModuleVisAttributes->SetForceWireframe( true );
+    //ModuleVisAttributes->SetLineWidth(5.0);
+    //ModuleVisAttributes->SetColour( G4Colour::Blue() );
+    //logicModule->SetVisAttributes( ModuleVisAttributes );
+
+   
 
     G4cout<<"--->ATLHECTB geometry built<---"<<G4endl;
 
