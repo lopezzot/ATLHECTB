@@ -251,7 +251,15 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
     //First Absorber
     //
+    auto FirstAbsorberVisAttributes = new G4VisAttributes();
+    FirstAbsorberVisAttributes->SetForceSolid( true );
+    FirstAbsorberVisAttributes->SetLineWidth(2.0);
+    FirstAbsorberVisAttributes->SetColour( G4Colour::Brown() );
+
     G4String firstAbsorbername = "ATLHECTBFirstAbsorber";
+    solidFirstAbsorber = new G4Tubs( firstAbsorbername, moduleRinner1-1.02*cm, moduleRouter-1.02*cm, firstAbsorber[0]/2.,modulePhistart, moduleDeltaPhi);
+    logicFirstAbsorber = new G4LogicalVolume( solidFirstAbsorber, CuMaterial, firstAbsorbername);
+    logicFirstAbsorber->SetVisAttributes( FirstAbsorberVisAttributes );
 
     //Place 7 depths in 1 HEC Module
     //
@@ -330,7 +338,28 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                                           fCheckOverlaps);
            absorberPositionZ += absorberSize+gapSize; 
         }
-    }
+    } 
+    
+    G4double firstAbsorberPositionZ = firstAbsorber[0]/2.- depthSize[0]/2.0;
+    physiFirstAbsorber = new G4PVPlacement(0,
+	                                   G4ThreeVector(0,absorberPosY,
+                                               firstAbsorberPositionZ),
+		                           firstAbsorbername,
+                                           logicFirstAbsorber,
+                                           physiDepth[0],  
+			                   false,
+                                           fCheckOverlaps);
+
+    firstAbsorberPositionZ = firstAbsorber[3]/2.- depthSize[3]/2.0;
+    physiAbsorber[1] = new G4PVPlacement(0,
+ 	                                 G4ThreeVector(0,absorberPosY,
+                                             firstAbsorberPositionZ),		                                                  absorberName,
+                                         logicAbsorber[1],
+                                         physiDepth[3],  
+ 			                 false,
+                                         -2,
+                                         fCheckOverlaps);
+
 
 
 
@@ -350,23 +379,6 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
 
    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
