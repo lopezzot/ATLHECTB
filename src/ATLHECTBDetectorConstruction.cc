@@ -59,6 +59,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //
     auto worldS = new G4Box("World", 10*m, 10*m, 10*m);
     auto worldLV = new G4LogicalVolume(worldS, AirMaterial, "World");
+    worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
     auto worldPV = new G4PVPlacement(0,                      //no rotation
                                      G4ThreeVector(),        //at (0,0,0)
                                      worldLV,                //its LV
@@ -170,6 +171,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                               numberZplane, zCoordinate, innerRadius, outerRadius);
 
     logicHEC = new G4LogicalVolume(solidHEC, lArMaterial, "ATLHEC");
+    logicHEC->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
     physiHEC = new G4PVPlacement(0, 
                                  G4ThreeVector(0.,0.,0.),
@@ -186,7 +188,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                  numberZplane, zCoordinate, innerRadius, outerRadius);
 
     logicModule = new G4LogicalVolume(solidModule, lArMaterial, "ATLHECModule");
-
+    logicModule->SetVisAttributes( G4VisAttributes::GetInvisible() );
+   
     G4RotationMatrix moduleRotation;
     moduleRotation.rotateZ(-modulePhistart);
 
@@ -231,7 +234,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double absorberRouter = moduleRouter-1.02*cm;
    
     auto AbsorberVisAttributes = new G4VisAttributes();
-    AbsorberVisAttributes->SetForceSolid( true );
+    AbsorberVisAttributes->SetForceWireframe( true );
+    //AbsorberVisAttributes->SetForceSolid( true );
     AbsorberVisAttributes->SetLineWidth(2.0);
     AbsorberVisAttributes->SetColour( G4Colour::Brown() );
    
@@ -360,57 +364,46 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                          -2,
                                          fCheckOverlaps);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Visualization attributes
+    G4String tieRodName = "ATLHECTBTieRod";
+    G4int indexRod;
+    auto TieRodVisAttributes = new G4VisAttributes();
+    TieRodVisAttributes->SetForceSolid( true );
+    TieRodVisAttributes->SetLineWidth(2.0);
+    TieRodVisAttributes->SetColour( G4Colour::Green() );
+    
+    //Tie rods in absorbers
     //
-    worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    solidAbsorberTieRod[0] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[0]/2.,absorberZ1/2.,0.*deg,360.*deg); 
+    solidAbsorberTieRod[1] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[1]/2.,absorberZ2/2.,0.*deg,360.*deg); 
+    logicAbsorberTieRod[0] = new G4LogicalVolume(solidAbsorberTieRod[0],FeMaterial,tieRodName,0,0,0);
+    logicAbsorberTieRod[1] = new G4LogicalVolume(solidAbsorberTieRod[1],FeMaterial,tieRodName,0,0,0);
+  
+    logicAbsorberTieRod[0]->SetVisAttributes(TieRodVisAttributes);
+    logicAbsorberTieRod[1]->SetVisAttributes(TieRodVisAttributes);
 
-    logicHEC->SetVisAttributes( G4VisAttributes::GetInvisible() );
-    //auto HECVisAttributes = new G4VisAttributes();
-    //HECVisAttributes->SetForceWireframe( true );
-    //HECVisAttributes->SetColour( G4Colour::Red() );
-    //HECVisAttributes->SetLineWidth(5.0);
-    //logicHEC->SetVisAttributes( HECVisAttributes ); 
+    for(G4int indexA=0; indexA<3; indexA++){
+        G4int indexR=0;
+        if(indexA>1) indexR=1;
+        for(indexRod=1; indexRod<4; indexRod++){
+            physiAbsorberTieRod[indexR] = new G4PVPlacement(0,G4ThreeVector(tieRodPositionX[indexRod],-(tieRodPositionY[indexRod]+absorberPosY), 0),
+                logicAbsorberTieRod[indexR],tieRodName,
+                logicAbsorber[indexA],false, -indexRod-1);
+           
+            physiAbsorberTieRod[indexR] = new G4PVPlacement(0,G4ThreeVector(-tieRodPositionX[indexRod],-(tieRodPositionY[indexRod]+absorberPosY), 0),
+                logicAbsorberTieRod[indexR],tieRodName, 
+		logicAbsorber[indexA],false, -indexRod-4);
 
-    logicModule->SetVisAttributes( G4VisAttributes::GetInvisible() );
-    //auto ModuleVisAttributes = new G4VisAttributes();
-    //ModuleVisAttributes->SetForceWireframe( true );
-    //ModuleVisAttributes->SetLineWidth(5.0);
-    //ModuleVisAttributes->SetColour( G4Colour::Blue() );
-    //logicModule->SetVisAttributes( ModuleVisAttributes );
+        }       
+    physiAbsorberTieRod[indexR] = new G4PVPlacement(0, 
+	        G4ThreeVector(tieRodPositionX[0],-(tieRodPositionY[0]+absorberPosY),0),
+                logicAbsorberTieRod[indexR],tieRodName,
+                logicAbsorber[indexA],false, -indexRod+3);
+    }  
 
    
+
+
+
 
     G4cout<<"--->ATLHECTB geometry built<---"<<G4endl;
 
