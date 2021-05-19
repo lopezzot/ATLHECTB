@@ -124,7 +124,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4int numberZplane = 4;
     G4int depthNumber = 7;
 
-    G4double moduleNumber = 3;          //three modules for test-beam geometry
+    G4double moduleNumber = 1;          //three modules for test-beam geometry
     G4double moduleRinner1 = 37.2*cm;   //LArHECmoduleRinner1, blrmn
     G4double moduleRinner2 = 47.5*cm;   //LArHECmoduleRinner2, blrmn
     G4double moduleRouter = 203.*cm;    //LArHECmoduleRouter, blrmx
@@ -134,7 +134,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double betweenWheel = 40.5*mm;    //LArHECbetweenWhell, gapwhl
     G4double moduleSize = 181.8*cm;     //module size
 
-    //LArHECdepthZ, dldpth
+    //LArHECdepthZ, bldpth
     G4double depthSize[7] = {28.05*cm, 26.8*cm, 26.8*cm, 25.9*cm, 23.4*cm, 23.4*cm, 23.4*cm};
     //LArHECfirstAbsorber, plate0
     G4double firstAbsorber[7] = {1.25*cm, 0*cm, 0*cm, 2.5*cm, 0*cm, 0*cm, 0*cm};
@@ -179,6 +179,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                  false,
                                  1,
                                  fCheckOverlaps);
+
     //Module construction
     //
     solidModule = new G4Polycone("ATLHECModule", modulePhistart, moduleDeltaPhi, 
@@ -200,19 +201,58 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         moduleRotation.rotateZ(moduleDeltaPhi);
     }    
 
-    //(Sensitive) slice gaps
+    //(Sensitive) slice gaps (solid and logic)
     //
     G4int sliceCopyNo = 0;
     G4int sliceNo;
     G4String depthName = "ATLHECTB::Depth";
     G4String sliceName = "ATLHECTB::Slice";
-    G4double ModuleRinner = moduleRinner1;
+    G4double moduleRinner = moduleRinner1;
 
-    for ( sliceNo = 0; sliceNo<3; sliceNo++){
-        if (sliceNo>0) ModuleRinner = moduleRinner2;
-        solidSlice[sliceNo] = new G4Tubs(sliceName, ModuleRinner, moduleRouter,
+    for ( sliceNo = 0; sliceNo<3; sliceNo++ ){
+        if (sliceNo>0) moduleRinner = moduleRinner2;
+        solidSlice[sliceNo] = new G4Tubs(sliceName, moduleRinner, moduleRouter,
                                          gapSize/2., modulePhistart, moduleDeltaPhi);
         logicSlice[sliceNo]= new G4LogicalVolume(solidSlice[sliceNo], lArMaterial, sliceName);
+    }
+
+
+
+
+
+
+    //Place 7 depths in 1 HEC Module
+    //
+    G4double depthPositionZ = 0;
+    for (G4int indexDepth = 0; indexDepth<depthNumber; indexDepth++ ){
+        
+        depthPositionZ += depthSize[indexDepth]/2.;
+        if ( indexDepth == 1 ) depthPositionZ += 0.001*cm;
+        moduleRinner = moduleRinner2;
+        if ( indexDepth == 0 ) moduleRinner = moduleRinner1;
+
+        G4double absorberSize = absorberZ2;
+        if (indexDepth < 3 ) absorberSize = absorberZ1;
+        G4double absorberPositionZ = firstAbsorber[indexDepth]+gapSize+absorberSize/2.0-depthSize[indexDepth]/2.0;
+        
+        solidDepths[indexDepth] = new G4Tubs( depthName, moduleRinner, moduleRouter,
+                                             depthSize[indexDepth]/2., modulePhistart,
+                                             moduleDeltaPhi );
+        logicDepth[indexDepth] = new G4LogicalVolume( solidDepths[indexDepth], 
+                                                      lArMaterial,
+                                                      depthName);
+        physiDepth[indexDepth] = new G4PVPlacement(0, 
+                                                    G4ThreeVector(0.,0.,depthPositionZ),
+                                                    depthName,
+                                                    logicDepth[indexDepth],
+                                                    physiModule,
+                                                    fCheckOverlaps,
+                                                    indexDepth);
+        depthPositionZ += depthSize[indexDepth]/2.0; 
+    
+    
+    
+    
     }
 
 
@@ -232,10 +272,6 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
 
 
-    //Place 7 depths in 1 HEC module
-    //
-    //G4double depthPositionZ = 0.;
-    //for ( G4int iDepth = 0; iDepth<depthNumber; iDepth++ ){}
    
 
 
@@ -271,11 +307,12 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //
     worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
-    auto HECVisAttributes = new G4VisAttributes();
-    HECVisAttributes->SetForceWireframe( true );
-    HECVisAttributes->SetColour( G4Colour::Red() );
-    HECVisAttributes->SetLineWidth(5.0);
-    logicHEC->SetVisAttributes( HECVisAttributes ); 
+    logicHEC->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    //auto HECVisAttributes = new G4VisAttributes();
+    //HECVisAttributes->SetForceWireframe( true );
+    //HECVisAttributes->SetColour( G4Colour::Red() );
+    //HECVisAttributes->SetLineWidth(5.0);
+    //logicHEC->SetVisAttributes( HECVisAttributes ); 
 
     auto ModuleVisAttributes = new G4VisAttributes();
     ModuleVisAttributes->SetForceWireframe( true );
