@@ -25,7 +25,7 @@
 //
 ATLHECTBDetectorConstruction::ATLHECTBDetectorConstruction()
     : G4VUserDetectorConstruction(),
-      fCheckOverlaps(true) {}
+      fCheckOverlaps(false) {}
 
 //Define deconstructor
 //
@@ -256,7 +256,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //First Absorber
     //
     auto FirstAbsorberVisAttributes = new G4VisAttributes();
-    FirstAbsorberVisAttributes->SetForceSolid( true );
+    FirstAbsorberVisAttributes->SetForceWireframe( true );
+    //FirstAbsorberVisAttributes->SetForceSolid( true );
     FirstAbsorberVisAttributes->SetLineWidth(2.0);
     FirstAbsorberVisAttributes->SetColour( G4Colour::Brown() );
 
@@ -343,7 +344,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
            absorberPositionZ += absorberSize+gapSize; 
         }
     } 
-    
+   
+    //First absorber (placement) 
     G4double firstAbsorberPositionZ = firstAbsorber[0]/2.- depthSize[0]/2.0;
     physiFirstAbsorber = new G4PVPlacement(0,
 	                                   G4ThreeVector(0,absorberPosY,
@@ -363,7 +365,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
  			                 false,
                                          -2,
                                          fCheckOverlaps);
-
+    //Tie rods in Slice
+    //
     G4String tieRodName = "ATLHECTBTieRod";
     G4int indexRod;
     auto TieRodVisAttributes = new G4VisAttributes();
