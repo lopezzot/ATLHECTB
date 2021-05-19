@@ -81,52 +81,88 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4Polycone* solidModule;         //solid Module
     G4LogicalVolume* logicModule;    //logical Module
     G4VPhysicalVolume* physiModule;  //physical Module
-    G4double zCoordinate[4],innerRadius[4],outerRadius[4]; //arrays for coordinates
 
     G4Tubs* solidDepths[7];          //array of 7 tubs
     G4LogicalVolume* logicDepth[7];  //array of 7 logical tubs
     G4VPhysicalVolume* physiDepth[7];//array of 7 physical tubs
-    G4int gapNumber[7];              //array for gap numbers
 
     G4Tubs* solidSlice[3];           //array of 3 slices
     G4LogicalVolume* logicSlice[3];  //array of 3 logical slice
     G4VPhysicalVolume* physiSlice[3];//array of 3 physical slice
 
+    G4Tubs* solidEstBoard;          //solid EstBoard
+    G4LogicalVolume* logicEstBoard;  //logical EstBoard
+    G4VPhysicalVolume* physiEstBoard;//physical EstBoard
+
+    G4Tubs* solidPadBoard;           //solid PadBoard
+    G4LogicalVolume* logicPadBoard;  //logic PadBoard
+    G4VPhysicalVolume* physiPadBoard;//physical PadBoard
+        
+    G4Tubs* solidTieRod[2];          //array of two TieRod
+    G4LogicalVolume* logicTieRod[2]; //array of two logical TieRod
+    G4VPhysicalVolume* physiTieRod[2];//array of two physical TieRod
+
+    G4Tubs* solidTieRodZone[2];      //for dead zone around TieRod, two TieRodZone
+    G4LogicalVolume* logicTieRodZone[2];//array of two logical TieRodZone
+    G4VPhysicalVolume* physiTieRodZone[2];//array of two physical TieRodZone
+
+    G4Tubs* solidAbsorberTieRod[2]; //for TieRod in absorber, two AbsorberTieRod
+    G4LogicalVolume* logicAbsorberTieRod[2];//array of two logical AbsorberTieRod
+    G4VPhysicalVolume* physiAbsorberTieRod[2];//array of two physical AbsorberTieRod
+
+    G4Tubs* solidAbsorber[3];        //array of three solid Absorber
+    G4LogicalVolume* logicAbsorber[3];//array of three logical Absorber
+    G4VPhysicalVolume* physiAbsorber[3];//array of three physical Absorber
+
+    G4Tubs* solidFirstAbsorber;      //solid of FirstAbsorber
+    G4LogicalVolume* logicFirstAbsorber;//logical of FirstAbsorber
+    G4VPhysicalVolume* physiFirstAbsorber;//pysucal of FirstAbsorber
 
 
-    
-
-
-    //Module settings
+    //HEC geo parameters (see README.md for atlas-mysql parameter extraction)
     //
-    G4double moduleNumber = 3;
-    G4double moduleRinner1 = 37.2*cm;
-    G4double moduleRinner2 = 37.2*cm;
-    G4double moduleRouter = 203.*cm;
-    G4double zStart = 427.7*cm;
-    G4double copperPad = 0.003*cm;
-    G4double gapSize = 8.5*mm;
-    G4double betweenWheel = 40.5*mm;
-    G4double moduleSize = 181.8*cm;
-
-    G4double modulePhistart = 264.375*deg;
-    G4double moduleDeltaPhi = 11.25*deg;
-    zCoordinate[0] = 0.0*cm;
-    zCoordinate[1] = 28.05*cm;
-    zCoordinate[2] = 28.05*cm + 0.001*cm;
-    zCoordinate[3] = 181.8*cm;
-    innerRadius[0] = moduleRinner1;
-    innerRadius[1] = moduleRinner1;
-    innerRadius[2] = moduleRinner2;
-    innerRadius[3] = moduleRinner2;
-
     G4int numberZplane = 4;
     G4int depthNumber = 7;
-    G4double depthSize[7];
-    G4double kaptonPosition[3];
-    G4double kaptonWidth[3];
 
-    for ( G4int index=0; index<numberZplane; index++) {outerRadius[index] = moduleRouter; }
+    G4double moduleNumber = 3;          //three modules for test-beam geometry
+    G4double moduleRinner1 = 37.2*cm;   //LArHECmoduleRinner1, blrmn
+    G4double moduleRinner2 = 47.5*cm;   //LArHECmoduleRinner2, blrmn
+    G4double moduleRouter = 203.*cm;    //LArHECmoduleRouter, blrmx
+    G4double zStart = 427.7*cm;         //LArHECzStart, zstart
+    G4double copperPad = 0.003*cm;      //LArHECcopperPad, copper
+    G4double gapSize = 8.5*mm;          //LArHECgapSize, larg
+    G4double betweenWheel = 40.5*mm;    //LArHECbetweenWhell, gapwhl
+    G4double moduleSize = 181.8*cm;     //module size
+
+    //LArHECdepthZ, dldpth
+    G4double depthSize[7] = {28.05*cm, 26.8*cm, 26.8*cm, 25.9*cm, 23.4*cm, 23.4*cm, 23.4*cm};
+    //LArHECfirstAbsorber, plate0
+    G4double firstAbsorber[7] = {1.25*cm, 0*cm, 0*cm, 2.5*cm, 0*cm, 0*cm, 0*cm};
+    //LArHECgapNumber, blmod
+    G4int gapNumber[7] = {8, 8, 8, 4, 4, 4, 4};
+    //LArHECkaptonPosition, kptpos
+    G4double kaptonPosition[3] = {0.204175*cm, 0.425*cm, 0.645825*cm};
+    //LArHECkaptonWidth, dptwid
+    G4double kaptonWidth[3] = {0.014*cm, 0.033*cm, 0.0333*cm};
+    //LArHECrodPosX, rodposx
+    G4double tieRodPositionX[4] = {0.*cm, 5.5*cm, 7.5*cm, 9.5*cm};
+    //LArHECrodPosY, rodposr
+    G4double tieRodPositionY[4] = {57.5*cm, 112.*cm, 155.*cm, 188.*cm};
+    //LArHECRodDim, roddim
+    G4double tieRodDiameter[2] = {1.2*cm, 1.6*cm};
+    //LArHECSpcDim, spcdim
+    G4double spacerDiameter[2] = {1.7*cm, 2.3*cm};
+
+    G4double distance = zStart + depthSize[0]/2.0;
+    G4double absorberZ1 = 2.5*cm;                  //LArHECplateWidth0, plate_0
+    G4double absorberZ2 = 5.0*cm;                  //LArHECplateWidth1, plate_1
+
+    G4double modulePhistart = 264.375*deg;         //(270.-11.25/2)*deg  
+    G4double moduleDeltaPhi = 11.25*deg;
+
+    G4double zCoordinate[4] = {0.0*cm, depthSize[0], depthSize[0]+0.001*cm, 181.8*cm};
+    G4double innerRadius[4] = {moduleRinner1, moduleRinner1, moduleRinner2, moduleRinner2};
+    G4double outerRadius[4] = {moduleRouter, moduleRouter, moduleRouter, moduleRouter};  
 
     //HEC construction
     //
@@ -201,6 +237,28 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //G4double depthPositionZ = 0.;
     //for ( G4int iDepth = 0; iDepth<depthNumber; iDepth++ ){}
    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
