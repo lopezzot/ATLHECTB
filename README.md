@@ -39,15 +39,15 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
    ```sh
    git clone https://github.com/lopezzot/ATLHECTB.git
    ```
-2. cmake build directory and make (using geant4.10.07_p01)
+2. source Geant4 env
+   ```sh
+   source /relative_path_to/geant4.10.07_p01-install/bin/geant4.sh
+   ```
+3. cmake build directory and make (using geant4.10.07_p01)
    ```sh
    mkdir ATLHECTB-build; cd ATLHECTB-build/
    cmake -DGeant4_DIR=/absolute_path_to/geant4.10.07_p01-install/lib/Geant4-10.7.1/ relative_path_to/ATLHECTB/
    make
-   ```
-3. source Geant4 env
-   ```sh
-   source /relative_path_to/geant4.10.07_p01-install/bin/geant4.sh
    ```
 4. execute (example with ATLHECTB_run.mac macro card, 2 threads and FTFP_BERT physics list)
    ```sh
