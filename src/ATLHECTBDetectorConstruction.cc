@@ -63,7 +63,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double   bryr_z = 129.55*cm;
     auto worldS = new G4Box("World", 2.*bryr_x, 2*bryr_y, 2*bryr_z);
     auto worldLV = new G4LogicalVolume(worldS, AirMaterial, "World");
-    //worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
     auto worldPV = new G4PVPlacement(0,                      //no rotation
                                      G4ThreeVector(),        //at (0,0,0)
                                      worldLV,                //its LV
@@ -139,8 +139,14 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
     //Warm cryostat wall
     //
+    auto brwwVisAttributes = new G4VisAttributes();
+    brwwVisAttributes->SetForceWireframe( true );
+    brwwVisAttributes->SetLineWidth(6.0);
+    brwwVisAttributes->SetColour( G4Colour::Grey() );
+
     brww_tub = new G4Tubs("brww_tubw",0.0*cm,bcry_rwarm,bryr_y,0.0*degree,360.0*degree);
     brww_log = new G4LogicalVolume(brww_tub, FeMaterial, "brww_log");
+    brww_log->SetVisAttributes( brwwVisAttributes );
     brww_phys = new G4PVPlacement(0,
                                     G4ThreeVector(),
                                     brww_log,
@@ -151,8 +157,16 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     
     //Vacuum between cryostat walls
     //
+    auto brvvVisAttributes = new G4VisAttributes();
+    brvvVisAttributes->SetForceWireframe( true );
+    //brvvVisAttributes->SetForceSolid( true );
+    brvvVisAttributes->SetLineWidth(6.0);
+    brvvVisAttributes->SetColour( G4Colour::Blue() );
+
     brvv_tub = new G4Tubs("brvv_tub", 0.0*cm, bcry_rvac, bryr_y, 0.0*degree, 360.*degree);
     brvv_log = new G4LogicalVolume(brvv_tub, VacuumMaterial, "brvv_log");
+    brvv_log->SetVisAttributes( brvvVisAttributes);
+
     brvv_phys = new G4PVPlacement(0, 
                                   G4ThreeVector(),
                                   brvv_log, 
@@ -163,8 +177,15 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
   
     //Cold cryostat wall
     //
+    auto brywVisAttributes = new G4VisAttributes();
+    brywVisAttributes->SetForceWireframe( true );
+    //brywVisAttributes->SetForceSolid( true );
+    brywVisAttributes->SetLineWidth(6.0);
+    brywVisAttributes->SetColour( G4Colour::Grey() );
+    
     bryw_tub = new G4Tubs("bryw_tub",0.0*cm,bcry_rcold,bryr_y,0.0*degree,360.0*degree);
     bryw_log = new G4LogicalVolume(bryw_tub, FeMaterial, "bryw_log");
+    bryw_log->SetVisAttributes( brywVisAttributes );
     bryw_phys = new G4PVPlacement(0,
                                   G4ThreeVector(),
                                   "bryw_phys",
@@ -175,8 +196,16 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
     //Inside cryostat
     //
+    auto bryiVisAttributes = new G4VisAttributes();
+    bryiVisAttributes->SetForceWireframe( true );
+    //bryiVisAttributes->SetForceSolid( true );
+    bryiVisAttributes->SetLineWidth(6.0);
+    bryiVisAttributes->SetColour( G4Colour::Cyan() );
+
     bryi_tub = new G4Tubs("bryi_tub",0.0*cm,bcry_rlar,bryr_y,0.0*degree,360.0*degree);
-    bryi_log = new G4LogicalVolume(bryi_tub, RohacellMaterial, "bryi_log");
+    bryi_log = new G4LogicalVolume(bryi_tub, AirMaterial, "bryi_log");
+    //bryi_log = new G4LogicalVolume(bryi_tub, RohacellMaterial, "bryi_log");
+    bryi_log->SetVisAttributes(bryiVisAttributes);
     bryi_phys = new G4PVPlacement(0,
                                  G4ThreeVector(),
                                  "bryi_phys",
@@ -194,7 +223,6 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                      );
     hecrot.rotateY(3.*M_PI/32); //3/2 * moduleDeltaPhi
     G4Transform3D hecpos = G4Transform3D(hecrot,G4ThreeVector(bepo_x,bepo_y,bepo_z));
-
     //--------------------------------------------------
     //Define ATLAS HEC TB geometry
     //--------------------------------------------------
