@@ -130,11 +130,11 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double moduleRinner1 = 37.2*cm;   //LArHECmoduleRinner1, blrmn
     G4double moduleRinner2 = 47.5*cm;   //LArHECmoduleRinner2, blrmn
     G4double moduleRouter = 203.*cm;    //LArHECmoduleRouter, blrmx
-    G4double zStart = 427.7*cm;         //LArHECzStart, zstart
+    //G4double zStart = 427.7*cm;         //LArHECzStart, zstart
     G4double copperPad = 0.003*cm;      //LArHECcopperPad, copper
     G4double gapSize = 8.5*mm;          //LArHECgapSize, larg
     G4double betweenWheel = 40.5*mm;    //LArHECbetweenWhell, gapwhl
-    G4double moduleSize = 181.8*cm;     //module size
+    //G4double moduleSize = 181.8*cm;     //module size
 
     //LArHECdepthZ, bldpth
     G4double depthSize[7] = {28.05*cm, 26.8*cm, 26.8*cm, 25.9*cm, 23.4*cm, 23.4*cm, 23.4*cm};
@@ -155,7 +155,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //LArHECSpcDim, spcdim
     G4double spacerDiameter[2] = {1.7*cm, 2.3*cm};
 
-    G4double distance = zStart + depthSize[0]/2.0;
+    //G4double distance = zStart + depthSize[0]/2.0;
     G4double absorberZ1 = 2.5*cm;                  //LArHECplateWidth0, plate_0
     G4double absorberZ2 = 5.0*cm;                  //LArHECplateWidth1, plate_1
 
