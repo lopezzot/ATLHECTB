@@ -48,18 +48,22 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //Getting materials from NIST (note: ATLAS defines materials from scratch)
     //
     auto nistManager = G4NistManager::Instance();
-    auto FeMaterial = nistManager->FindOrBuildMaterial("G4_Fe");         //iron
-    auto CuMaterial = nistManager->FindOrBuildMaterial("G4_Cu");         //copper
-    auto lArMaterial = nistManager->FindOrBuildMaterial("G4_lAr");       //liquid Argon
-    auto KaptonMaterial = nistManager->FindOrBuildMaterial("G4_KAPTON"); //KAPTON
-    auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");       //air
-
+    auto FeMaterial = nistManager->FindOrBuildMaterial("G4_Fe");           //iron
+    auto CuMaterial = nistManager->FindOrBuildMaterial("G4_Cu");           //copper
+    auto lArMaterial = nistManager->FindOrBuildMaterial("G4_lAr");         //liquid Argon
+    auto KaptonMaterial = nistManager->FindOrBuildMaterial("G4_KAPTON");   //KAPTON
+    auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
+    auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
+    auto RohacellMaterial = new G4Material("Rohacell", 6.18, 12.957*g/mole, 0.112*g/cm3); //Rohacell
 
     //World Construction
     //
-    auto worldS = new G4Box("World", 10*m, 10*m, 10*m);
+    G4double   bryr_x = 200.0*cm; //dimenson of room with cryostat
+    G4double   bryr_y = 200.0*cm;
+    G4double   bryr_z = 129.55*cm;
+    auto worldS = new G4Box("World", 2.*bryr_x, 2*bryr_y, 2*bryr_z);
     auto worldLV = new G4LogicalVolume(worldS, AirMaterial, "World");
-    worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    //worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
     auto worldPV = new G4PVPlacement(0,                      //no rotation
                                      G4ThreeVector(),        //at (0,0,0)
                                      worldLV,                //its LV
@@ -69,6 +73,131 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                      0,                      //copynumber
                                      fCheckOverlaps);        //checking overlaps
    
+    //--------------------------------------------------
+    //Define cryostat geometry
+    //--------------------------------------------------
+  
+    //Cryostat geo parameters
+    //
+    G4double   bcry_rwarm = 129.55*cm; //dimension of different walls of cryostat
+    G4double   bcry_rvac =  129.3*cm;
+    G4double   bcry_rcold = 125.8*cm;
+    G4double   bcry_rlar = 125.5*cm;
+    G4double   bcry_dz = 100.0*cm; 
+
+    G4double   bepo_Angle=0.0*degree; //position of HEC $ leakage det inside cryostat
+    G4double   bepo_x = 0.0*cm;
+    G4double   bepo_y = bcry_rlar-44.5*cm;
+    G4double   bepo_z = 172.*cm;
+    G4double   bepo_tx = 180.0*degree;
+    G4double   bepo_ty = 90.0*degree;
+    G4double   bepo_tz = 90.0*degree;
+    G4double   bepo_px = 270.0*degree;
+    G4double   bepo_py = 0.0*degree;
+    G4double   bepo_pz = 270.0*degree;
+    G4double   bepo_Rtot = 204.0*cm;
+    G4double   bepo_Ztot = 182.0*cm;
+    G4double   bepo_Thick = 3.0*cm;
+    G4double   bepo_Shift = 2.0*cm;
+    G4double   bepo_Edge = 10.0*cm;
+    //G4double bepo_Beta = 3.0*pi/32.0*degree;
+    G4double   bepo_Beta = 16.875*degree;
+
+    //Initialize pointers for cryostato geometry
+    //
+    G4Tubs *brww_tub;
+    G4LogicalVolume *brww_log;
+    G4VPhysicalVolume *brww_phys;
+   
+    G4Tubs *brvv_tub;
+    G4LogicalVolume *brvv_log;
+    G4VPhysicalVolume *brvv_phys;
+   
+    G4Tubs *bryw_tub;
+    G4LogicalVolume *bryw_log;
+    G4VPhysicalVolume *bryw_phys;
+   
+    G4Tubs *bryi_tub;
+    G4LogicalVolume *bryi_log;
+    G4VPhysicalVolume *bryi_phys;
+
+    G4LogicalVolume* left_log;
+    G4VPhysicalVolume* left_phys;
+    G4Transform3D left_pos;
+   
+    G4LogicalVolume* right_log;
+    G4VPhysicalVolume* right_phys;
+    G4Transform3D right_pos;
+   
+    G4LogicalVolume* down_log;
+    G4VPhysicalVolume* down_phys;
+    G4Transform3D down_pos;
+   
+    G4LogicalVolume* back_log;
+    G4VPhysicalVolume* back_phys;
+    G4Transform3D back_pos;
+
+    G4LogicalVolume *hec_log;				  
+    G4VPhysicalVolume *hec_phys;
+
+    //Warm cryostat wall
+    //
+    brww_tub = new G4Tubs("brww_tubw",0.0*cm,bcry_rwarm,bryr_y,0.0*degree,360.0*degree);
+    brww_log = new G4LogicalVolume(brww_tub, FeMaterial, "brww_log");
+    brww_phys = new G4PVPlacement(0,
+                                    G4ThreeVector(),
+                                    brww_log,
+                                    "brww_phys",
+                                    worldLV,
+                                    false,
+                                    1);
+    
+    //Vacuum between cryostat walls
+    //
+    brvv_tub = new G4Tubs("brvv_tub", 0.0*cm, bcry_rvac, bryr_y, 0.0*degree, 360.*degree);
+    brvv_log = new G4LogicalVolume(brvv_tub, VacuumMaterial, "brvv_log");
+    brvv_phys = new G4PVPlacement(0, 
+                                  G4ThreeVector(),
+                                  brvv_log, 
+                                  "brvv_phys",
+                                  brww_log, 
+                                  false, 
+                                  1); 
+  
+    //Cold cryostat wall
+    //
+    bryw_tub = new G4Tubs("bryw_tub",0.0*cm,bcry_rcold,bryr_y,0.0*degree,360.0*degree);
+    bryw_log = new G4LogicalVolume(bryw_tub, FeMaterial, "bryw_log");
+    bryw_phys = new G4PVPlacement(0,
+                                  G4ThreeVector(),
+                                  "bryw_phys",
+                                  bryw_log,
+                                  brvv_phys,
+                                  false,
+                                  1);
+
+    //Inside cryostat
+    //
+    bryi_tub = new G4Tubs("bryi_tub",0.0*cm,bcry_rlar,bryr_y,0.0*degree,360.0*degree);
+    bryi_log = new G4LogicalVolume(bryi_tub, RohacellMaterial, "bryi_log");
+    bryi_phys = new G4PVPlacement(0,
+                                 G4ThreeVector(),
+                                 "bryi_phys",
+                                 bryi_log,
+                                 bryw_phys,
+                                 false, 
+                                 1);
+
+    //Prepare for HEC placement within cryostat
+    //
+    G4RotationMatrix hecrot;
+    hecrot.rotateAxes(G4ThreeVector(sin(bepo_tx)*cos(bepo_px),sin(bepo_tx)*sin(bepo_px),cos(bepo_tx)),
+                      G4ThreeVector(sin(bepo_ty)*cos(bepo_py),sin(bepo_ty)*sin(bepo_py),cos(bepo_ty)),
+                      G4ThreeVector(sin(bepo_tz)*cos(bepo_pz),sin(bepo_tz)*sin(bepo_pz),cos(bepo_tz))
+                     );
+    hecrot.rotateY(3.*M_PI/32); //3/2 * moduleDeltaPhi
+    G4Transform3D hecpos = G4Transform3D(hecrot,G4ThreeVector(bepo_x,bepo_y,bepo_z));
+
     //--------------------------------------------------
     //Define ATLAS HEC TB geometry
     //--------------------------------------------------
@@ -126,7 +255,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4int numberZplane = 4;
     G4int depthNumber = 7;
 
-    G4double moduleNumber = 1;          //three modules for test-beam geometry
+    G4double moduleNumber = 3;          //three modules for test-beam geometry
     G4double moduleRinner1 = 37.2*cm;   //LArHECmoduleRinner1, blrmn
     G4double moduleRinner2 = 47.5*cm;   //LArHECmoduleRinner2, blrmn
     G4double moduleRouter = 203.*cm;    //LArHECmoduleRouter, blrmx
@@ -174,15 +303,14 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     logicHEC = new G4LogicalVolume(solidHEC, lArMaterial, "ATLHEC");
     logicHEC->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
-    physiHEC = new G4PVPlacement(0, 
-                                 G4ThreeVector(0.,0.,0.),
+    physiHEC = new G4PVPlacement(hecpos, 
                                  logicHEC,
                                  "ATLHEC",
-                                 worldLV,
+                                 bryi_log,
                                  false,
                                  1,
                                  fCheckOverlaps);
-
+    
     //Module construction
     //
     solidModule = new G4Polycone("ATLHECModule", modulePhistart, moduleDeltaPhi, 
@@ -490,6 +618,10 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
             }//if	   
         //}//for indexKapton
     }//for indexBoard
+   
+
+
+
 
     //Return physical world
     //
