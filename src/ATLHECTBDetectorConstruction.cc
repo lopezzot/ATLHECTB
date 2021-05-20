@@ -54,8 +54,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     auto KaptonMaterial = nistManager->FindOrBuildMaterial("G4_KAPTON");   //KAPTON
     auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
     auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
-    auto RohacellMaterial = new G4Material("Rohacell", 6.18, 12.957*g/mole, 0.112*g/cm3); //Rohacell
-
+    //Rohacell material
+    auto RohacellMaterial = new G4Material("Rohacell", 6.18, 12.957*g/mole, 0.112*g/cm3); 
     //World Construction
     //
     G4double   bryr_x = 200.0*cm; //dimenson of room with cryostat
@@ -136,9 +136,6 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4LogicalVolume* back_log;
     G4VPhysicalVolume* back_phys;
     G4Transform3D back_pos;
-
-    G4LogicalVolume *hec_log;				  
-    G4VPhysicalVolume *hec_phys;
 
     //Warm cryostat wall
     //
