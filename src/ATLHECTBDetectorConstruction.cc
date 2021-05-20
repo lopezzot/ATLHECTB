@@ -365,7 +365,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
  			                 false,
                                          -2,
                                          fCheckOverlaps);
-    //Tie rods in Slice
+    
+    //Tie rods in absorbers
     //
     G4String tieRodName = "ATLHECTBTieRod";
     G4int indexRod;
@@ -373,9 +374,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     TieRodVisAttributes->SetForceSolid( true );
     TieRodVisAttributes->SetLineWidth(2.0);
     TieRodVisAttributes->SetColour( G4Colour::Green() );
-    
-    //Tie rods in absorbers
-    //
+   
     solidAbsorberTieRod[0] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[0]/2.,absorberZ1/2.,0.*deg,360.*deg); 
     solidAbsorberTieRod[1] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[1]/2.,absorberZ2/2.,0.*deg,360.*deg); 
     logicAbsorberTieRod[0] = new G4LogicalVolume(solidAbsorberTieRod[0],FeMaterial,tieRodName,0,0,0);
@@ -402,8 +401,189 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                 logicAbsorberTieRod[indexR],tieRodName,
                 logicAbsorber[indexA],false, -indexRod+3);
     }  
+/*
+    //Tie rods in slice
+    //
+    G4double ztie[2];
+    ztie[0]=-0.227825*cm;
+    ztie[1]= 0.227825*cm;
+    G4double rodSize = 0.39435*cm;
+    //  G4double rodSize = 0.85*cm;
+    for (G4int indexWheel=0; indexWheel<2; indexWheel++) { 
+     solidTieRod[indexWheel] = new G4Tubs(tieRodName,
+                            0.*cm,spacerDiameter[indexWheel]/2.,rodSize/2.,
+		            0.*deg,360.*deg);         //size                 
+     logiTieRod[indexWheel] = new G4LogicalVolume(solidTieRod[indexWheel],
+                            Fe,tieRodName,0,0,0);
+     g4vis->SetVis(logiTieRod[indexWheel]);
+     if ( HECversion == "standard_np_zone" ) {
+	 solidTieRodZone[indexWheel] = new G4Tubs(tieRodName+"::Zone",
+	                                   spacerDiameter[indexWheel]/2., 
+					   (spacerDiameter[indexWheel]/2.) + 2.*mm, rodSize/2.,
+					   0.*deg,360.*deg);
+         logiTieRodZone[indexWheel] = new G4LogicalVolume(solidTieRodZone[indexWheel],
+                                          LAr,tieRodName,0,0,0);
+     }
 
-   
+  }
+  for(G4int numberSlice=0; numberSlice<3; numberSlice++){
+        G4int numberTie=0;
+	if(numberSlice==2) numberTie=1;
+     for(indexRod=1; indexRod<4; indexRod++){
+       for(G4int iz=0;iz<2;iz++){
+        physiTieRod[numberTie] = new G4PVPlacement(0, 
+		G4ThreeVector(tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),
+////               0),
+	  logiTieRod[numberTie],tieRodName,
+          logiSlice[numberSlice],false, indexRod+1); 
+          physiTieRod[numberTie] = new G4PVPlacement(0, 
+		   G4ThreeVector(-tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),
+////               0),
+	  logiTieRod[numberTie],tieRodName,
+          logiSlice[numberSlice],false, indexRod+4); 
+
+     if ( HECversion == "standard_np_zone" ) {
+        physiTieRodZone[numberTie] = new G4PVPlacement(0, 
+		G4ThreeVector(tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),
+	                      logiTieRodZone[numberTie],tieRodName,
+                              logiSlice[numberSlice],false, indexRod+1); 
+          physiTieRodZone[numberTie] = new G4PVPlacement(0, 
+		   G4ThreeVector(-tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),
+	           logiTieRodZone[numberTie],tieRodName,
+                   logiSlice[numberSlice],false, indexRod+4); 
+     }
+       }//for iz
+     }     
+   for( G4int iz1=0;iz1<2;iz1++){   
+         physiTieRod[numberTie] = new G4PVPlacement(0, 
+	      G4ThreeVector(tieRodPositionX[0],-tieRodPositionY[0],ztie[iz1]),
+////       G4ThreeVector(tieRodPositionX[0],-tieRodPositionY[0],0),
+	logiTieRod[numberTie],tieRodName,
+        logiSlice[numberSlice],false, indexRod-3); 
+     if ( HECversion == "standard_np_zone" ) {
+         physiTieRodZone[numberTie] = new G4PVPlacement(0, 
+	      G4ThreeVector(tieRodPositionX[0],-tieRodPositionY[0],ztie[iz1]),
+  	      logiTieRodZone[numberTie],tieRodName,
+              logiSlice[numberSlice],false, indexRod-3); 
+     }
+    }//for iz1 
+  }     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Electronic boards of a slice
+    //
+    auto ElectrodeVisAttributes = new G4VisAttributes();
+    ElectrodeVisAttributes->SetForceSolid( true );
+    ElectrodeVisAttributes->SetLineWidth(2.0);
+    ElectrodeVisAttributes->SetColour( G4Colour::Green() );
+    
+    
+    auto CopperVisAttributes = new G4VisAttributes();
+    CopperVisAttributes->SetForceWireframe( true );
+    CopperVisAttributes->SetLineWidth(1.0);
+    CopperVisAttributes->SetColour( G4Colour::Red() );
+    
+    
+    G4String electrodeName = "ATLHECTBElectrode";
+    G4String copperName = "ATLHECTBCopper";
+    for( G4int indexBoard=0; indexBoard<3; indexBoard++ ){
+        if (indexBoard==0) moduleRinner = moduleRinner1;
+        else  moduleRinner = moduleRinner2;           
+        //for(G4int indexKapton=0; indexKapton<3; indexKapton++) { 
+            G4int indexKapton=1;  
+            solidPadBoard = new G4Tubs(copperName,moduleRinner,moduleRouter,copperPad/2.,modulePhistart,moduleDeltaPhi);                   
+            logicPadBoard = new G4LogicalVolume(solidPadBoard, CuMaterial,copperName);
+            logicPadBoard->SetVisAttributes(ElectrodeVisAttributes);
+
+            solidEstBoard = new G4Tubs(electrodeName,
+            //moduleRinner,moduleRouter,(kaptonWidth[indexKapton])/2.,
+            moduleRinner,moduleRouter,(kaptonWidth[indexKapton]/2.+kaptonWidth[0]),
+	    modulePhistart,moduleDeltaPhi);
+            logicEstBoard  = new G4LogicalVolume(solidEstBoard, KaptonMaterial, electrodeName );
+            logicEstBoard->SetVisAttributes(CopperVisAttributes);
+
+            G4double kaptonPositionZ = kaptonPosition[indexKapton]-gapSize/2.;
+            physiEstBoard = new G4PVPlacement(0,G4ThreeVector(0,0,kaptonPositionZ),logicEstBoard,electrodeName, logicSlice[indexBoard],false, indexKapton); 
+            if(indexKapton==1) { 
+                physiPadBoard = new G4PVPlacement(0, G4ThreeVector(0,0,0),		
+  	        copperName,logicPadBoard, physiEstBoard,  
+  	        false,  indexKapton);
+            }//if	   
+        //}//for indexKapton
+    }//for indexBoard
 
 
 
