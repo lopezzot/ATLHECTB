@@ -107,6 +107,8 @@ Parser options
    ```
 
 ### Get ATLAS HEC geo parameters from mysql database
+Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instructions to get geo parameters from ATLAS mysql database are intended for comparisons only.
+
 1. access mysql database
    ```sh 
    mysql --host=dbod-tbnova.cern.ch --user=reader --password=askauthor --port=5501 atlas
