@@ -20,6 +20,7 @@
 #include "G4Box.hh"
 #include "G4Polycone.hh"
 #include "G4Tubs.hh"
+#include "G4UserLimits.hh"
 
 //Define constructor
 //
@@ -63,7 +64,11 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double   bryr_z = 129.55*cm;
     auto worldS = new G4Box("World", 2.*bryr_x, 2*bryr_y, 2*bryr_z);
     auto worldLV = new G4LogicalVolume(worldS, AirMaterial, "World");
-    worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    //worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    G4double maxstep = 0.0000000000000000000001*mm;
+    auto fStepLimit = new G4UserLimits(maxstep);
+    fStepLimit->SetMaxAllowedStep(maxstep);
+    worldLV->SetUserLimits(fStepLimit);
     auto worldPV = new G4PVPlacement(0,                      //no rotation
                                      G4ThreeVector(),        //at (0,0,0)
                                      worldLV,                //its LV
@@ -72,7 +77,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                      false,                  //no boolean operation
                                      0,                      //copynumber
                                      fCheckOverlaps);        //checking overlaps
-   
+  /* 
     //--------------------------------------------------
     //Define cryostat geometry
     //--------------------------------------------------
@@ -645,7 +650,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     }//for indexBoard
    
 
-
+*/
 
 
     //Return physical world

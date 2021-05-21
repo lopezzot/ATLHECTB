@@ -19,6 +19,7 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 #include "G4PhysListFactory.hh" //no need to include PL (FTFP_BERT.hh), PL constructed with Factory
+#include "G4StepLimiterPhysics.hh"
 
 //G4err output for usage error
 //
@@ -81,6 +82,7 @@ int main( int argc, char** argv ) {
     runManager->SetUserInitialization( DetConstruction );
     auto physListFactory = new G4PhysListFactory;
     auto physList = physListFactory->GetReferencePhysList(custom_pl);
+    physList->RegisterPhysics(new G4StepLimiterPhysics());
     runManager ->SetUserInitialization(physList);
     auto ActInitialization = new ATLHECTBActionInitialization( DetConstruction );
     runManager->SetUserInitialization( ActInitialization );

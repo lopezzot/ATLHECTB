@@ -33,7 +33,7 @@ ATLHECTBSteppingAction::~ATLHECTBSteppingAction(){}
 //
 void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     
-    //step->GetTrack();
+    G4cout<<step->GetStepLength()<<G4endl;
 }
 
 //**************************************************
