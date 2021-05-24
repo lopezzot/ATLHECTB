@@ -18,7 +18,8 @@
 #include "Randomize.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-#include "G4PhysListFactory.hh" //no need to include PL (FTFP_BERT.hh), PL constructed with Factory
+#include "G4PhysListFactory.hh" //construct PL from PLFactory
+#include "G4StepLimiterPhysics.hh"
 
 //G4err output for usage error
 //
@@ -33,7 +34,7 @@ namespace PrintUsageError {
 //
 int main( int argc, char** argv ) {
     
-    //Error in argument numbers
+    //Error in argument numbers/
     //
     if ( argc > 9 ){
         PrintUsageError::UsageError();
@@ -80,7 +81,8 @@ int main( int argc, char** argv ) {
     auto DetConstruction = new ATLHECTBDetectorConstruction();
     runManager->SetUserInitialization( DetConstruction );
     auto physListFactory = new G4PhysListFactory;
-    auto physList = physListFactory->GetReferencePhysList(custom_pl);
+    auto physList = physListFactory->GetReferencePhysList( custom_pl );
+    physList->RegisterPhysics( new G4StepLimiterPhysics() );
     runManager ->SetUserInitialization(physList);
     auto ActInitialization = new ATLHECTBActionInitialization( DetConstruction );
     runManager->SetUserInitialization( ActInitialization );

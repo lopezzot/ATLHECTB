@@ -20,6 +20,7 @@
 #include "G4Box.hh"
 #include "G4Polycone.hh"
 #include "G4Tubs.hh"
+#include "G4UserLimits.hh"
 
 //Define constructor
 //
@@ -103,7 +104,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //G4double bepo_Beta = 3.0*pi/32.0*degree;
     G4double   bepo_Beta = 16.875*degree;
 
-    //Initialize pointers for cryostato geometry
+    //Initialize pointers for cryostat geometry
     //
     G4Tubs *brww_tub;
     G4LogicalVolume *brww_log;
@@ -223,6 +224,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                      );
     hecrot.rotateY(3.*M_PI/32); //3/2 * moduleDeltaPhi
     G4Transform3D hecpos = G4Transform3D(hecrot,G4ThreeVector(bepo_x,bepo_y,bepo_z));
+
     //--------------------------------------------------
     //Define ATLAS HEC TB geometry
     //--------------------------------------------------
@@ -274,7 +276,6 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4LogicalVolume* logicFirstAbsorber;//logical of FirstAbsorber
     G4VPhysicalVolume* physiFirstAbsorber;//pysucal of FirstAbsorber
 
-
     //HEC geo parameters (see README.md for atlas-mysql parameter extraction)
     //
     G4int numberZplane = 4;
@@ -284,11 +285,11 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double moduleRinner1 = 37.2*cm;   //LArHECmoduleRinner1, blrmn
     G4double moduleRinner2 = 47.5*cm;   //LArHECmoduleRinner2, blrmn
     G4double moduleRouter = 203.*cm;    //LArHECmoduleRouter, blrmx
-    //G4double zStart = 427.7*cm;         //LArHECzStart, zstart
+    //G4double zStart = 427.7*cm;       //LArHECzStart, zstart
     G4double copperPad = 0.003*cm;      //LArHECcopperPad, copper
     G4double gapSize = 8.5*mm;          //LArHECgapSize, larg
     G4double betweenWheel = 40.5*mm;    //LArHECbetweenWhell, gapwhl
-    //G4double moduleSize = 181.8*cm;     //module size
+    //G4double moduleSize = 181.8*cm;   //module size
 
     //LArHECdepthZ, bldpth
     G4double depthSize[7] = {28.05*cm, 26.8*cm, 26.8*cm, 25.9*cm, 23.4*cm, 23.4*cm, 23.4*cm};
@@ -359,7 +360,11 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     }    
 
     //(Sensitive) slice gaps (solid and logic)
-    //
+    // 
+    G4double maxstepslice = 0.05*mm;
+    auto StepLimit = new G4UserLimits( );         
+    StepLimit->SetMaxAllowedStep( maxstepslice );
+    
     G4int sliceCopyNo = 0;
     G4int sliceNo;
     G4String depthName = "ATLHECTB::Depth";
@@ -376,6 +381,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         solidSlice[sliceNo] = new G4Tubs(sliceName, moduleRinner, moduleRouter,
                                          gapSize/2., modulePhistart, moduleDeltaPhi);
         logicSlice[sliceNo]= new G4LogicalVolume(solidSlice[sliceNo], lArMaterial, sliceName);
+        logicSlice[sliceNo]->SetUserLimits( StepLimit );
         logicSlice[sliceNo]->SetVisAttributes( SliceVisAttributes );
     }
 
