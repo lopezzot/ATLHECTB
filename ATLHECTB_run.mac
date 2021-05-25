@@ -34,7 +34,7 @@
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
-/run/printProgress 5
+#/run/printProgress 5
 /run/beamOn 100
 #
 #

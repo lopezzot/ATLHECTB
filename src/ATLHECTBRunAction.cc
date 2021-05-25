@@ -28,6 +28,12 @@ ATLHECTBRunAction::ATLHECTBRunAction()
     auto analysisManager = G4AnalysisManager::Instance(); //using ROOT
     analysisManager->SetVerboseLevel( 1 );
     analysisManager->SetNtupleMerging( 1 );    
+
+    analysisManager->CreateNtuple("ATLHECTB", "ATLHECTBoutput");
+    analysisManager->CreateNtupleIColumn("PDGID");
+    analysisManager->CreateNtupleDColumn("vertexkenergy");
+    analysisManager->CreateNtupleDColumn("eleakage");
+    analysisManager->FinishNtuple();
 }
 
 //Define deconstructor
@@ -42,10 +48,10 @@ ATLHECTBRunAction::~ATLHECTBRunAction(){
 //
 void ATLHECTBRunAction::BeginOfRunAction( const G4Run* ){
 
-    //G4RunManger::GetRunManager()->SetRandomNumberStore( true ); //interesting, to be used
+    //G4RunManager::GetRunManager()->SetRandomNumberStore( true );//inform runManager to save seeds
     auto analysisManager = G4AnalysisManager::Instance();
 
-    G4String outputfile = "ATLHECTB";
+    G4String outputfile = "ATLHECTBout";
     analysisManager->OpenFile( outputfile );
 }
 

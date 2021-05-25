@@ -22,7 +22,11 @@
 //Define constructor
 //
 ATLHECTBEventAction::ATLHECTBEventAction()
-    : G4UserEventAction() {}
+    : G4UserEventAction(),
+    PDGID(0),
+    vertexkenergy(0.),
+    eleakage(0.)
+{}
 
 //Define deconstructor
 //
@@ -30,11 +34,25 @@ ATLHECTBEventAction::~ATLHECTBEventAction() {}
 
 //Define BeginOfEventAction() and EndOfEventAction() methods
 //
-void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){}
+void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
+    
+    //Initialize variable per event
+    //
+    PDGID =  0;
+    vertexkenergy = 0.;
+    eleakage = 0.;
 
-void ATLHECTBEventAction::EndOfEventAction( const G4Event* event ) {
+}
 
-    //G4cout<< "--->End of Event: " << event->GetEventID() <<G4endl;
+void ATLHECTBEventAction::EndOfEventAction( const G4Event* ) {
+
+    //Accumulate statistics
+    //
+    auto analysisManager = G4AnalysisManager::Instance();
+    analysisManager->FillNtupleIColumn(0, PDGID);
+    analysisManager->FillNtupleDColumn(1, vertexkenergy); 
+    analysisManager->FillNtupleDColumn(2, eleakage);
+    analysisManager->AddNtupleRow();
 
 }
 

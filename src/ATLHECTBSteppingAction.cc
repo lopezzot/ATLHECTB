@@ -32,7 +32,26 @@ ATLHECTBSteppingAction::~ATLHECTBSteppingAction(){}
 //Definition of UserSteppingAction() method
 //
 void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
+
+    //Save primary particle PDGID and vertex kinetic energy
+    //
+    if ( step->GetTrack()->GetTrackID() == 1 && step->GetTrack()->GetCurrentStepNumber() == 1){
+        fEventAction->SavePDGID(step->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
+        fEventAction->Savevertexkenergy(step->GetTrack()->GetVertexKineticEnergy());
+    }
     
+    //Collect out of world leakage
+    //
+    if ( !step->GetTrack()->GetNextVolume() ){
+        fEventAction->Addeleak( step->GetTrack()->GetKineticEnergy() ); 
+    }
+
+
+
+
+
+
+
 }
 
 //**************************************************

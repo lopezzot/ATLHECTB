@@ -22,7 +22,28 @@ class ATLHECTBEventAction : public G4UserEventAction {
 
         virtual void BeginOfEventAction( const G4Event* event );
         virtual void EndOfEventAction( const G4Event* event );
+
+        void SavePDGID( G4int ID );
+        void Savevertexkenergy( G4double kenergy );
+        void Addeleak( G4double eleak );
+
+    private:
+        G4int PDGID;
+        G4double vertexkenergy;
+        G4double eleakage; 
 };
+
+inline void ATLHECTBEventAction::SavePDGID( G4int ID){
+    PDGID = ID;
+}
+
+inline void ATLHECTBEventAction::Savevertexkenergy( G4double kenergy ){
+    vertexkenergy = kenergy;
+}
+
+inline void ATLHECTBEventAction::Addeleak( G4double eleak ){
+    eleakage += eleak;
+}
 
 #endif
 
