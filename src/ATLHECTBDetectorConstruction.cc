@@ -56,7 +56,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
     auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
     //Rohacell material
-    auto RohacellMaterial = new G4Material("Rohacell", 6.18, 12.957*g/mole, 0.112*g/cm3); 
+    //auto RohacellMaterial = new G4Material("Rohacell", 6.18, 12.957*g/mole, 0.112*g/cm3); 
     //World Construction
     //
     G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
@@ -84,9 +84,9 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double   bcry_rvac =  129.3*cm;
     G4double   bcry_rcold = 125.8*cm;
     G4double   bcry_rlar = 125.5*cm;
-    G4double   bcry_dz = 100.0*cm; 
+    //G4double   bcry_dz = 100.0*cm; 
 
-    G4double   bepo_Angle=0.0*degree; //position of HEC $ leakage det inside cryostat
+    //G4double   bepo_Angle=0.0*degree; //position of HEC $ leakage det inside cryostat
     G4double   bepo_x = 0.0*cm;
     G4double   bepo_y = bcry_rlar-44.5*cm;
     G4double   bepo_z = 172.*cm;
@@ -96,13 +96,13 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double   bepo_px = 270.0*degree;
     G4double   bepo_py = 0.0*degree;
     G4double   bepo_pz = 270.0*degree;
-    G4double   bepo_Rtot = 204.0*cm;
-    G4double   bepo_Ztot = 182.0*cm;
-    G4double   bepo_Thick = 3.0*cm;
-    G4double   bepo_Shift = 2.0*cm;
-    G4double   bepo_Edge = 10.0*cm;
+    //G4double   bepo_Rtot = 204.0*cm;
+    //G4double   bepo_Ztot = 182.0*cm;
+    //G4double   bepo_Thick = 3.0*cm;
+    //G4double   bepo_Shift = 2.0*cm;
+    //G4double   bepo_Edge = 10.0*cm;
     //G4double bepo_Beta = 3.0*pi/32.0*degree;
-    G4double   bepo_Beta = 16.875*degree;
+    //G4double   bepo_Beta = 16.875*degree;
 
     //Initialize pointers for cryostat geometry
     //
@@ -122,7 +122,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4LogicalVolume *bryi_log;
     G4VPhysicalVolume *bryi_phys;
 
-    G4LogicalVolume* left_log;
+    /*G4LogicalVolume* left_log;       //used by ATLAS for leakage detectors
     G4VPhysicalVolume* left_phys;
     G4Transform3D left_pos;
    
@@ -136,7 +136,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
    
     G4LogicalVolume* back_log;
     G4VPhysicalVolume* back_phys;
-    G4Transform3D back_pos;
+    G4Transform3D back_pos;*/
 
     //Warm cryostat wall
     //
