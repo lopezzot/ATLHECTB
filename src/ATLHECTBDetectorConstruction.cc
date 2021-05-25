@@ -59,21 +59,21 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     auto RohacellMaterial = new G4Material("Rohacell", 6.18, 12.957*g/mole, 0.112*g/cm3); 
     //World Construction
     //
-    G4double   bryr_x = 200.0*cm; //dimenson of room with cryostat
+    G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
     G4double   bryr_y = 200.0*cm;
     G4double   bryr_z = 129.55*cm;
-    auto worldS = new G4Box("World", 2.*bryr_x, 2*bryr_y, 2*bryr_z);
-    auto worldLV = new G4LogicalVolume(worldS, AirMaterial, "World");
-    worldLV->SetVisAttributes( G4VisAttributes::GetInvisible() );
-    auto worldPV = new G4PVPlacement(0,                      //no rotation
-                                     G4ThreeVector(),        //at (0,0,0)
-                                     worldLV,                //its LV
-                                     "World",                //its name
-                                     0,                      //its mother volume
-                                     false,                  //no boolean operation
-                                     0,                      //copynumber
-                                     fCheckOverlaps);        //checking overlaps
-
+    auto solidWorld = new G4Box("World", 2.*bryr_x, 2*bryr_y, 2*bryr_z);
+    auto logicWorld = new G4LogicalVolume(solidWorld, AirMaterial, "World");
+    logicWorld->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    auto physiWorld = new G4PVPlacement(0,                      //no rotation
+                                        G4ThreeVector(),        //at (0,0,0)
+                                        logicWorld,             //its LV
+                                        "World",                //its name
+                                        0,                      //its mother volume
+                                        false,                  //no boolean operation
+                                        0,                      //copynumber
+                                        fCheckOverlaps);        //checking overlaps
+    
     //--------------------------------------------------
     //Define cryostat geometry
     //--------------------------------------------------
@@ -152,7 +152,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                     G4ThreeVector(),
                                     brww_log,
                                     "brww_phys",
-                                    worldLV,
+                                    logicWorld,
                                     false,
                                     1);
     
@@ -189,9 +189,9 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     bryw_log->SetVisAttributes( brywVisAttributes );
     bryw_phys = new G4PVPlacement(0,
                                   G4ThreeVector(),
-                                  "bryw_phys",
                                   bryw_log,
-                                  brvv_phys,
+                                  "bryw_phys",
+                                  brvv_log,
                                   false,
                                   1);
 
@@ -209,90 +209,99 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     bryi_log->SetVisAttributes(bryiVisAttributes);
     bryi_phys = new G4PVPlacement(0,
                                  G4ThreeVector(),
-                                 "bryi_phys",
                                  bryi_log,
-                                 bryw_phys,
+                                 "bryi_phys",
+                                 bryw_log,
                                  false, 
                                  1);
 
     //Prepare for HEC placement within cryostat
     //
     G4RotationMatrix hecrot;
-    hecrot.rotateAxes(G4ThreeVector(sin(bepo_tx)*cos(bepo_px),sin(bepo_tx)*sin(bepo_px),cos(bepo_tx)),
-                      G4ThreeVector(sin(bepo_ty)*cos(bepo_py),sin(bepo_ty)*sin(bepo_py),cos(bepo_ty)),
-                      G4ThreeVector(sin(bepo_tz)*cos(bepo_pz),sin(bepo_tz)*sin(bepo_pz),cos(bepo_tz))
+    hecrot.rotateAxes(G4ThreeVector(sin(bepo_tx)*cos(bepo_px),
+                                    sin(bepo_tx)*sin(bepo_px),cos(bepo_tx)),
+                      G4ThreeVector(sin(bepo_ty)*cos(bepo_py),
+                                    sin(bepo_ty)*sin(bepo_py),cos(bepo_ty)),
+                      G4ThreeVector(sin(bepo_tz)*cos(bepo_pz),
+                                    sin(bepo_tz)*sin(bepo_pz),cos(bepo_tz))
                      );
     hecrot.rotateY(3.*M_PI/32); //3/2 * moduleDeltaPhi
     G4Transform3D hecpos = G4Transform3D(hecrot,G4ThreeVector(bepo_x,bepo_y,bepo_z));
-
+    
     //--------------------------------------------------
     //Define ATLAS HEC TB geometry
     //--------------------------------------------------
     
     //Instantiate pointers to solid, logic and physic volumes
     //
-    G4Polycone* solidHEC;            //solid HEC
-    G4LogicalVolume* logicHEC;       //logical HEC
-    G4VPhysicalVolume* physiHEC;     //physical HEC
+    G4Polycone* solidHEC;                 //solid HEC
+    G4LogicalVolume* logicHEC;            //logical HEC
+    G4VPhysicalVolume* physiHEC;          //physical HEC
 
-    G4Polycone* solidModule;         //solid Module
-    G4LogicalVolume* logicModule;    //logical Module
-    G4VPhysicalVolume* physiModule;  //physical Module
+    G4Polycone* solidModule;              //solid Module
+    G4LogicalVolume* logicModule;         //logical Module
+    G4VPhysicalVolume* physiModule;       //physical Module
 
-    G4Tubs* solidDepths[7];          //array of 7 tubs
-    G4LogicalVolume* logicDepth[7];  //array of 7 logical tubs
-    G4VPhysicalVolume* physiDepth[7];//array of 7 physical tubs
+    G4Tubs* solidDepths[7];               //array of 7 tubs for Depths
+    G4LogicalVolume* logicDepth[7];       //array of 7 logical tubs
+    G4VPhysicalVolume* physiDepth[7];     //array of 7 physical tubs
 
-    G4Tubs* solidSlice[3];           //array of 3 slices
-    G4LogicalVolume* logicSlice[3];  //array of 3 logical slice
-    G4VPhysicalVolume* physiSlice[3];//array of 3 physical slice
+    G4Tubs* solidSlice[3];                //array of 3 slices for Slice
+    G4LogicalVolume* logicSlice[3];       //array of 3 logical slice
+    G4VPhysicalVolume* physiSlice[3];     //array of 3 physical slice
 
-    G4Tubs* solidEstBoard;          //solid EstBoard
-    G4LogicalVolume* logicEstBoard;  //logical EstBoard
-    G4VPhysicalVolume* physiEstBoard;//physical EstBoard
+    G4Tubs* solidEstBoard;                //solid EstBoard
+    G4LogicalVolume* logicEstBoard;       //logical EstBoard
+    G4VPhysicalVolume* physiEstBoard;     //physical EstBoard
 
-    G4Tubs* solidPadBoard;           //solid PadBoard
-    G4LogicalVolume* logicPadBoard;  //logic PadBoard
-    G4VPhysicalVolume* physiPadBoard;//physical PadBoard
+    G4Tubs* solidPadBoard;                //solid PadBoard
+    G4LogicalVolume* logicPadBoard;       //logic PadBoard
+    G4VPhysicalVolume* physiPadBoard;     //physical PadBoard
         
-    G4Tubs* solidTieRod[2];          //array of two TieRod
-    G4LogicalVolume* logicTieRod[2]; //array of two logical TieRod
-    G4VPhysicalVolume* physiTieRod[2];//array of two physical TieRod
+    G4Tubs* solidTieRod[2];               //array of two TieRod
+    G4LogicalVolume* logicTieRod[2];      //array of two logical TieRod
+    G4VPhysicalVolume* physiTieRod[2];    //array of two physical TieRod
     
-    bool TieRodZone = true;               //true for includeing dead zones on tierods
+    bool TieRodZone = true;               //true for including dead zones around tierods
     G4Tubs* solidTieRodZone[2];           //for dead zone on TieRod, two TieRodZone
     G4LogicalVolume* logicTieRodZone[2];  //array of two logical TieRodZone
     G4VPhysicalVolume* physiTieRodZone[2];//array of two physical TieRodZone
 
-    G4Tubs* solidAbsorberTieRod[2]; //for TieRod in absorber, two AbsorberTieRod
+    G4Tubs* solidAbsorberTieRod[2];         //for TieRod in absorber, two AbsorberTieRod
     G4LogicalVolume* logicAbsorberTieRod[2];//array of two logical AbsorberTieRod
     G4VPhysicalVolume* physiAbsorberTieRod[2];//array of two physical AbsorberTieRod
 
-    G4Tubs* solidAbsorber[3];        //array of three solid Absorber
-    G4LogicalVolume* logicAbsorber[3];//array of three logical Absorber
-    G4VPhysicalVolume* physiAbsorber[3];//array of three physical Absorber
+    G4Tubs* solidAbsorber[3];             //array of three solid Absorber
+    G4LogicalVolume* logicAbsorber[3];    //array of three logical Absorber
+    G4VPhysicalVolume* physiAbsorber[3];  //array of three physical Absorber
 
-    G4Tubs* solidFirstAbsorber;      //solid of FirstAbsorber
-    G4LogicalVolume* logicFirstAbsorber;//logical of FirstAbsorber
-    G4VPhysicalVolume* physiFirstAbsorber;//pysucal of FirstAbsorber
+    G4Tubs* solidFirstAbsorber;           //solid of FirstAbsorber
+    G4LogicalVolume* logicFirstAbsorber;  //logical of FirstAbsorber
+    G4VPhysicalVolume* physiFirstAbsorber;//pysical of FirstAbsorber
 
     //HEC geo parameters (see README.md for atlas-mysql parameter extraction)
     //
     G4int numberZplane = 4;
     G4int depthNumber = 7;
-
     G4double moduleNumber = 3;          //three modules for test-beam geometry
+                                        // 32 for the whole ATLAS HEC geometry
+                                        
+                                        //alias in atl-det-construction, mysql name
     G4double moduleRinner1 = 37.2*cm;   //LArHECmoduleRinner1, blrmn
     G4double moduleRinner2 = 47.5*cm;   //LArHECmoduleRinner2, blrmn
     G4double moduleRouter = 203.*cm;    //LArHECmoduleRouter, blrmx
     //G4double zStart = 427.7*cm;       //LArHECzStart, zstart
+                                        // (used by atl for G4double distance,
+                                        //  not used in the construction.
+                                        //  Comment this value)
     G4double copperPad = 0.003*cm;      //LArHECcopperPad, copper
     G4double gapSize = 8.5*mm;          //LArHECgapSize, larg
-    G4double betweenWheel = 40.5*mm;    //LArHECbetweenWhell, gapwhl
-    //G4double moduleSize = 181.8*cm;   //module size
+    G4double betweenWheel = 40.5*mm;    //LArHECbetweenWheel, gapwhl
+    G4double moduleSize = 181.8*cm;     //module size
 
     //LArHECdepthZ, bldpth
-    G4double depthSize[7] = {28.05*cm, 26.8*cm, 26.8*cm, 25.9*cm, 23.4*cm, 23.4*cm, 23.4*cm};
+    G4double depthSize[7] = {28.05*cm, 26.8*cm, 26.8*cm, 
+                             25.9*cm, 23.4*cm, 23.4*cm, 23.4*cm};
     //LArHECfirstAbsorber, plate0
     G4double firstAbsorber[7] = {1.25*cm, 0*cm, 0*cm, 2.5*cm, 0*cm, 0*cm, 0*cm};
     //LArHECgapNumber, blmod
@@ -310,15 +319,16 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //LArHECSpcDim, spcdim
     G4double spacerDiameter[2] = {1.7*cm, 2.3*cm};
 
-    //G4double distance = zStart + depthSize[0]/2.0;
-    G4double absorberZ1 = 2.5*cm;                  //LArHECplateWidth0, plate_0
-    G4double absorberZ2 = 5.0*cm;                  //LArHECplateWidth1, plate_1
+    //G4double distance = zStart + depthSize[0]/2.0; //(not used by atl, comment it)
+    G4double absorberZ1 = 2.5*cm;                    //LArHECplateWidth0, plate_0
+    G4double absorberZ2 = 5.0*cm;                    //LArHECplateWidth1, plate_1
 
-    G4double modulePhistart = 264.375*deg;         //(270.-11.25/2)*deg  
-    G4double moduleDeltaPhi = 11.25*deg;
+    G4double modulePhistart = 264.375*deg;           //(270.-11.25/2)*deg  
+    G4double moduleDeltaPhi = 11.25*deg;             //360/32=11.25*deg
 
-    G4double zCoordinate[4] = {0.0*cm, depthSize[0], depthSize[0]+0.001*cm, 181.8*cm};
-    G4double innerRadius[4] = {moduleRinner1, moduleRinner1, moduleRinner2, moduleRinner2};
+    G4double zCoordinate[4] = {0.0*cm, depthSize[0], depthSize[0]+0.001*cm, moduleSize};
+    G4double innerRadius[4] = {moduleRinner1, moduleRinner1,
+                               moduleRinner2, moduleRinner2};
     G4double outerRadius[4] = {moduleRouter, moduleRouter, moduleRouter, moduleRouter};  
 
     //HEC construction
@@ -327,6 +337,12 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                               numberZplane, zCoordinate, innerRadius, outerRadius);
 
     logicHEC = new G4LogicalVolume(solidHEC, lArMaterial, "ATLHEC");
+   
+    //auto HECVisAttributes = new G4VisAttributes();      //for image display
+    //HECVisAttributes->SetForceWireframe( true );        //for image display
+    //HECVisAttributes->SetLineWidth(12.0);               //for image display
+    //HECVisAttributes->SetColour( G4Colour::Red() );     //for image display
+    //logicHEC->SetVisAttributes( HECVisAttributes );     //for image display
     logicHEC->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
     physiHEC = new G4PVPlacement(hecpos, 
@@ -334,15 +350,21 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                  "ATLHEC",
                                  bryi_log,
                                  false,
-                                 1,
+                                 0,
                                  fCheckOverlaps);
-    
+     
     //Module construction
     //
     solidModule = new G4Polycone("ATLHECModule", modulePhistart, moduleDeltaPhi, 
                                  numberZplane, zCoordinate, innerRadius, outerRadius);
 
     logicModule = new G4LogicalVolume(solidModule, lArMaterial, "ATLHECModule");
+
+    //auto ModuleVisAttributes = new G4VisAttributes();      //for image display
+    //ModuleVisAttributes->SetForceWireframe( true );        //for image display
+    //ModuleVisAttributes->SetLineWidth(12.0);               //for image display
+    //ModuleVisAttributes->SetColour( G4Colour::Blue() );    //for image display
+    //logicModule->SetVisAttributes( ModuleVisAttributes );  //for image display
     logicModule->SetVisAttributes( G4VisAttributes::GetInvisible() );
    
     G4RotationMatrix moduleRotation;
@@ -358,7 +380,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                         fCheckOverlaps); 
         moduleRotation.rotateZ(moduleDeltaPhi);
     }    
-
+    
     //(Sensitive) slice gaps (solid and logic)
     // 
     G4double maxstepslice = 0.05*mm;
@@ -367,12 +389,12 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     
     G4int sliceCopyNo = 0;
     G4int sliceNo;
-    G4String depthName = "ATLHECTB::Depth";
     G4String sliceName = "ATLHECTB::Slice";
     G4double moduleRinner = moduleRinner1;
     
     auto SliceVisAttributes = new G4VisAttributes();
-    SliceVisAttributes->SetForceWireframe( true );
+    //SliceVisAttributes->SetForceWireframe( true );
+    SliceVisAttributes->SetForceSolid( true );
     SliceVisAttributes->SetLineWidth(2.0);
     SliceVisAttributes->SetColour( G4Colour::Blue() );
 
@@ -380,7 +402,9 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         if (sliceNo>0) moduleRinner = moduleRinner2;
         solidSlice[sliceNo] = new G4Tubs(sliceName, moduleRinner, moduleRouter,
                                          gapSize/2., modulePhistart, moduleDeltaPhi);
-        logicSlice[sliceNo]= new G4LogicalVolume(solidSlice[sliceNo], lArMaterial, sliceName);
+        logicSlice[sliceNo]= new G4LogicalVolume(solidSlice[sliceNo], 
+                                                 lArMaterial,
+                                                 sliceName);
         logicSlice[sliceNo]->SetUserLimits( StepLimit );
         logicSlice[sliceNo]->SetVisAttributes( SliceVisAttributes );
     }
@@ -394,8 +418,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double absorberRouter = moduleRouter-1.02*cm;
    
     auto AbsorberVisAttributes = new G4VisAttributes();
-    AbsorberVisAttributes->SetForceWireframe( true );
-    //AbsorberVisAttributes->SetForceSolid( true );
+    //AbsorberVisAttributes->SetForceWireframe( true );
+    AbsorberVisAttributes->SetForceSolid( true );
     AbsorberVisAttributes->SetLineWidth(2.0);
     AbsorberVisAttributes->SetColour( G4Colour::Brown() );
    
@@ -409,35 +433,44 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                   absorberRinner2,absorberRouter,absorberZ2/2.,
                                   modulePhistart,moduleDeltaPhi);                   
     for ( absorberNo=0; absorberNo<3; absorberNo++ ){
-        logicAbsorber[absorberNo] = new G4LogicalVolume(solidAbsorber[absorberNo], CuMaterial, absorberName );
+        logicAbsorber[absorberNo] = new G4LogicalVolume(solidAbsorber[absorberNo],
+                                                        CuMaterial, absorberName );
         logicAbsorber[absorberNo]->SetVisAttributes(AbsorberVisAttributes);
     }
 
     //First Absorber
     //
     auto FirstAbsorberVisAttributes = new G4VisAttributes();
-    FirstAbsorberVisAttributes->SetForceWireframe( true );
-    //FirstAbsorberVisAttributes->SetForceSolid( true );
+    //FirstAbsorberVisAttributes->SetForceWireframe( true );
+    FirstAbsorberVisAttributes->SetForceSolid( true );
     FirstAbsorberVisAttributes->SetLineWidth(2.0);
     FirstAbsorberVisAttributes->SetColour( G4Colour::Brown() );
 
     G4String firstAbsorbername = "ATLHECTBFirstAbsorber";
-    solidFirstAbsorber = new G4Tubs( firstAbsorbername, moduleRinner1-1.02*cm, moduleRouter-1.02*cm, firstAbsorber[0]/2.,modulePhistart, moduleDeltaPhi);
-    logicFirstAbsorber = new G4LogicalVolume( solidFirstAbsorber, CuMaterial, firstAbsorbername);
+    solidFirstAbsorber = new G4Tubs( firstAbsorbername, 
+                                    moduleRinner1-1.02*cm,
+                                    moduleRouter-1.02*cm,
+                                    firstAbsorber[0]/2.,
+                                    modulePhistart,
+                                    moduleDeltaPhi);
+
+    logicFirstAbsorber = new G4LogicalVolume( solidFirstAbsorber, CuMaterial, 
+                                              firstAbsorbername);
     logicFirstAbsorber->SetVisAttributes( FirstAbsorberVisAttributes );
 
     //Place 7 depths in 1 HEC Module
     //
-    auto DepthVisAttributes = new G4VisAttributes();
-    DepthVisAttributes->SetForceWireframe( true );
-    DepthVisAttributes->SetLineWidth(5.0);
-    DepthVisAttributes->SetColour( G4Colour::Grey() );
-
+    auto DepthVisAttributes = new G4VisAttributes();    //for image display
+    DepthVisAttributes->SetForceWireframe( true );      //for image display
+    DepthVisAttributes->SetLineWidth(5.0);              //for image display
+    DepthVisAttributes->SetColour( G4Colour::Grey() );  //for image display
+    
+    G4String depthName = "ATLHECTB::Depth";
     G4double depthPositionZ = 0;
     G4double absorberPosY = -1.02*cm;
 
     for (G4int indexDepth = 0; indexDepth<depthNumber; indexDepth++ ){
-        
+
         depthPositionZ += depthSize[indexDepth]/2.;
         if ( indexDepth == 1 ) depthPositionZ += 0.001*cm;
         moduleRinner = moduleRinner2;
@@ -445,7 +478,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
         G4double absorberSize = absorberZ2;
         if (indexDepth < 3 ) absorberSize = absorberZ1;
-        G4double absorberPositionZ = firstAbsorber[indexDepth]+gapSize+absorberSize/2.0-depthSize[indexDepth]/2.0;
+        G4double absorberPositionZ = firstAbsorber[indexDepth]+gapSize+absorberSize/2.0
+                                     -depthSize[indexDepth]/2.0;
         
         solidDepths[indexDepth] = new G4Tubs( depthName, moduleRinner, moduleRouter,
                                              depthSize[indexDepth]/2., modulePhistart,
@@ -453,20 +487,21 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         logicDepth[indexDepth] = new G4LogicalVolume( solidDepths[indexDepth], 
                                                       lArMaterial,
                                                       depthName);
-        logicDepth[indexDepth]->SetVisAttributes( DepthVisAttributes );
+        logicDepth[indexDepth]->SetVisAttributes( DepthVisAttributes );//image dispaly
+        //logicDepth[indexDepth]->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
         physiDepth[indexDepth] = new G4PVPlacement(0, 
-                                                    G4ThreeVector(0.,0.,depthPositionZ),
-                                                    depthName,
-                                                    logicDepth[indexDepth],
-                                                    physiModule,
-                                                    false,
-                                                    indexDepth,
-                                                    fCheckOverlaps);
+                                                   G4ThreeVector(0.,0.,depthPositionZ),
+                                                   depthName,
+                                                   logicDepth[indexDepth],
+                                                   physiModule,
+                                                   false,
+                                                   indexDepth,
+                                                   fCheckOverlaps);
                                                    
         depthPositionZ += depthSize[indexDepth]/2.0;
         if ( indexDepth == 2) depthPositionZ += betweenWheel; //end of depths positioning
-        
+     
         G4double slicePositionZ = firstAbsorber[indexDepth]+gapSize/2.0-depthSize[indexDepth]/2.0;
         if ( indexDepth > 0 ) sliceCopyNo += gapNumber[indexDepth-1];
         if ( indexDepth == 0 ) { 
@@ -481,7 +516,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
             absorberNo = 2;
         }
         for (G4int indexSlice=0; indexSlice<gapNumber[indexDepth]; indexSlice++ ){
-        
+       
             physiSlice[sliceNo] = new G4PVPlacement(0, 
                                                     G4ThreeVector(0.,0.,slicePositionZ),
                                                     sliceName, 
@@ -501,11 +536,13 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                                           false, 
                                                           indexSlice+sliceCopyNo+1,
                                                           fCheckOverlaps);
+                                                          
            absorberPositionZ += absorberSize+gapSize; 
-        }
-    } 
+        }//for indexSlice
+    }//for depthNumber
    
     //First absorber (placement) 
+    //
     G4double firstAbsorberPositionZ = firstAbsorber[0]/2.- depthSize[0]/2.0;
     physiFirstAbsorber = new G4PVPlacement(0,
 	                                   G4ThreeVector(0,absorberPosY,
@@ -514,54 +551,86 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                            logicFirstAbsorber,
                                            physiDepth[0],  
 			                   false,
+                                           -1,                   //additioal absorbers
+                                                                 //have neg copynumber
                                            fCheckOverlaps);
 
     firstAbsorberPositionZ = firstAbsorber[3]/2.- depthSize[3]/2.0;
     physiAbsorber[1] = new G4PVPlacement(0,
  	                                 G4ThreeVector(0,absorberPosY,
-                                             firstAbsorberPositionZ),		                                                  absorberName,
+                                         firstAbsorberPositionZ),
+                                         absorberName,
                                          logicAbsorber[1],
                                          physiDepth[3],  
  			                 false,
-                                         -2,
+                                         -2,                    //additional absorbers
+                                                                //have neg copynumber
                                          fCheckOverlaps);
-    
+
     //Tie rods in absorbers
     //
     G4String tieRodName = "ATLHECTBTieRod";
     G4int indexRod;
-    auto TieRodVisAttributes = new G4VisAttributes();
-    TieRodVisAttributes->SetForceSolid( true );
-    TieRodVisAttributes->SetLineWidth(2.0);
-    TieRodVisAttributes->SetColour( G4Colour::Green() );
+    //auto TieRodVisAttributes = new G4VisAttributes();        //for image display
+    //TieRodVisAttributes->SetForceSolid( true );              //for image display
+    //TieRodVisAttributes->SetLineWidth(2.0);                  //for image display
+    //TieRodVisAttributes->SetColour( G4Colour::Grey() );      //for image display
    
-    solidAbsorberTieRod[0] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[0]/2.,absorberZ1/2.,0.*deg,360.*deg); 
-    solidAbsorberTieRod[1] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[1]/2.,absorberZ2/2.,0.*deg,360.*deg); 
-    logicAbsorberTieRod[0] = new G4LogicalVolume(solidAbsorberTieRod[0],FeMaterial,tieRodName,0,0,0);
-    logicAbsorberTieRod[1] = new G4LogicalVolume(solidAbsorberTieRod[1],FeMaterial,tieRodName,0,0,0);
+    solidAbsorberTieRod[0] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[0]/2.,
+                                        absorberZ1/2.,0.*deg,360.*deg); 
+    solidAbsorberTieRod[1] = new G4Tubs(tieRodName, 0.*cm,tieRodDiameter[1]/2.,
+                                        absorberZ2/2.,0.*deg,360.*deg); 
+    logicAbsorberTieRod[0] = new G4LogicalVolume(solidAbsorberTieRod[0],FeMaterial,
+                                                 tieRodName,0,0,0);
+    logicAbsorberTieRod[1] = new G4LogicalVolume(solidAbsorberTieRod[1],FeMaterial,
+                                                 tieRodName,0,0,0);
   
-    logicAbsorberTieRod[0]->SetVisAttributes(TieRodVisAttributes);
-    logicAbsorberTieRod[1]->SetVisAttributes(TieRodVisAttributes);
+    //logicAbsorberTieRod[0]->SetVisAttributes(TieRodVisAttributes);   //for image display
+    //logicAbsorberTieRod[1]->SetVisAttributes(TieRodVisAttributes);   //for image display
+    logicAbsorberTieRod[0]->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    logicAbsorberTieRod[1]->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
     for(G4int indexA=0; indexA<3; indexA++){
         G4int indexR=0;
         if(indexA>1) indexR=1;
         for(indexRod=1; indexRod<4; indexRod++){
-            physiAbsorberTieRod[indexR] = new G4PVPlacement(0,G4ThreeVector(tieRodPositionX[indexRod],-(tieRodPositionY[indexRod]+absorberPosY), 0),
-                logicAbsorberTieRod[indexR],tieRodName,
-                logicAbsorber[indexA],false, -indexRod-1);
+            physiAbsorberTieRod[indexR] = new G4PVPlacement(0,
+                                                            G4ThreeVector(
+                                                            tieRodPositionX[indexRod],
+                                                            -(tieRodPositionY[indexRod]
+                                                            +absorberPosY), 
+                                                            0),
+                                                            logicAbsorberTieRod[indexR],
+                                                            tieRodName,
+                                                            logicAbsorber[indexA],
+                                                            false,
+                                                            -indexRod-1);
            
-            physiAbsorberTieRod[indexR] = new G4PVPlacement(0,G4ThreeVector(-tieRodPositionX[indexRod],-(tieRodPositionY[indexRod]+absorberPosY), 0),
-                logicAbsorberTieRod[indexR],tieRodName, 
-		logicAbsorber[indexA],false, -indexRod-4);
+          physiAbsorberTieRod[indexR] = new G4PVPlacement(0,
+                                                            G4ThreeVector(
+                                                            -tieRodPositionX[indexRod],
+                                                            -(tieRodPositionY[indexRod]
+                                                            +absorberPosY),
+                                                            0),
+                                                            logicAbsorberTieRod[indexR],
+                                                            tieRodName, 
+		                                            logicAbsorber[indexA],
+                                                            false,
+                                                            -indexRod-4);
+        }   
 
-        }       
     physiAbsorberTieRod[indexR] = new G4PVPlacement(0, 
-	        G4ThreeVector(tieRodPositionX[0],-(tieRodPositionY[0]+absorberPosY),0),
-                logicAbsorberTieRod[indexR],tieRodName,
-                logicAbsorber[indexA],false, -indexRod+3);
+	                                            G4ThreeVector(tieRodPositionX[0],
+                                                    -(tieRodPositionY[0]
+                                                    +absorberPosY),
+                                                    0),
+                                                    logicAbsorberTieRod[indexR],
+                                                    tieRodName,
+                                                    logicAbsorber[indexA],
+                                                    false,
+                                                    -indexRod+3);
     }  
-
+    
     //Tie rods in slice
     //
     G4double ztie[2];
@@ -571,18 +640,25 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //  G4double rodSize = 0.85*cm;
     for ( G4int indexWheel=0; indexWheel<2; indexWheel++ ) { 
         solidTieRod[indexWheel] = new G4Tubs(tieRodName,
-                                             0.*cm,spacerDiameter[indexWheel]/2.,rodSize/                                             2.,0.*deg,360.*deg);
+                                             0.*cm,spacerDiameter[indexWheel]/2.,
+                                             rodSize/2.,0.*deg,360.*deg);
 
         logicTieRod[indexWheel] = new G4LogicalVolume(solidTieRod[indexWheel],
                                                      FeMaterial,tieRodName,0,0,0);
 
-        logicTieRod[indexWheel]->SetVisAttributes(TieRodVisAttributes);
+        //logicTieRod[indexWheel]->SetVisAttributes(TieRodVisAttributes);  //for image display
+        logicTieRod[indexWheel]->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
         if ( TieRodZone ) {//true: HECversion == "standard_np_zone" 
 	    solidTieRodZone[indexWheel] = new G4Tubs(tieRodName+"::Zone",
 	                                             spacerDiameter[indexWheel]/2., 
-					             (spacerDiameter[indexWheel]/2.) + 2.*mm, rodSize/2.,0.*deg,360.*deg);
-            logicTieRodZone[indexWheel] = new G4LogicalVolume(solidTieRodZone[indexWheel],lArMaterial,tieRodName,0,0,0);
+					             (spacerDiameter[indexWheel]/2.)
+                                                     + 2.*mm,
+                                                     rodSize/2.,0.*deg,360.*deg);
+            logicTieRodZone[indexWheel] =new G4LogicalVolume(solidTieRodZone[indexWheel],                                                             lArMaterial,
+                                                             tieRodName,0,0,0);
+            //logicTieRodZone[indexWheel]->SetVisAttributes(SliceVisAttributes);//for image display
+            logicTieRodZone[indexWheel]->SetVisAttributes( G4VisAttributes::GetInvisible() );
         }
 
     }
@@ -591,61 +667,139 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 	 if( numberSlice==2 ) numberTie=1;
          for(indexRod=1; indexRod<4; indexRod++){
             for(G4int iz=0;iz<2;iz++){
-                physiTieRod[numberTie] = new G4PVPlacement(0, G4ThreeVector(tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),logicTieRod[numberTie],tieRodName,logicSlice[numberSlice],false, indexRod+1); 
-                physiTieRod[numberTie] = new G4PVPlacement(0,G4ThreeVector(-tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),logicTieRod[numberTie],tieRodName,logicSlice[numberSlice],false, indexRod+4); 
+                physiTieRod[numberTie] = new G4PVPlacement(0,
+                                                           G4ThreeVector(
+                                                           tieRodPositionX[indexRod],
+                                                           -tieRodPositionY[indexRod],
+                                                           ztie[iz]),
+                                                           logicTieRod[numberTie],
+                                                           tieRodName,
+                                                           logicSlice[numberSlice],
+                                                           false,
+                                                           indexRod+1);
+
+                physiTieRod[numberTie] = new G4PVPlacement(0,
+                                                           G4ThreeVector(
+                                                          -tieRodPositionX[indexRod],
+                                                          -tieRodPositionY[indexRod],
+                                                          ztie[iz]),
+                                                          logicTieRod[numberTie],
+                                                          tieRodName,
+                                                          logicSlice[numberSlice],
+                                                          false,
+                                                          indexRod+4); 
 
                 if ( TieRodZone ) {//true: HECversion == "standard_np_zone" 
-                    physiTieRodZone[numberTie] = new G4PVPlacement(0, G4ThreeVector(tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),logicTieRodZone[numberTie],tieRodName,logicSlice[numberSlice],false, indexRod+1); 
-                    physiTieRodZone[numberTie] = new G4PVPlacement(0, G4ThreeVector(-tieRodPositionX[indexRod],-tieRodPositionY[indexRod], ztie[iz]),logicTieRodZone[numberTie],tieRodName,logicSlice[numberSlice],false, indexRod+4); 
+                    physiTieRodZone[numberTie] = new G4PVPlacement(0, 
+                                                                   G4ThreeVector(
+                                                            tieRodPositionX[indexRod],
+                                                            -tieRodPositionY[indexRod], 
+                                                            ztie[iz]),
+                                                            logicTieRodZone[numberTie],
+                                                            tieRodName,
+                                                            logicSlice[numberSlice],
+                                                            false,
+                                                            indexRod+1);
+
+                    physiTieRodZone[numberTie] = new G4PVPlacement(0,
+                                                                   G4ThreeVector(
+                                                            -tieRodPositionX[indexRod],
+                                                            -tieRodPositionY[indexRod],
+                                                            ztie[iz]),
+                                                            logicTieRodZone[numberTie],
+                                                            tieRodName,
+                                                            logicSlice[numberSlice],
+                                                            false,
+                                                            indexRod+4); 
                 }
             }//for iz
          }//for indexRod     
+         
          for( G4int iz1=0;iz1<2;iz1++){   
-            physiTieRod[numberTie] = new G4PVPlacement(0, G4ThreeVector(tieRodPositionX[0],-tieRodPositionY[0],ztie[iz1]),logicTieRod[numberTie],tieRodName,logicSlice[numberSlice],false, indexRod-3); 
+            physiTieRod[numberTie] = new G4PVPlacement(0,
+                                                       G4ThreeVector(tieRodPositionX[0],
+                                                       -tieRodPositionY[0],
+                                                       ztie[iz1]),
+                                                       logicTieRod[numberTie],
+                                                       tieRodName,
+                                                       logicSlice[numberSlice],
+                                                       false,
+                                                       indexRod-3); 
+
             if ( TieRodZone ) {//HECversion == "standard_np_zone"
-                physiTieRodZone[numberTie] = new G4PVPlacement(0, G4ThreeVector(tieRodPositionX[0],-tieRodPositionY[0],ztie[iz1]),
-  	        logicTieRodZone[numberTie],tieRodName,
-                logicSlice[numberSlice],false, indexRod-3); 
+                physiTieRodZone[numberTie] = new G4PVPlacement(0,
+                                                               G4ThreeVector(
+                                                               tieRodPositionX[0],
+                                                               -tieRodPositionY[0],
+                                                               ztie[iz1]),
+                	                                      logicTieRodZone[numberTie],
+                                                               tieRodName,
+                                                               logicSlice[numberSlice],
+                                                               false,
+                                                               indexRod-3); 
             }
          }//for iz1 
     }//for numberSlice 
 
     //Electronic boards of a slice
     //
-    auto ElectrodeVisAttributes = new G4VisAttributes();
-    ElectrodeVisAttributes->SetForceSolid( true );
-    ElectrodeVisAttributes->SetLineWidth(2.0);
-    ElectrodeVisAttributes->SetColour( G4Colour::Green() );
+    //auto ElectrodeVisAttributes = new G4VisAttributes();        //for image dislay
+    //ElectrodeVisAttributes->SetForceWireframe( true );          //for image display
+    //ElectrodeVisAttributes->SetLineWidth(2.0);                  //for image display
+    //ElectrodeVisAttributes->SetColour( G4Colour::Yellow() );    //for image display
     
-    auto CopperVisAttributes = new G4VisAttributes();
-    CopperVisAttributes->SetForceWireframe( true );
-    CopperVisAttributes->SetLineWidth(1.0);
-    CopperVisAttributes->SetColour( G4Colour::Red() );
+    //auto CopperVisAttributes = new G4VisAttributes();           //for image display
+    //CopperVisAttributes->SetForceSolid( true );                 //for image display
+    //CopperVisAttributes->SetLineWidth(2.0);                     //for image display
+    //CopperVisAttributes->SetColour( G4Colour::Red() );          //for image display
     
-    G4String electrodeName = "ATLHECTBElectrode";
-    G4String copperName = "ATLHECTBCopper";
+    G4String electrodeName = "ATLHECTB::Electrode";
+    G4String copperName = "ATLHECTB::Copper";
     for( G4int indexBoard=0; indexBoard<3; indexBoard++ ){
         if (indexBoard==0) moduleRinner = moduleRinner1;
         else  moduleRinner = moduleRinner2;           
         //for(G4int indexKapton=0; indexKapton<3; indexKapton++) { 
             G4int indexKapton=1;  
-            solidPadBoard = new G4Tubs(copperName,moduleRinner,moduleRouter,copperPad/2.,modulePhistart,moduleDeltaPhi);                   
+            solidPadBoard = new G4Tubs(copperName,
+                                       moduleRinner,
+                                       moduleRouter,
+                                       copperPad/2.,
+                                       modulePhistart,
+                                       moduleDeltaPhi);
+
             logicPadBoard = new G4LogicalVolume(solidPadBoard, CuMaterial,copperName);
-            logicPadBoard->SetVisAttributes(ElectrodeVisAttributes);
+            //logicPadBoard->SetVisAttributes(CopperVisAttributes); //for image display
+            logicPadBoard->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
             solidEstBoard = new G4Tubs(electrodeName,
-            //moduleRinner,moduleRouter,(kaptonWidth[indexKapton])/2.,
-            moduleRinner,moduleRouter,(kaptonWidth[indexKapton]/2.+kaptonWidth[0]),
-	    modulePhistart,moduleDeltaPhi);
-            logicEstBoard  = new G4LogicalVolume(solidEstBoard, KaptonMaterial, electrodeName );
-            logicEstBoard->SetVisAttributes(CopperVisAttributes);
+                                       //moduleRinner,moduleRouter,(kaptonWidth[indexKapton])/2.,
+                                       moduleRinner,
+                                       moduleRouter,
+                                       (kaptonWidth[indexKapton]/2.+kaptonWidth[0]),
+	                               modulePhistart,
+                                       moduleDeltaPhi);
+
+            logicEstBoard  = new G4LogicalVolume(solidEstBoard, KaptonMaterial, 
+                                                 electrodeName );
+            //logicEstBoard->SetVisAttributes(ElectrodeVisAttributes);//for image display
+            logicEstBoard->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
             G4double kaptonPositionZ = kaptonPosition[indexKapton]-gapSize/2.;
-            physiEstBoard = new G4PVPlacement(0,G4ThreeVector(0,0,kaptonPositionZ),logicEstBoard,electrodeName, logicSlice[indexBoard],false, indexKapton); 
+            physiEstBoard = new G4PVPlacement(0,
+                                              G4ThreeVector(0,0,kaptonPositionZ),
+                                              logicEstBoard,electrodeName,
+                                              logicSlice[indexBoard],
+                                              false, 
+                                              indexKapton);
+
             if(indexKapton==1) { 
-                physiPadBoard = new G4PVPlacement(0, G4ThreeVector(0,0,0),		
-  	        copperName,logicPadBoard, physiEstBoard,  
-  	        false,  indexKapton);
+                physiPadBoard = new G4PVPlacement(0,
+                                                  G4ThreeVector(0,0,0),		
+  	                                          copperName,
+                                                  logicPadBoard,
+                                                  physiEstBoard,  
+  	                                          false,
+                                                  indexKapton);
             }//if	   
         //}//for indexKapton
     }//for indexBoard
@@ -653,7 +807,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //Return physical world
     //
     G4cout<<"----------> ATLHECTB geometry built <----------"<<G4endl;
-    return worldPV;
+    return physiWorld;
 
 }
 
