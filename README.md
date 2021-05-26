@@ -14,6 +14,7 @@
         <li><a href="#build-compile-and-execute-on-lxplus">Build, compile and execute on lxplus</a></li>
         <li><a href="#submit-a-job-with-htcondor-on-lxplus">Submit a job with HTCondor on lxplus</a></li>
         <li><a href="#get-atlas-hec-geo-parameters-from-mysql-database">Get ATLAS HEC geo parameters from mysql database</a></li>
+        <li><a href="#dump-atlhectb-gdml-geometry-description-file">Dump ATLHECTB GDML geometry description file</a></li>
       </ul>
     </li>
     <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a></li>
@@ -135,7 +136,17 @@ Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instr
    ```sh
    SELECT * FROM parameter;
    ```
-  
+   
+### Dump ATLHECTB GDML geometry description file
+We support GDML geometry description. By default it is not active, to activate modify the ATLHECTBDetectorConstruction fDumpGDMLgeo data member, as follows
+   ```c++
+   ATLHECTBDetectorConstruction::ATLHECTBDetectorConstruction()
+    : G4VUserDetectorConstruction(),
+      fCheckOverlaps(false),
+      fDumpGDMLgeo(true){}
+   ```
+At the first execution it will create the ATLHECTBgeo.gdml file with the up to date GDML geometry description.
+
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
 - Geant4 evaluation with test-beam data (NIM A560 (2006)):  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
