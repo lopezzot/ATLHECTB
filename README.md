@@ -17,7 +17,8 @@
         <li><a href="#dump-atlhectb-gdml-geometry-description-file">Dump ATLHECTB GDML geometry description file</a></li>
       </ul>
     </li>
-    <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a></li>
+    <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a>
+    </li><li><a href="#my-quick-geant4-installation">My quick Geant4 installation</a></li>
   </ol>                                           
 </details>
 
@@ -147,6 +148,28 @@ We support GDML geometry description. By default it is not active, to activate i
    ```
 At the first execution, it will create the ATLHECTBgeo.gdml file with the up to date GDML geometry description.
 
+<!--My quick Geant4 installation-->
+## My quick Geant4 installation
+Here is my standard Geant4 installation (example with Geant4.10.7.p01) starting from the unpacked geant4.10.07.tar.gz file under the example path "path/to".
+
+1. create build directory alongside source files
+      ```sh
+   cd /path/to
+   mkdir geant4.10.07-build
+   cd geant4.10.07-build
+   ```
+2. link libraries with CMAKE (example with my favourite libraries)
+   ```sh
+   cmake -DCMAKE_INSTALL_PREFIX=/Users/lorenzo/myG4/geant4.10.07_p01-install \
+   -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_QT=ON -DGEANT4_BUILD_MULTITHREADED=ON \
+   -DGEANT4_USE_GDML=ON ../geant4.10.07.p01
+   ```
+3. make it
+   ```sh
+   make -jN
+   make install
+   ```
+   
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
 - Geant4 evaluation with test-beam data (NIM A560 (2006)):  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
