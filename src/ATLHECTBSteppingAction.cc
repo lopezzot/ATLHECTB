@@ -35,8 +35,10 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
 
     //Save primary particle PDGID and vertex kinetic energy
     //
-    if ( step->GetTrack()->GetTrackID() == 1 && step->GetTrack()->GetCurrentStepNumber() == 1){
-        fEventAction->SavePDGID(step->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
+    if ( step->GetTrack()->GetTrackID() == 1 &&
+        step->GetTrack()->GetCurrentStepNumber() == 1 ){
+        fEventAction->SavePDGID(
+                step->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
         fEventAction->Savevertexkenergy(step->GetTrack()->GetVertexKineticEnergy());
     }
     
@@ -46,12 +48,14 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
         fEventAction->Addeleak( step->GetTrack()->GetKineticEnergy() ); 
     }
 
-
-
-
-
-
-
+    //Collect energy deposited in test beam prototype
+    //
+    /*G4String matname = step->GetPreStepPoint()->GetMaterial->GetName();
+    if ( matname == "G4_Cu" || matname == "G4_KAPTON" || 
+         matname == "lAr" ){
+    fEventAction->Addedep( step->GetTotalEnergyDeposit() );
+    //G4cout<<step->GetPreStepPoint()->GetMaterial()->GetName()<<G4endl;
+    } */
 }
 
 //**************************************************

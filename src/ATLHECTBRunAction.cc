@@ -33,6 +33,7 @@ ATLHECTBRunAction::ATLHECTBRunAction()
     analysisManager->CreateNtupleIColumn("PDGID");
     analysisManager->CreateNtupleDColumn("vertexkenergy");
     analysisManager->CreateNtupleDColumn("eleakage");
+    analysisManager->CreateNtupleDColumn("edep");
     analysisManager->FinishNtuple();
 }
 

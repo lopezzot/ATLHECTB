@@ -27,7 +27,8 @@ class ATLHECTBDetectorConstruction : public G4VUserDetectorConstruction {
 
     private:
         G4VPhysicalVolume* DefineVolumes(); 
-        G4bool fCheckOverlaps; //options to check volumes overlaps
+        G4bool fCheckOverlaps; //option to check volumes overlaps
+        G4bool fDumpGDMLgeo;   //option to dump GDML geometry description
 };
 
 #endif

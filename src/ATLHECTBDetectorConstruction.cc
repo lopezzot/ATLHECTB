@@ -21,12 +21,15 @@
 #include "G4Polycone.hh"
 #include "G4Tubs.hh"
 #include "G4UserLimits.hh"
-
+#include "G4GDMLParser.hh"
+        
 //Define constructor
 //
 ATLHECTBDetectorConstruction::ATLHECTBDetectorConstruction()
     : G4VUserDetectorConstruction(),
-      fCheckOverlaps(false) {}
+      fCheckOverlaps(false),
+      fDumpGDMLgeo(false)
+{}
 
 //Define deconstructor
 //
@@ -35,7 +38,14 @@ ATLHECTBDetectorConstruction::~ATLHECTBDetectorConstruction() {}
 //Define Construct() method
 //
 G4VPhysicalVolume* ATLHECTBDetectorConstruction::Construct(){
-    return DefineVolumes();
+    
+    auto WorldPV = DefineVolumes();
+    if ( fDumpGDMLgeo ){
+        G4GDMLParser Parser;
+        Parser.Write("ATLHECTBgeo.gdml", WorldPV); 
+    }
+    return WorldPV;
+
 }
 
 //Define DefineVolumes() method
@@ -56,7 +66,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
     auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
     //Rohacell material
-    //auto RohacellMaterial = new G4Material("Rohacell", 6.18, 12.957*g/mole, 0.112*g/cm3); 
+    //auto RohacellMaterial = new G4Material("Rohacell", 
+                                             //6.18, 12.957*g/mole, 0.112*g/cm3); 
     //World Construction
     //
     G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
@@ -71,7 +82,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                         "World",                //its name
                                         0,                      //its mother volume
                                         false,                  //no boolean operation
-                                        0,                      //copynumber
+                                        -1,                      //copynumber
                                         fCheckOverlaps);        //checking overlaps
     
     //--------------------------------------------------
@@ -122,21 +133,21 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4LogicalVolume *bryi_log;
     G4VPhysicalVolume *bryi_phys;
 
-    /*G4LogicalVolume* left_log;       //used by ATLAS for leakage detectors
-    G4VPhysicalVolume* left_phys;
-    G4Transform3D left_pos;
+    //G4LogicalVolume* left_log;       //used by ATLAS for leakage detectors
+    //G4VPhysicalVolume* left_phys;
+    //G4Transform3D left_pos;
    
-    G4LogicalVolume* right_log;
-    G4VPhysicalVolume* right_phys;
-    G4Transform3D right_pos;
+    //G4LogicalVolume* right_log;
+    //G4VPhysicalVolume* right_phys;
+    //G4Transform3D right_pos;
    
-    G4LogicalVolume* down_log;
-    G4VPhysicalVolume* down_phys;
-    G4Transform3D down_pos;
+    //G4LogicalVolume* down_log;
+    //G4VPhysicalVolume* down_phys;
+    //G4Transform3D down_pos;
    
-    G4LogicalVolume* back_log;
-    G4VPhysicalVolume* back_phys;
-    G4Transform3D back_pos;*/
+    //G4LogicalVolume* back_log;
+    //G4VPhysicalVolume* back_phys;
+    //G4Transform3D back_pos;
 
     //Warm cryostat wall
     //
@@ -154,7 +165,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                     "brww_phys",
                                     logicWorld,
                                     false,
-                                    1);
+                                    -2);
     
     //Vacuum between cryostat walls
     //
@@ -164,7 +175,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     brvvVisAttributes->SetLineWidth(6.0);
     brvvVisAttributes->SetColour( G4Colour::Blue() );
 
-    brvv_tub = new G4Tubs("brvv_tub", 0.0*cm, bcry_rvac, bryr_y, 0.0*degree, 360.*degree);
+    brvv_tub = new G4Tubs("brvv_tub", 0.0*cm, bcry_rvac, bryr_y, 0.0*degree,360.*degree);
     brvv_log = new G4LogicalVolume(brvv_tub, VacuumMaterial, "brvv_log");
     brvv_log->SetVisAttributes( brvvVisAttributes);
 
@@ -174,7 +185,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                   "brvv_phys",
                                   brww_log, 
                                   false, 
-                                  1); 
+                                  -3); 
   
     //Cold cryostat wall
     //
@@ -193,7 +204,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                   "bryw_phys",
                                   brvv_log,
                                   false,
-                                  1);
+                                  -4);
 
     //Inside cryostat
     //
@@ -213,7 +224,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                  "bryi_phys",
                                  bryw_log,
                                  false, 
-                                 1);
+                                 -5);
 
     //Prepare for HEC placement within cryostat
     //
@@ -227,7 +238,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                      );
     hecrot.rotateY(3.*M_PI/32); //3/2 * moduleDeltaPhi
     G4Transform3D hecpos = G4Transform3D(hecrot,G4ThreeVector(bepo_x,bepo_y,bepo_z));
-    
+     
     //--------------------------------------------------
     //Define ATLAS HEC TB geometry
     //--------------------------------------------------
@@ -283,7 +294,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //
     G4int numberZplane = 4;
     G4int depthNumber = 7;
-    G4double moduleNumber = 3;          //three modules for test-beam geometry
+    G4double moduleNumber = 1;          //three modules for test-beam geometry
                                         // 32 for the whole ATLAS HEC geometry
                                         
                                         //alias in atl-det-construction, mysql name
@@ -487,8 +498,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         logicDepth[indexDepth] = new G4LogicalVolume( solidDepths[indexDepth], 
                                                       lArMaterial,
                                                       depthName);
-        logicDepth[indexDepth]->SetVisAttributes( DepthVisAttributes );//image dispaly
-        //logicDepth[indexDepth]->SetVisAttributes( G4VisAttributes::GetInvisible() );
+        //logicDepth[indexDepth]->SetVisAttributes( DepthVisAttributes );//image dispaly
+        logicDepth[indexDepth]->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
         physiDepth[indexDepth] = new G4PVPlacement(0, 
                                                    G4ThreeVector(0.,0.,depthPositionZ),
@@ -646,7 +657,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         logicTieRod[indexWheel] = new G4LogicalVolume(solidTieRod[indexWheel],
                                                      FeMaterial,tieRodName,0,0,0);
 
-        //logicTieRod[indexWheel]->SetVisAttributes(TieRodVisAttributes);  //for image display
+        //logicTieRod[indexWheel]->SetVisAttributes(TieRodVisAttributes);//for image
+                                                                         // display
         logicTieRod[indexWheel]->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
         if ( TieRodZone ) {//true: HECversion == "standard_np_zone" 

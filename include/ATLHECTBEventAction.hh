@@ -26,11 +26,13 @@ class ATLHECTBEventAction : public G4UserEventAction {
         void SavePDGID( G4int ID );
         void Savevertexkenergy( G4double kenergy );
         void Addeleak( G4double eleak );
+        void Addedep( G4double stepedep );
 
     private:
         G4int PDGID;
         G4double vertexkenergy;
         G4double eleakage; 
+        G4double edep;
 };
 
 inline void ATLHECTBEventAction::SavePDGID( G4int ID){
@@ -45,6 +47,9 @@ inline void ATLHECTBEventAction::Addeleak( G4double eleak ){
     eleakage += eleak;
 }
 
+inline void ATLHECTBEventAction::Addedep( G4double stepedep ){
+    edep += stepedep;
+}
 #endif
 
 //**************************************************
