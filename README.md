@@ -17,8 +17,8 @@
         <li><a href="#dump-atlhectb-gdml-geometry-description-file">Dump ATLHECTB GDML geometry description file</a></li>
       </ul>
     </li>
-    <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a>
     </li><li><a href="#my-quick-geant4-installation">My quick Geant4 installation</a></li>
+    <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a>
   </ol>                                           
 </details>
 
@@ -26,7 +26,7 @@
 ## Project description
 The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. 
 - Start date: 11 May 2021 
-- Status: under development. 
+- Status: under development
 
 <!--Authors and contacts-->
 ## Authors and contacts
