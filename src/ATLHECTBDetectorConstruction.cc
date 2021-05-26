@@ -28,8 +28,7 @@
 ATLHECTBDetectorConstruction::ATLHECTBDetectorConstruction()
     : G4VUserDetectorConstruction(),
       fCheckOverlaps(false),
-      fDumpGDMLgeo(false)
-{}
+      fDumpGDMLgeo(false){}
 
 //Define deconstructor
 //
