@@ -138,14 +138,14 @@ Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instr
    ```
    
 ### Dump ATLHECTB GDML geometry description file
-We support GDML geometry description. By default it is not active, to activate modify the ATLHECTBDetectorConstruction fDumpGDMLgeo data member, as follows
+We support GDML geometry description. By default it is not active, to activate it, modify the ATLHECTBDetectorConstruction fDumpGDMLgeo data member, as follows
    ```c++
    ATLHECTBDetectorConstruction::ATLHECTBDetectorConstruction()
     : G4VUserDetectorConstruction(),
       fCheckOverlaps(false),
       fDumpGDMLgeo(true){}
    ```
-At the first execution it will create the ATLHECTBgeo.gdml file with the up to date GDML geometry description.
+At the first execution, it will create the ATLHECTBgeo.gdml file with the up to date GDML geometry description.
 
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
