@@ -54,25 +54,26 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     //
     G4int cpNo = step->GetPreStepPoint()->GetTouchable()->GetCopyNumber();
     G4String matName = step->GetPreStepPoint()->GetMaterial()->GetName();
-    //ATTENZIONE PRENDERE NOME WORLD NON NOME MATERIALE
-    if ( cpNo > 0 || ( cpNo == 0 && matName != "World" ) ){
+    G4String volName = step->GetPreStepPoint()->GetTouchable()->GetVolume()->GetName();
+
+    if ( cpNo > 0 || ( cpNo == 0 && volName != "World" ) ){
         fEventAction->Addedep( step->GetTotalEnergyDeposit() );
     }
     //Collect energy deposited in cryostat and World
     //cryostat columes have copy number < 0
     //World has copy number = 0
     //
-    if ( cpNo < 0 || ( cpNo == 0 && matName == "World" ) ){
+    if ( cpNo < 0 || ( cpNo == 0 && volName == "World" ) ){
         fEventAction->Addecryostat( step->GetTotalEnergyDeposit() ); 
     }
 
-    if ( step->GetTrack()->GetParticleDefinition()->GetParticleName() == "pi-" &&
+    /*    if ( step->GetTrack()->GetParticleDefinition()->GetParticleName() == "pi-" &&
          matName == "G4_lAr" && step->GetTotalEnergyDeposit() > 0.01){
     G4double e = step->GetTotalEnergyDeposit();
     G4double l = step->GetStepLength();
     ApplyBirks( e, l );
     }
-    
+  */  
 }
 
 
