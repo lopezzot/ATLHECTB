@@ -27,8 +27,9 @@
 # 1 event with tracking/verbose
 #
 /gun/particle e-
-/gun/energy 1 GeV
-/gun/direction 0 0 1
+/gun/energy 10 GeV
+/gun/position 0.0 0.2 1.8 m
+/gun/direction 0 0 -1
 #
 #
 /tracking/verbose 0
