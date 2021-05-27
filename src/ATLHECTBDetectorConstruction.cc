@@ -561,7 +561,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                            logicFirstAbsorber,
                                            physiDepth[0],  
 			                   false,
-                                           0,                  
+                                           1,                  
                                            fCheckOverlaps);
 
     firstAbsorberPositionZ = firstAbsorber[3]/2.- depthSize[3]/2.0;
@@ -572,7 +572,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                          logicAbsorber[1],
                                          physiDepth[3],  
  			                 false,
-                                         0,
+                                         1,
                                          fCheckOverlaps);
 
     //Tie rods in absorbers
