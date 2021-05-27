@@ -20,15 +20,17 @@ class ATLHECTBEventAction;
 class ATLHECTBSteppingAction : public G4UserSteppingAction {
     
     public:
-        ATLHECTBSteppingAction( const ATLHECTBDetectorConstruction* detConstruction,
+        ATLHECTBSteppingAction( //const ATLHECTBDetectorConstruction* detConstruction,
                                 ATLHECTBEventAction* eventAction );
         virtual ~ATLHECTBSteppingAction();
 
         virtual void UserSteppingAction( const G4Step* step );
 
+
     private:
-        const ATLHECTBDetectorConstruction* fDetConstruction;
+        //const ATLHECTBDetectorConstruction* fDetConstruction;
         ATLHECTBEventAction* fEventAction;
+
 };
 
 #endif

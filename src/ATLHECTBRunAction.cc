@@ -35,6 +35,7 @@ ATLHECTBRunAction::ATLHECTBRunAction()
     analysisManager->CreateNtupleDColumn("vertexkenergy");
     analysisManager->CreateNtupleDColumn("eleakage");
     analysisManager->CreateNtupleDColumn("edep");
+    analysisManager->CreateNtupleDColumn("ecryostat");
     analysisManager->FinishNtuple();
 }
 

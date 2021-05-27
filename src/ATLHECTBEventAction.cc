@@ -26,7 +26,8 @@ ATLHECTBEventAction::ATLHECTBEventAction()
     PDGID(0),
     vertexkenergy(0.),
     eleakage(0.),
-    edep(0.)
+    edep(0.),
+    ecryostat(0.)
 {}
 
 //Define deconstructor
@@ -43,6 +44,7 @@ void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
     vertexkenergy = 0.;
     eleakage = 0.;
     edep = 0.;
+    ecryostat = 0.;
 
 }
 
@@ -55,6 +57,7 @@ void ATLHECTBEventAction::EndOfEventAction( const G4Event* ) {
     analysisManager->FillNtupleDColumn(1, vertexkenergy); 
     analysisManager->FillNtupleDColumn(2, eleakage);
     analysisManager->FillNtupleDColumn(3, edep);
+    analysisManager->FillNtupleDColumn(4, ecryostat);
     analysisManager->AddNtupleRow();
 
 }

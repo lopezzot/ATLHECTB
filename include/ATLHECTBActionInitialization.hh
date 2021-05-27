@@ -19,14 +19,14 @@ class ATLHECTBDetectorConstruction;
 class ATLHECTBActionInitialization : public G4VUserActionInitialization {
     
     public:
-        ATLHECTBActionInitialization( ATLHECTBDetectorConstruction* );
+        ATLHECTBActionInitialization( /*ATLHECTBDetectorConstruction**/ );
         virtual ~ATLHECTBActionInitialization();
         
         virtual void BuildForMaster() const;
         virtual void Build() const;
 
-    private:
-       ATLHECTBDetectorConstruction* fDetConstruction; 
+    //private:
+       //ATLHECTBDetectorConstruction* fDetConstruction; 
 
 };
 

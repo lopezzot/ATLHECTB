@@ -84,7 +84,7 @@ int main( int argc, char** argv ) {
     auto physList = physListFactory->GetReferencePhysList( custom_pl );
     physList->RegisterPhysics( new G4StepLimiterPhysics() );
     runManager ->SetUserInitialization(physList);
-    auto ActInitialization = new ATLHECTBActionInitialization( DetConstruction );
+    auto ActInitialization = new ATLHECTBActionInitialization( /*DetConstruction*/ );
     runManager->SetUserInitialization( ActInitialization );
 
     //Initialize visualization

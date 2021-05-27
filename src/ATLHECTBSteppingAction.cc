@@ -10,6 +10,7 @@
 #include "ATLHECTBSteppingAction.hh"
 #include "ATLHECTBEventAction.hh"
 #include "ATLHECTBDetectorConstruction.hh"
+#include "ATLHECTBBirksLaw.hh"
 
 //Includers from Geant4
 //
@@ -19,10 +20,10 @@
 //Definition of constructor
 //
 ATLHECTBSteppingAction::ATLHECTBSteppingAction(
-        const ATLHECTBDetectorConstruction* detConstruction,
+        //const ATLHECTBDetectorConstruction* detConstruction,
         ATLHECTBEventAction* eventAction )
     : G4UserSteppingAction(),
-      fDetConstruction( detConstruction ),
+      //fDetConstruction( detConstruction ),
       fEventAction( eventAction ) {}
 
 //Definition of deconstructor
@@ -49,13 +50,30 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     }
 
     //Collect energy deposited in test beam prototype
+    //all volumes inside HEC have copy number => 0
     //
-    /*G4String matname = step->GetPreStepPoint()->GetMaterial->GetName();
-    if ( matname == "G4_Cu" || matname == "G4_KAPTON" || 
-         matname == "lAr" ){
-    fEventAction->Addedep( step->GetTotalEnergyDeposit() );
-    //G4cout<<step->GetPreStepPoint()->GetMaterial()->GetName()<<G4endl;
-    } */
+    G4int cpNo = step->GetPreStepPoint()->GetTouchable()->GetCopyNumber();
+    G4String matName = step->GetPreStepPoint()->GetMaterial()->GetName();
+    //ATTENZIONE PRENDERE NOME WORLD NON NOME MATERIALE
+    if ( cpNo > 0 || ( cpNo == 0 && matName != "World" ) ){
+        fEventAction->Addedep( step->GetTotalEnergyDeposit() );
+    }
+    //Collect energy deposited in cryostat and World
+    //cryostat columes have copy number < 0
+    //World has copy number = 0
+    //
+    if ( cpNo < 0 || ( cpNo == 0 && matName == "World" ) ){
+        fEventAction->Addecryostat( step->GetTotalEnergyDeposit() ); 
+    }
+
+    if ( step->GetTrack()->GetParticleDefinition()->GetParticleName() == "pi-" &&
+         matName == "G4_lAr" && step->GetTotalEnergyDeposit() > 0.01){
+    G4double e = step->GetTotalEnergyDeposit();
+    G4double l = step->GetStepLength();
+    ApplyBirks( e, l );
+    }
+    
 }
+
 
 //**************************************************

@@ -27,12 +27,15 @@ class ATLHECTBEventAction : public G4UserEventAction {
         void Savevertexkenergy( G4double kenergy );
         void Addeleak( G4double eleak );
         void Addedep( G4double stepedep );
+        void Addecryostat( G4double stepecryostat );
 
     private:
         G4int PDGID;
         G4double vertexkenergy;
         G4double eleakage; 
         G4double edep;
+        G4double ecryostat;
+
 };
 
 inline void ATLHECTBEventAction::SavePDGID( G4int ID){
@@ -49,6 +52,10 @@ inline void ATLHECTBEventAction::Addeleak( G4double eleak ){
 
 inline void ATLHECTBEventAction::Addedep( G4double stepedep ){
     edep += stepedep;
+}
+
+inline void ATLHECTBEventAction::Addecryostat( G4double stepecryostat ){
+    ecryostat += stepecryostat;
 }
 #endif
 

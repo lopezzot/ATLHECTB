@@ -393,7 +393,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     
     //(Sensitive) slice gaps (solid and logic)
     // 
-    G4double maxstepslice = 0.05*mm;
+    G4double maxstepslice = gapSize/2.; //at least two steps per track in LAr
     auto StepLimit = new G4UserLimits( );         
     StepLimit->SetMaxAllowedStep( maxstepslice );
     

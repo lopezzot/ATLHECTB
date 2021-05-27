@@ -16,9 +16,10 @@
 
 //Define constructor
 //
-ATLHECTBActionInitialization::ATLHECTBActionInitialization( ATLHECTBDetectorConstruction* detConstruction )
-    : G4VUserActionInitialization(),
-      fDetConstruction( detConstruction ) {}
+ATLHECTBActionInitialization::ATLHECTBActionInitialization( /*ATLHECTBDetectorConstruction* detConstruction*/ )
+    : G4VUserActionInitialization()//,
+      /*fDetConstruction( detConstruction )*/ 
+{}
 
 //Define deconstruction
 //
@@ -35,7 +36,7 @@ void ATLHECTBActionInitialization::Build() const {
     SetUserAction( new ATLHECTBRunAction );
     auto eventAction = new ATLHECTBEventAction;
     SetUserAction( eventAction );
-    SetUserAction( new ATLHECTBSteppingAction( fDetConstruction, eventAction ) ); 
+    SetUserAction( new ATLHECTBSteppingAction( /*fDetConstruction,*/ eventAction ) ); 
 }
 
 //**************************************************
