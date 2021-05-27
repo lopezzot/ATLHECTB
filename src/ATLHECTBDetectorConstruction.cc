@@ -293,7 +293,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //
     G4int numberZplane = 4;
     G4int depthNumber = 7;
-    G4double moduleNumber = 1;          //three modules for test-beam geometry
+    G4double moduleNumber = 3;          //three modules for test-beam geometry
                                         // 32 for the whole ATLAS HEC geometry
                                         
                                         //alias in atl-det-construction, mysql name
@@ -779,7 +779,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
             logicPadBoard = new G4LogicalVolume(solidPadBoard, CuMaterial,copperName);
             //logicPadBoard->SetVisAttributes(CopperVisAttributes); //for image display
-            //logicPadBoard->SetVisAttributes( G4VisAttributes::GetInvisible() );
+            logicPadBoard->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
             solidEstBoard = new G4Tubs(electrodeName,
                                        //moduleRinner,moduleRouter,(kaptonWidth[indexKapton])/2.,
@@ -792,7 +792,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
             logicEstBoard  = new G4LogicalVolume(solidEstBoard, KaptonMaterial, 
                                                  electrodeName );
             //logicEstBoard->SetVisAttributes(ElectrodeVisAttributes);//for image display
-            //logicEstBoard->SetVisAttributes( G4VisAttributes::GetInvisible() );
+            logicEstBoard->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
             G4double kaptonPositionZ = kaptonPosition[indexKapton]-gapSize/2.;
             physiEstBoard = new G4PVPlacement(0,

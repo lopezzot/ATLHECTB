@@ -16,6 +16,7 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include <string>
 
 //Define constructor
 //
@@ -29,7 +30,7 @@ ATLHECTBRunAction::ATLHECTBRunAction()
     analysisManager->SetVerboseLevel( 1 );
     analysisManager->SetNtupleMerging( 1 );    
 
-    analysisManager->CreateNtuple("ATLHECTB", "ATLHECTBoutput");
+    analysisManager->CreateNtuple("ATLHECTBout", "ATLHECTBoutput");
     analysisManager->CreateNtupleIColumn("PDGID");
     analysisManager->CreateNtupleDColumn("vertexkenergy");
     analysisManager->CreateNtupleDColumn("eleakage");
@@ -47,12 +48,13 @@ ATLHECTBRunAction::~ATLHECTBRunAction(){
 
 //Define BeginOfRunAction() and EndOfRunAction() methods
 //
-void ATLHECTBRunAction::BeginOfRunAction( const G4Run* ){
+void ATLHECTBRunAction::BeginOfRunAction( const G4Run* Run){
 
     //G4RunManager::GetRunManager()->SetRandomNumberStore( true );//inform runManager to save seeds
     auto analysisManager = G4AnalysisManager::Instance();
 
-    G4String outputfile = "ATLHECTBout";
+    std::string runnumber = std::to_string( Run->GetRunID() );
+    G4String outputfile = "ATLHECTBout_Run"+runnumber;
     analysisManager->OpenFile( outputfile );
 }
 
