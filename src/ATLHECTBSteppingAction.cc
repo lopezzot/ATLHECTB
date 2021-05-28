@@ -42,7 +42,11 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
                 step->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
         fEventAction->Savevertexkenergy(step->GetTrack()->GetVertexKineticEnergy());
     }
-    
+   
+    if ( step->GetTrack()->GetParticleDefinition()->GetParticleName() == "neutron" ){
+        if ( step->GetTrack()->GetGlobalTime() > 310. ){
+        G4cout<<step->GetTrack()->GetGlobalTime()<<G4endl;}
+    } 
     //Collect out of world leakage
     //
     if ( !step->GetTrack()->GetNextVolume() ){

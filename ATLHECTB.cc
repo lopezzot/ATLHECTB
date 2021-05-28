@@ -18,8 +18,10 @@
 #include "Randomize.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-#include "G4PhysListFactory.hh" //construct PL from PLFactory
+#include "G4PhysListFactory.hh"   
 #include "G4StepLimiterPhysics.hh"
+#include "G4NeutronTrackingCut.hh"
+#include "G4SystemOfUnits.hh"
 
 //G4err output for usage error
 //
@@ -80,10 +82,15 @@ int main( int argc, char** argv ) {
     //
     auto DetConstruction = new ATLHECTBDetectorConstruction();
     runManager->SetUserInitialization( DetConstruction );
+
     auto physListFactory = new G4PhysListFactory;
     auto physList = physListFactory->GetReferencePhysList( custom_pl );
     physList->RegisterPhysics( new G4StepLimiterPhysics() );
+    auto nCut = new G4NeutronTrackingCut("neutronTrackingCut", 1);
+    nCut->SetTimeLimit(290.*ns);
+    physList->RegisterPhysics(nCut);
     runManager ->SetUserInitialization(physList);
+
     auto ActInitialization = new ATLHECTBActionInitialization( /*DetConstruction*/ );
     runManager->SetUserInitialization( ActInitialization );
 
