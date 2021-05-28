@@ -36,6 +36,8 @@ ATLHECTBRunAction::ATLHECTBRunAction()
     analysisManager->CreateNtupleDColumn("eleakage");
     analysisManager->CreateNtupleDColumn("edep");
     analysisManager->CreateNtupleDColumn("ecryostat");
+    analysisManager->CreateNtupleDColumn("elAr");
+    analysisManager->CreateNtupleDColumn("BirkelAr");
     analysisManager->FinishNtuple();
 }
 

@@ -37,7 +37,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     //Save primary particle PDGID and vertex kinetic energy
     //
     if ( step->GetTrack()->GetTrackID() == 1 &&
-        step->GetTrack()->GetCurrentStepNumber() == 1 ){
+         step->GetTrack()->GetCurrentStepNumber() == 1 ){
         fEventAction->SavePDGID(
                 step->GetTrack()->GetParticleDefinition()->GetPDGEncoding());
         fEventAction->Savevertexkenergy(step->GetTrack()->GetVertexKineticEnergy());
@@ -59,6 +59,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     if ( cpNo > 0 || ( cpNo == 0 && volName != "World" ) ){
         fEventAction->Addedep( step->GetTotalEnergyDeposit() );
     }
+
     //Collect energy deposited in cryostat and World
     //cryostat columes have copy number < 0
     //World has copy number = 0
@@ -67,13 +68,18 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
         fEventAction->Addecryostat( step->GetTotalEnergyDeposit() ); 
     }
 
-    /*    if ( step->GetTrack()->GetParticleDefinition()->GetParticleName() == "pi-" &&
-         matName == "G4_lAr" && step->GetTotalEnergyDeposit() > 0.01){
-    G4double e = step->GetTotalEnergyDeposit();
-    G4double l = step->GetStepLength();
-    ApplyBirks( e, l );
+    //Collect energy deposited and Birk energy deposited in lAr gaps
+    //
+    if ( matName == "G4_lAr"){
+        G4double stepl = step->GetStepLength();
+        G4double edep = step->GetTotalEnergyDeposit();
+        if ( stepl > 0. && edep > 0. ){
+            fEventAction->AddelAr( edep );
+            fEventAction->AddBirkelAr( 
+                    ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
+        }
     }
-  */  
+  
 }
 
 

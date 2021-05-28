@@ -28,6 +28,8 @@ class ATLHECTBEventAction : public G4UserEventAction {
         void Addeleak( G4double eleak );
         void Addedep( G4double stepedep );
         void Addecryostat( G4double stepecryostat );
+        void AddelAr( G4double stepelAr );
+        void AddBirkelAr( G4double stepBirkelAr );
 
     private:
         G4int PDGID;
@@ -35,6 +37,8 @@ class ATLHECTBEventAction : public G4UserEventAction {
         G4double eleakage; 
         G4double edep;
         G4double ecryostat;
+        G4double elAr;
+        G4double BirkelAr;
 
 };
 
@@ -57,6 +61,15 @@ inline void ATLHECTBEventAction::Addedep( G4double stepedep ){
 inline void ATLHECTBEventAction::Addecryostat( G4double stepecryostat ){
     ecryostat += stepecryostat;
 }
+
+inline void ATLHECTBEventAction::AddelAr( G4double stepelAr ){
+    elAr += stepelAr;
+}
+
+inline void ATLHECTBEventAction::AddBirkelAr( G4double stepBirkelAr ){
+    BirkelAr += stepBirkelAr;
+}
+
 #endif
 
 //**************************************************
