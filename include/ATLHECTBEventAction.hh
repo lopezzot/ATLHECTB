@@ -10,6 +10,8 @@
 #ifndef ATLHECTBEventAction_h
 #define ATLHECTBEventAction_h 1
 
+#include <vector>
+
 //Includers from Gean4
 //
 #include "G4UserEventAction.hh"
@@ -30,15 +32,18 @@ class ATLHECTBEventAction : public G4UserEventAction {
         void Addecryostat( G4double stepecryostat );
         void AddelAr( G4double stepelAr );
         void AddBirkelAr( G4double stepBirkelAr );
-
+        void AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo );
+        std::vector<G4double>& GetBirkeSlice() { return BirkeSlice; };
+    
     private:
-        G4int PDGID;
-        G4double vertexkenergy;
-        G4double eleakage; 
-        G4double edep;
-        G4double ecryostat;
-        G4double elAr;
-        G4double BirkelAr;
+        G4int PDGID;                         //primary particle PDGID
+        G4double vertexkenergy;              //primary particle kenergy (MeV)
+        G4double eleakage;                   //out of world leakage (MeV)
+        G4double edep;                       //energy deposited in HEC (MeV)
+        G4double ecryostat;                  //energy deposited in cryostat (MeV)
+        G4double elAr;                       //energy deposited in lAr (MeV)
+        G4double BirkelAr;                   //Birk corrected elAr (a.u.)
+        std::vector<G4double> BirkeSlice;    //Birk corrected elAr per 40 slice (a.u.)
 
 };
 
@@ -68,6 +73,10 @@ inline void ATLHECTBEventAction::AddelAr( G4double stepelAr ){
 
 inline void ATLHECTBEventAction::AddBirkelAr( G4double stepBirkelAr ){
     BirkelAr += stepBirkelAr;
+}
+
+inline void ATLHECTBEventAction::AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo ){
+    BirkeSlice[sliceNo] += stepBirkeSlice;
 }
 
 #endif

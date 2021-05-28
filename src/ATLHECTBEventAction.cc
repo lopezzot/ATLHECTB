@@ -16,8 +16,6 @@
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
-#include "Randomize.hh"
-#include <iomanip>
 
 //Define constructor
 //
@@ -29,7 +27,8 @@ ATLHECTBEventAction::ATLHECTBEventAction()
     edep(0.),
     ecryostat(0.),
     elAr(0.),
-    BirkelAr(0.)
+    BirkelAr(0.),
+    BirkeSlice{}
 {}
 
 //Define deconstructor
@@ -40,7 +39,7 @@ ATLHECTBEventAction::~ATLHECTBEventAction() {}
 //
 void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
     
-    //Initialize variable per event
+    //Initialize variables per event
     //
     PDGID =  0;
     vertexkenergy = 0.;
@@ -49,11 +48,17 @@ void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
     ecryostat = 0.;
     elAr = 0.;
     BirkelAr = 0.;
+    BirkeSlice.clear();
+    for ( unsigned int i = 0; i<40; i++) { BirkeSlice.push_back(0.); }
 
 }
 
 void ATLHECTBEventAction::EndOfEventAction( const G4Event* ) {
 
+    //Access Event random seeds
+    //
+    //auto rndseed = G4RunManager::GetRunManager()->GetRandomNumberStatusForThisEvent();
+    
     //Accumulate statistics
     //
     auto analysisManager = G4AnalysisManager::Instance();
@@ -65,7 +70,7 @@ void ATLHECTBEventAction::EndOfEventAction( const G4Event* ) {
     analysisManager->FillNtupleDColumn(5, elAr);
     analysisManager->FillNtupleDColumn(6, BirkelAr);
     analysisManager->AddNtupleRow();
-
+    
 }
 
 //**************************************************

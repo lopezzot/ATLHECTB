@@ -28,13 +28,14 @@ ATLHECTBActionInitialization::~ATLHECTBActionInitialization() {}
 //Define Build() and BuildForMaster() methods
 //
 void ATLHECTBActionInitialization::BuildForMaster() const {
-    SetUserAction( new ATLHECTBRunAction );
+    auto eventAction = new ATLHECTBEventAction;
+    SetUserAction( new ATLHECTBRunAction( eventAction ) );
 }
 
 void ATLHECTBActionInitialization::Build() const {
     SetUserAction( new ATLHECTBPrimaryGeneratorAction );
-    SetUserAction( new ATLHECTBRunAction );
     auto eventAction = new ATLHECTBEventAction;
+    SetUserAction( new ATLHECTBRunAction( eventAction ) );
     SetUserAction( eventAction );
     SetUserAction( new ATLHECTBSteppingAction( /*fDetConstruction,*/ eventAction ) ); 
 }

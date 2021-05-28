@@ -8,6 +8,7 @@
 //Includers from project files
 //
 #include "ATLHECTBRunAction.hh"
+#include "ATLHECTBEventAction.hh"
 
 //Includers from Geant4
 //
@@ -20,8 +21,9 @@
 
 //Define constructor
 //
-ATLHECTBRunAction::ATLHECTBRunAction()
-    : G4UserRunAction() {
+ATLHECTBRunAction::ATLHECTBRunAction( ATLHECTBEventAction* eventAction )
+    : G4UserRunAction(),
+      fEventAction( eventAction ) {
     
     G4RunManager::GetRunManager()->SetPrintProgress( 1 ); //print each event number
 
@@ -38,7 +40,9 @@ ATLHECTBRunAction::ATLHECTBRunAction()
     analysisManager->CreateNtupleDColumn("ecryostat");
     analysisManager->CreateNtupleDColumn("elAr");
     analysisManager->CreateNtupleDColumn("BirkelAr");
+    analysisManager->CreateNtupleDColumn("BirkeSlice", fEventAction->GetBirkeSlice() );
     analysisManager->FinishNtuple();
+
 }
 
 //Define deconstructor
@@ -53,7 +57,10 @@ ATLHECTBRunAction::~ATLHECTBRunAction(){
 //
 void ATLHECTBRunAction::BeginOfRunAction( const G4Run* Run){
 
-    //G4RunManager::GetRunManager()->SetRandomNumberStore( true );//inform runManager to save seeds
+    //Inform RunManager to save random seeds 
+    //
+    //G4RunManager::GetRunManager()->SetRandomNumberStore( true );
+
     auto analysisManager = G4AnalysisManager::Instance();
 
     std::string runnumber = std::to_string( Run->GetRunID() );

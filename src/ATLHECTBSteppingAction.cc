@@ -77,10 +77,11 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
             fEventAction->AddelAr( edep );
             fEventAction->AddBirkelAr( 
                     ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
+            fEventAction->AddBirkeSlice( 
+                    ApplyBirks( step->GetTotalEnergyDeposit(), stepl), cpNo );
         }
     }
   
 }
-
 
 //**************************************************
