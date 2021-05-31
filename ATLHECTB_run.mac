@@ -10,6 +10,21 @@
 # Initialize kernel
 /run/initialize
 #
+# Run 0
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/gun/position 0 200 50 cm
+/gun/direction 0 -1 0
+#
+# Verose options
+#
+#/tracking/verbose 0
+#/run/verbose 0
+#/event/verbose 0
+#/run/printProgress 5
+/run/beamOn 100
+#
 #(OPTIONALS)
 # Default kinematics: 
 # Magnetic field
@@ -22,29 +37,3 @@
 #/process/inactivate eBrem
 #
 #(END OPTIONALS)
-#
-# electron 50 MeV in direction (0.,0.,1.)
-# 1 event with tracking/verbose
-#
-/gun/particle e-
-/gun/energy 10 GeV
-/gun/position 0.0 0.2 1.8 m
-/gun/direction 0 0 -1
-#
-#
-/tracking/verbose 0
-/run/verbose 0
-/event/verbose 0
-#/run/printProgress 5
-/run/beamOn 100
-#
-#
-# Magnetic field
-# 
-#/globalField/setValue 0 0 0 tesla
-#
-# Activate/inactivate physics processes
-#
-#/process/list
-#/process/inactivate eBrem
-#
