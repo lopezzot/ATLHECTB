@@ -5,7 +5,7 @@
 // \start date: 11 May 2021
 //**************************************************
 
-G4double ApplyBirks( G4double de, G4double steplength ){
+G4double ApplyBirks( const G4double& de, const G4double& steplength ){
 
     const G4double Emin = 1.51;        //(MeV cm2)/g, minimal energy loss in LAr
     const G4double Ef = 9.2;           //kV/cm, electric field in LAr gaps  
