@@ -1,6 +1,8 @@
 # ATLHECTB
 **A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.**
 
+![Alt Text](https://github.com/lopezzot/ATLHECTB/blob/main/images/ATLHECTB_movie.gif)
+
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
