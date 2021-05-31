@@ -20,8 +20,8 @@
 #include "G4UIExecutive.hh"
 #include "G4PhysListFactory.hh"   
 #include "G4StepLimiterPhysics.hh"
-#include "G4NeutronTrackingCut.hh"
-#include "G4SystemOfUnits.hh"
+//#include "G4NeutronTrackingCut.hh" //for neutron time limit cut
+//#include "G4SystemOfUnits.hh"      //for neutron time limit cut
 
 //G4err output for usage error
 //
@@ -86,9 +86,9 @@ int main( int argc, char** argv ) {
     auto physListFactory = new G4PhysListFactory;
     auto physList = physListFactory->GetReferencePhysList( custom_pl );
     physList->RegisterPhysics( new G4StepLimiterPhysics() );
-    auto nCut = new G4NeutronTrackingCut("neutronTrackingCut", 1);
-    nCut->SetTimeLimit(290.*ns);
-    physList->RegisterPhysics(nCut);
+    //auto nCut = new G4NeutronTrackingCut("neutronTrackingCut", 1);
+    //nCut->SetTimeLimit(290.*ns);
+    //physList->RegisterPhysics(nCut);
     runManager ->SetUserInitialization(physList);
 
     auto ActInitialization = new ATLHECTBActionInitialization( /*DetConstruction*/ );

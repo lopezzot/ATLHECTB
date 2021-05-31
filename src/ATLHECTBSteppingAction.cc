@@ -43,10 +43,6 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
         fEventAction->Savevertexkenergy(step->GetTrack()->GetVertexKineticEnergy());
     }
    
-    if ( step->GetTrack()->GetParticleDefinition()->GetParticleName() == "neutron" ){
-        if ( step->GetTrack()->GetGlobalTime() > 310. ){
-        G4cout<<step->GetTrack()->GetGlobalTime()<<G4endl;}
-    } 
     //Collect out of world leakage
     //
     if ( !step->GetTrack()->GetNextVolume() ){
@@ -79,10 +75,12 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
         G4double edep = step->GetTotalEnergyDeposit();
         if ( stepl > 0. && edep > 0. ){
             fEventAction->AddelAr( edep );
-            fEventAction->AddBirkelAr( 
-                    ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
-            fEventAction->AddBirkeSlice( 
-                    ApplyBirks( step->GetTotalEnergyDeposit(), stepl), cpNo );
+            if ( step->GetTrack()->GetGlobalTime() <= 75. ){  // nanoseconds (ns)
+                fEventAction->AddBirkelAr( 
+                        ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
+                fEventAction->AddBirkeSlice( 
+                        ApplyBirks( step->GetTotalEnergyDeposit(), stepl), cpNo );
+            }
         }
     }
   
