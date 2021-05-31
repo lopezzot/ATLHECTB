@@ -43,8 +43,9 @@ class ATLHECTBEventAction : public G4UserEventAction {
         G4double ecryostat;                  //energy deposited in cryostat (MeV)
         G4double elAr;                       //energy deposited in lAr (MeV)
         G4double BirkelAr;                   //Birk corrected elAr (a.u.)
+                                             // signal from <75*ns hits
         std::vector<G4double> BirkeSlice;    //Birk corrected elAr per 40 slice (a.u.)
-
+                                             // signal from <75*ns hits
 };
 
 inline void ATLHECTBEventAction::SavePDGID( G4int ID){
