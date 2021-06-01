@@ -65,8 +65,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
     auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
     //Rohacell material
-    //auto RohacellMaterial = new G4Material("Rohacell", 
-                                             //6.18, 12.957*g/mole, 0.112*g/cm3); 
+    auto RohacellMaterial = new G4Material("Rohacell", 
+                                             6.18, 12.957*g/mole, 0.112*g/cm3); 
     //World Construction
     //
     G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
@@ -214,8 +214,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     bryiVisAttributes->SetColour( G4Colour::Cyan() );
 
     bryi_tub = new G4Tubs("bryi_tub",0.0*cm,bcry_rlar,bryr_y,0.0*degree,360.0*degree);
-    bryi_log = new G4LogicalVolume(bryi_tub, AirMaterial, "bryi_log");
-    //bryi_log = new G4LogicalVolume(bryi_tub, RohacellMaterial, "bryi_log");
+    //bryi_log = new G4LogicalVolume(bryi_tub, AirMaterial, "bryi_log");
+    bryi_log = new G4LogicalVolume(bryi_tub, RohacellMaterial, "bryi_log");
     bryi_log->SetVisAttributes(bryiVisAttributes);
     bryi_phys = new G4PVPlacement(0,
                                  G4ThreeVector(),
