@@ -77,6 +77,7 @@ int main( int argc, char** argv ) {
     #ifdef G4MULTITHREADED
     if ( nthreads > 0 ) runManager->SetNumberOfThreads(nthreads);
     #endif
+    G4Random::setTheSeed(2);
 
     //Set mandatory classes (DetConstruction, PhysicsList, ActionInitialization)
     //
