@@ -3,7 +3,7 @@
 
 <figure>
 <img src="https://github.com/lopezzot/ATLHECTB/blob/main/images/ATLHECTB_movie.gif" alt="Trulli" style="width:100%">
-<figcaption align="center"><b>Fig. - 10 GeV muon passing through the ATLAS HEC</b></figcaption>
+<figcaption align="center"><b>Fig. - 10 GeV muon passing through the ATLAS HEC.</b></figcaption>
 </figure>
 
 <br/><br/>
