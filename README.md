@@ -82,7 +82,7 @@ Parser options
    cmake3 -DGeant4_DIR= /cvmfs/geant4.cern.ch/geant4/10.7.p01/x86_64-centos7-gcc8-optdeb-MT/lib64/Geant4-10.7.1 ../ATLHECTB/
    make
    ```
-   Hint: cp and source the script/ATLHECTB_lxplus_10.7.p01.sh file in the build directory.
+   Hint: cp and source the scripts/ATLHECTB_lxplus_10.7.p01.sh file in the build directory.
 3. execute (example with ATLHECTB_run.mac macro card, 2 threads and FTFP_BERT physics list)
    ```sh
    ./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT
