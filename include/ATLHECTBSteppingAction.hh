@@ -14,8 +14,13 @@
 //
 #include "G4UserSteppingAction.hh"
 
+//Includers from project files
+//
+#include "ATLHECTBSignalCalculator.hh"
+
 class ATLHECTBDetectorConstruction;
 class ATLHECTBEventAction;
+
 
 class ATLHECTBSteppingAction : public G4UserSteppingAction {
     
@@ -30,6 +35,9 @@ class ATLHECTBSteppingAction : public G4UserSteppingAction {
     private:
         //const ATLHECTBDetectorConstruction* fDetConstruction;
         ATLHECTBEventAction* fEventAction;
+
+        //pointer to ATLHECTSignalCalculator (singleton)
+        ATLHECTBSignalCalculator* fSCalculator;
 
 };
 

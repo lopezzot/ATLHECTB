@@ -5,7 +5,7 @@
 // \start date: 11 May 2021
 //**************************************************
 
-//Includera from project files
+//Includers from project files
 //
 #include "ATLHECTBEventAction.hh"
 #include "ATLHECTBRunAction.hh"

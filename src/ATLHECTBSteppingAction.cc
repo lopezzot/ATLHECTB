@@ -10,7 +10,6 @@
 #include "ATLHECTBSteppingAction.hh"
 #include "ATLHECTBEventAction.hh"
 #include "ATLHECTBDetectorConstruction.hh"
-#include "ATLHECTBBirksLaw.hh"
 
 //Includers from Geant4
 //
@@ -24,7 +23,10 @@ ATLHECTBSteppingAction::ATLHECTBSteppingAction(
         ATLHECTBEventAction* eventAction )
     : G4UserSteppingAction(),
       //fDetConstruction( detConstruction ),
-      fEventAction( eventAction ) {}
+      fEventAction( eventAction ) {
+        
+    fSCalculator = ATLHECTBSignalCalculator::Instance();
+}
 
 //Definition of deconstructor
 //
@@ -77,13 +79,13 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
             fEventAction->AddelAr( edep );
             if ( step->GetTrack()->GetGlobalTime() <= 75. ){  // nanoseconds (ns)
                 fEventAction->AddBirkelAr( 
-                        ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
+                        fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
                 fEventAction->AddBirkeSlice( 
-                        ApplyBirks( step->GetTotalEnergyDeposit(), stepl), cpNo );
+                        fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl), cpNo );
             }
         }
     }
-  
+
 }
 
 //**************************************************
