@@ -272,7 +272,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4LogicalVolume* logicTieRod[2];      //array of two logical TieRod
     G4VPhysicalVolume* physiTieRod[2];    //array of two physical TieRod
     
-    bool TieRodZone = true;               //true for including dead zones around tierods
+    bool TieRodZone = false;               //true for including dead zones around tierods
     G4Tubs* solidTieRodZone[2];           //for dead zone on TieRod, two TieRodZone
     G4LogicalVolume* logicTieRodZone[2];  //array of two logical TieRodZone
     G4VPhysicalVolume* physiTieRodZone[2];//array of two physical TieRodZone
