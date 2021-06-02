@@ -32,8 +32,10 @@ class ATLHECTBEventAction : public G4UserEventAction {
         void Addecryostat( G4double stepecryostat );
         void AddelAr( G4double stepelAr );
         void AddBirkelAr( G4double stepBirkelAr );
-        void AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo );
-        std::vector<G4double>& GetBirkeSlice() { return BirkeSlice; };
+        void AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo, G4int moduleNo );
+        std::vector<G4double>& GetM1BirkeSlice() { return M1BirkeSlice; };
+        std::vector<G4double>& GetM2BirkeSlice() { return M2BirkeSlice; };
+        std::vector<G4double>& GetM3BirkeSlice() { return M3BirkeSlice; };
     
     private:
         G4int PDGID;                         //primary particle PDGID
@@ -44,8 +46,10 @@ class ATLHECTBEventAction : public G4UserEventAction {
         G4double elAr;                       //energy deposited in lAr (MeV)
         G4double BirkelAr;                   //Birk corrected elAr (a.u.)
                                              // signal from <75*ns hits
-        std::vector<G4double> BirkeSlice;    //Birk corrected elAr per 40 slice (a.u.)
-                                             // signal from <75*ns hits
+        std::vector<G4double> M1BirkeSlice;  //Birk corrected elAr per 40 slice (a.u.)
+                                             // for Module 101, signal from <75*ns hits
+        std::vector<G4double> M2BirkeSlice;  //     Module 102
+        std::vector<G4double> M3BirkeSlice;  //     Module 103
 };
 
 inline void ATLHECTBEventAction::SavePDGID( G4int ID){
@@ -76,8 +80,12 @@ inline void ATLHECTBEventAction::AddBirkelAr( G4double stepBirkelAr ){
     BirkelAr += stepBirkelAr;
 }
 
-inline void ATLHECTBEventAction::AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo ){
-    BirkeSlice[sliceNo] += stepBirkeSlice;
+inline void ATLHECTBEventAction::AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo, G4int moduleNo ){
+
+    if      ( moduleNo == 101 ){ M1BirkeSlice[sliceNo] += stepBirkeSlice; }
+    else if ( moduleNo == 102 ){ M2BirkeSlice[sliceNo] += stepBirkeSlice; }
+    else if ( moduleNo == 103 ){ M3BirkeSlice[sliceNo] += stepBirkeSlice; }
+    else {;}
 }
 
 #endif

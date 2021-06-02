@@ -73,7 +73,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     //Collect energy deposited and Birk energy deposited in lAr gaps
     //
     if ( matName == "G4_lAr" ){
-        G4cout<<step->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2)<<G4endl;
+        G4int modulecpNo = step->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
         G4double stepl = step->GetStepLength()/10.; //cm
         G4double edep = step->GetTotalEnergyDeposit();
         if ( stepl > 0. && edep > 0. ){
@@ -82,7 +82,8 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
                 fEventAction->AddBirkelAr( 
                         fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
                 fEventAction->AddBirkeSlice( 
-                        fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl), cpNo );
+                        fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl),
+                                                  cpNo, modulecpNo );
             }
         }
     }

@@ -28,7 +28,9 @@ ATLHECTBEventAction::ATLHECTBEventAction()
     ecryostat(0.),
     elAr(0.),
     BirkelAr(0.),
-    BirkeSlice{}
+    M1BirkeSlice{},
+    M2BirkeSlice{},
+    M3BirkeSlice{}
 {}
 
 //Define deconstructor
@@ -48,8 +50,12 @@ void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
     ecryostat = 0.;
     elAr = 0.;
     BirkelAr = 0.;
-    BirkeSlice.clear();
-    for ( unsigned int i = 0; i<40; i++) { BirkeSlice.push_back(0.); }
+    M1BirkeSlice.clear();
+    M2BirkeSlice.clear();
+    M3BirkeSlice.clear();
+    for ( unsigned int i = 0; i<40; i++) { M1BirkeSlice.push_back(0.); }
+    for ( unsigned int i = 0; i<40; i++) { M2BirkeSlice.push_back(0.); }
+    for ( unsigned int i = 0; i<40; i++) { M3BirkeSlice.push_back(0.); }
 
 }
 
