@@ -71,7 +71,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     //Collect energy deposited and Birk energy deposited in lAr gaps
     //
     if ( matName == "G4_lAr"){
-        G4double stepl = step->GetStepLength();
+        G4double stepl = step->GetStepLength()/10.; //cm
         G4double edep = step->GetTotalEnergyDeposit();
         if ( stepl > 0. && edep > 0. ){
             fEventAction->AddelAr( edep );
