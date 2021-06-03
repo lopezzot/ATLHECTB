@@ -41,5 +41,5 @@ G4double ATLHECTBSignalCalculator::ApplyBirks( const G4double& de, const G4doubl
             G4double satde = de*A/( 1.+( (k/Ef)*(1/LArdensity)*(de/steplength) ) ); 
     
             return satde;
-};
+}
 //**************************************************
