@@ -101,7 +101,10 @@ Parser options
     source ATLHECTB_lxplus_10.7.p01
     ```
 3. prepare for HTCondor submission (example with Geant4.10.07_p01, ATLHECTB_run.mac, 2 threads, FTFP_BERT physics list)
+    ```sh
     cp ../ATLHECTB/scripts/ATLHECTB_HTCondor.sh .
+    export MYHOME=`pwd`
+    echo $MYHOME/ATLHECTB -m $MYHOME/ATLHECTB_run.mac -t 2 > ATLHECTB_HTCondor.sh
     cp ../ATLHECTB/scripts/ATLHECTB_HTCondor.sub .
     ```
 4. submit a job
