@@ -98,7 +98,7 @@ Parser options
     mkdir ATLHECTB-build; cd ATLHECTB-build
     mkdir error log output
     cp ../ATLHECTB/scripts/ATLHECTB_lxplus_10.7.p01.sh .
-    source ATLHECTB_lxplus_10.7.p01
+    source ATLHECTB_lxplus_10.7.p01.sh
     ```
 3. prepare for HTCondor submission (example with Geant4.10.07_p01, ATLHECTB_run.mac, 2 threads, FTFP_BERT physics list)
     ```sh
