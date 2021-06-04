@@ -97,16 +97,18 @@ Parser options
     ```sh
     mkdir ATLHECTB-build; cd ATLHECTB-build
     mkdir error log output
-    cp ../ATLHECTB/script/ATLHECTB_HTCondor.sub .
-    cp ../ATLHECTB/script/ATLHECTB_lxplus_10.7.p01.sh .
-    echo "./ATLHECTB -m ATLHECTB_run.mac -t 2 -pl FTFP_BERT" >> ATLHECTB_lxplus_10.7.p01.sh
-    sed -i '1 i executable = ATLHECTB_lxplus_10.7.p01.sh' ATLHECTB_HTCondor.sub
+    cp ../ATLHECTB/scripts/ATLHECTB_lxplus_10.7.p01.sh .
+    source ATLHECTB_lxplus_10.7.p01
     ```
-3. submit a job
+3. prepare for HTCondor submission (example with Geant4.10.07_p01, ATLHECTB_run.mac, 2 threads, FTFP_BERT physics list)
+    cp ../ATLHECTB/scripts/ATLHECTB_HTCondor.sh .
+    cp ../ATLHECTB/scripts/ATLHECTB_HTCondor.sub .
+    ```
+4. submit a job
    ```sh
    condor_submit ATLHECTB_HTCondor.sub 
    ```
-4. monitor the job
+5. monitor the job
    ```sh
    condor_q
    ```
