@@ -104,7 +104,7 @@ Parser options
     ```sh
     cp ../ATLHECTB/scripts/ATLHECTB_HTCondor_10.7.p01.sh .
     export MYHOME=`pwd`
-    echo $MYHOME/ATLHECTB -m $MYHOME/ATLHECTB_run.mac -t 2 > ATLHECTB_HTCondor_10.7.p01.sh
+    echo $MYHOME/ATLHECTB -m $MYHOME/ATLHECTB_run.mac -t 2 >> ATLHECTB_HTCondor_10.7.p01.sh
     cp ../ATLHECTB/scripts/ATLHECTB_HTCondor.sub .
     sed -i '1 i executable = ATLHECTB_HTCondor_10.7.p01.sh' ATLHECTB_HTCondor.sub
     ```
