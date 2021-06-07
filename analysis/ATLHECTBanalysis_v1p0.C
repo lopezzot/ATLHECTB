@@ -161,7 +161,7 @@ void pianalysis( const vector<double>& emenergies, const vector<string>& emfiles
                               nBins, 0., emenergies[RunNo]*100. );
 
         auto H1Econt = new TH1F("piEcont", "piEcont", 
-                              nBins, 0., 1. );
+                              nBins, 0., emenergies[RunNo]);
 
         auto H1MaxS = new TH1F("piMaxS", "piMaxS", 
                               nBins, 0., emenergies[RunNo]*100. );
@@ -181,13 +181,12 @@ void pianalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1Leak->Fill((lenergy+cenergy)/1000.);
             H2LeakvsEdep->Fill(lenergy/1000., cenergy/1000.);
             H1TotS->Fill(BelAr);
-            H1Econt->Fill((emenergies[RunNo]-lenergy/1000.-cenergy/1000.)/emenergies[RunNo]);
+            H1Econt->Fill(emenergies[RunNo]-lenergy/1000.-cenergy/1000.);
         }
 
         energies[RunNo] = emenergies[RunNo];
         ratiomaxtotS[RunNo] = H1MaxS->GetMean() / H1TotS->GetMean();
-        responses[RunNo] = H1TotS->GetMean() / H1Econt->GetMean();
-
+        responses[RunNo] = H1TotS->GetXaxis()->GetBinCenter( H1TotS->GetMaximumBin() ) / emenergies[RunNo];
         outputfile->cd();
         H1Econt->Write();
         delete H1Econt;
@@ -218,7 +217,7 @@ void pianalysis( const vector<double>& emenergies, const vector<string>& emfiles
 };
 
 void ATLHECTBanalysis_v1p0(){
-    
+   /* 
     // Analysis of e- data
     // energies 6, 20, 50, 100, 200 GeV
     //
@@ -229,7 +228,7 @@ void ATLHECTBanalysis_v1p0(){
     }
 
     emanalysis( emenergies, emfiles );
-
+*/
     // Analysis of pi- data
     // energies 6, 20, 50, 100, 200 GeV
     //
