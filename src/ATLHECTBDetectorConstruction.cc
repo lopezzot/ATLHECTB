@@ -71,10 +71,10 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //
     G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
     G4double   bryr_y = 200.0*cm;
-    G4double   bryr_z = 200.0*cm; //in ATLAS = 129.55*cm;
+    G4double   bryr_z = 350.0*cm; //in ATLAS = 129.55*cm;
     auto solidWorld = new G4Box("World", 2.*bryr_x, 2*bryr_y, 2*bryr_z);
     auto logicWorld = new G4LogicalVolume(solidWorld, AirMaterial, "World");
-    logicWorld->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    //logicWorld->SetVisAttributes( G4VisAttributes::GetInvisible() );
     auto physiWorld = new G4PVPlacement(0,                      //no rotation
                                         G4ThreeVector(),        //at (0,0,0)
                                         logicWorld,             //its LV
@@ -160,7 +160,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     brww_log->SetVisAttributes( brwwVisAttributes );
     G4RotationMatrix cryostatrot;
     cryostatrot.rotateX(-90.*deg);
-    G4Transform3D cryostatpos = G4Transform3D(cryostatrot,G4ThreeVector(0.,0.,2.*m));
+    cryostatrot.rotateZ(180.*deg);
+    G4Transform3D cryostatpos = G4Transform3D(cryostatrot,G4ThreeVector(0.,1720.*mm,5.*m));
     /*brww_phys =*/ new G4PVPlacement(cryostatpos,
                                     brww_log,
                                     "brww_phys",

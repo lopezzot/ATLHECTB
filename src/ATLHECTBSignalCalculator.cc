@@ -42,4 +42,48 @@ G4double ATLHECTBSignalCalculator::ApplyBirks( const G4double& de, const G4doubl
     
             return satde;
 }
+
+//Define index L1() method
+//
+G4int ATLHECTBSignalCalculator::IndexL1( const G4double& eta, const G4double& relX ){
+    G4int index;
+
+    if ( 1.5<eta && eta<1.6 ) { 
+        if ( relX > 0 ) {index = 0;}
+        else            {index = 1;}}
+    if ( 1.6<eta && eta<1.7 ) {
+        if (relX > 0 ) {index = 2;}
+        else           {index = 3;}}
+    if (1.7<eta && eta<1.8 ) {
+        if (relX > 0 ) {index = 4;}
+        else           {index = 5;}}
+    if (1.8<eta && eta<1.9) {
+        if (relX > 0) {index = 6;}
+        else          {index = 7;}}
+    if (1.9<eta && eta<2.0) {
+        if (relX > 0) {index = 8;}
+        else          {index = 9;}}
+    if (2.0<eta && eta<2.1) {
+        if (relX > 0) {index = 10;}
+        else          {index = 11;}}
+    if (2.1<eta && eta<2.2) {
+        if (relX > 0) {index = 12;}
+        else          {index = 13;}}
+    if (2.2<eta && eta<2.3) {
+        if (relX > 0) {index = 14;}
+        else          {index = 15;}}
+    if (2.3<eta && eta<2.4) {
+        if (relX > 0) {index = 16;}
+        else          {index = 17;}}
+    if (2.4<eta && eta<2.5) {
+        if (relX > 0) {index = 18;}
+        else          {index = 19;}}
+    if (2.5<eta && eta<2.7)  {index = 20;}
+    if (2.7<eta && eta<2.9)  {index = 21;}
+    if (2.9<eta && eta<3.0)  {index = 40;}
+    if (3.0<eta    )  {index = 23;}
+
+    return index;
+}
+
 //**************************************************

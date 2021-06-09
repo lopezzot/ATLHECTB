@@ -84,7 +84,17 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
                 fEventAction->AddBirkeSlice( 
                         fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl),
                                                   cpNo, modulecpNo );
-            }
+                //test for position extraction
+                //
+                G4ThreeVector origin(0.,0.,0.);
+                G4ThreeVector vectPos = step->GetPreStepPoint()->GetTouchable()->
+                    GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
+                //G4cout<<"abs: "<<vectPos.getX()<<" "<<vectPos.getY()<<" "<<vectPos.getZ()<<G4endl;                
+                G4ThreeVector hitpos = step->GetPreStepPoint()->GetPosition();
+                G4ThreeVector relhitpos = hitpos-vectPos;
+                G4cout<<hitpos.getEta()<<" "<<fSCalculator->IndexL1(hitpos.getEta(),relhitpos.getX())<<G4endl;
+                //G4cout<<"hit: "<<hitpos.getX()<<" "<<hitpos.getY()<<" "<<hitpos.getZ()<<G4endl;
+                }
         }
     }
 
