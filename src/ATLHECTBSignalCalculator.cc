@@ -82,6 +82,7 @@ G4int ATLHECTBSignalCalculator::IndexL1( const G4double& eta, const G4double& re
     if (2.7<eta && eta<2.9)  {index = 21;}
     if (2.9<eta && eta<3.0)  {index = 22;}
     if (3.0<eta    )  {index = 23;}
+    else {index = 0;}
 
     return index;
 }
@@ -122,6 +123,7 @@ G4int ATLHECTBSignalCalculator::IndexL2( const G4double& eta, const G4double& re
     if (2.45<eta && eta<2.7)  {index = 20;}
     if (2.7<eta && eta<2.9)  {index = 21;}
     if (2.9<eta)  {index = 22;}
+    else {index = 0;}
 
     return index;
 }
@@ -159,6 +161,7 @@ G4int ATLHECTBSignalCalculator::IndexL3( const G4double& eta, const G4double& re
     if (2.35<eta && eta<2.6) {index = 18; }
     if (2.6<eta && eta<2.8)  {index = 19; }
     if (2.8<eta )            {index = 20; }
+    else {index = 0;}
 
     return index;
 }
@@ -194,6 +197,7 @@ G4int ATLHECTBSignalCalculator::IndexL4( const G4double& eta, const G4double& re
     if (2.35<eta && eta<2.6)  {index = 17; }
     if (2.6<eta && eta<2.8)   {index = 18; }
     if (2.8<eta )             {index = 19; }
+    else {index = 0;}
 
     return index;
 }
