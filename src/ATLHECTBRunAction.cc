@@ -43,6 +43,18 @@ ATLHECTBRunAction::ATLHECTBRunAction( ATLHECTBEventAction* eventAction )
     analysisManager->CreateNtupleDColumn("M1BirkeSlice", fEventAction->GetM1BirkeSlice() );
     analysisManager->CreateNtupleDColumn("M2BirkeSlice", fEventAction->GetM2BirkeSlice() );
     analysisManager->CreateNtupleDColumn("M3BirkeSlice", fEventAction->GetM3BirkeSlice() );
+    analysisManager->CreateNtupleDColumn("M1L1BirkeLayer", fEventAction->GetM1L1BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M2L1BirkeLayer", fEventAction->GetM2L1BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M3L1BirkeLayer", fEventAction->GetM3L1BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M1L2BirkeLayer", fEventAction->GetM1L2BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M2L2BirkeLayer", fEventAction->GetM2L2BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M3L2BirkeLayer", fEventAction->GetM3L2BirkeLayer() ); 
+    analysisManager->CreateNtupleDColumn("M1L3BirkeLayer", fEventAction->GetM1L3BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M2L3BirkeLayer", fEventAction->GetM2L3BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M3L3BirkeLayer", fEventAction->GetM3L3BirkeLayer() ); 
+     analysisManager->CreateNtupleDColumn("M1L4BirkeLayer", fEventAction->GetM1L4BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M2L4BirkeLayer", fEventAction->GetM2L4BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M3L4BirkeLayer", fEventAction->GetM3L4BirkeLayer() ); 
     analysisManager->FinishNtuple();
 
 }

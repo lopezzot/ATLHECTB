@@ -33,11 +33,27 @@ class ATLHECTBEventAction : public G4UserEventAction {
         void AddelAr( G4double stepelAr );
         void AddBirkelAr( G4double stepBirkelAr );
         void AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo, G4int moduleNo );
-        //void AddM1L1BirkeSlice( G4double stepBirkeSlice, G4double relX, G4double relY );
+        void AddL1BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice );
+        void AddL2BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice );
+        void AddL3BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice ); 
+        void AddL4BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice ); 
+
         std::vector<G4double>& GetM1BirkeSlice() { return M1BirkeSlice; };
         std::vector<G4double>& GetM2BirkeSlice() { return M2BirkeSlice; };
         std::vector<G4double>& GetM3BirkeSlice() { return M3BirkeSlice; };
-    
+        std::vector<G4double>& GetM1L1BirkeLayer() { return M1L1BirkeLayer; };
+        std::vector<G4double>& GetM2L1BirkeLayer() { return M2L1BirkeLayer; };
+        std::vector<G4double>& GetM3L1BirkeLayer() { return M3L1BirkeLayer; };
+        std::vector<G4double>& GetM1L2BirkeLayer() { return M1L2BirkeLayer; };
+        std::vector<G4double>& GetM2L2BirkeLayer() { return M2L2BirkeLayer; };
+        std::vector<G4double>& GetM3L2BirkeLayer() { return M3L2BirkeLayer; };
+        std::vector<G4double>& GetM1L3BirkeLayer() { return M1L3BirkeLayer; };
+        std::vector<G4double>& GetM2L3BirkeLayer() { return M2L3BirkeLayer; };
+        std::vector<G4double>& GetM3L3BirkeLayer() { return M3L3BirkeLayer; };
+        std::vector<G4double>& GetM1L4BirkeLayer() { return M1L4BirkeLayer; };
+        std::vector<G4double>& GetM2L4BirkeLayer() { return M2L4BirkeLayer; };
+        std::vector<G4double>& GetM3L4BirkeLayer() { return M3L4BirkeLayer; };
+
     private:
         G4int PDGID;                         //primary particle PDGID
         G4double vertexkenergy;              //primary particle kenergy (MeV)
@@ -51,8 +67,18 @@ class ATLHECTBEventAction : public G4UserEventAction {
                                              // for Module 101, signal from <75*ns hits
         std::vector<G4double> M2BirkeSlice;  //     Module 102
         std::vector<G4double> M3BirkeSlice;  //     Module 103
-        //std::vector<G4double> M1L1BirkeSlice;
-};
+        std::vector<G4double> M1L1BirkeLayer;
+        std::vector<G4double> M2L1BirkeLayer;
+        std::vector<G4double> M3L1BirkeLayer;
+        std::vector<G4double> M1L2BirkeLayer;
+        std::vector<G4double> M2L2BirkeLayer;
+        std::vector<G4double> M3L2BirkeLayer;
+        std::vector<G4double> M1L3BirkeLayer;
+        std::vector<G4double> M2L3BirkeLayer;
+        std::vector<G4double> M3L3BirkeLayer;
+        std::vector<G4double> M1L4BirkeLayer;
+        std::vector<G4double> M2L4BirkeLayer;
+        std::vector<G4double> M3L4BirkeLayer;};
 
 inline void ATLHECTBEventAction::SavePDGID( G4int ID){
     PDGID = ID;
@@ -89,6 +115,40 @@ inline void ATLHECTBEventAction::AddBirkeSlice( G4double stepBirkeSlice, G4int s
     else if ( moduleNo == 103 ){ M3BirkeSlice[sliceNo] += stepBirkeSlice; }
     else {;}
 }
+
+inline void ATLHECTBEventAction::AddL1BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice ){
+    
+    if ( moduleNo == 101 ) { M1L1BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 102 ) { M2L1BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 103 ) { M3L1BirkeLayer[index] += stepBirkeSlice; }
+
+} 
+
+inline void ATLHECTBEventAction::AddL2BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice ){
+    
+    if ( moduleNo == 101 ) { M1L2BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 102 ) { M2L2BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 103 ) { M3L2BirkeLayer[index] += stepBirkeSlice; }
+
+} 
+
+inline void ATLHECTBEventAction::AddL3BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice ){
+    
+    if ( moduleNo == 101 ) { M1L3BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 102 ) { M2L3BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 103 ) { M3L3BirkeLayer[index] += stepBirkeSlice; }
+
+} 
+
+inline void ATLHECTBEventAction::AddL4BirkeLayer( G4int moduleNo, G4int index, G4double stepBirkeSlice ){
+    
+    if ( moduleNo == 101 ) { M1L4BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 102 ) { M2L4BirkeLayer[index] += stepBirkeSlice; }
+    if ( moduleNo == 103 ) { M3L4BirkeLayer[index] += stepBirkeSlice; }
+
+} 
+
+
 
 #endif
 

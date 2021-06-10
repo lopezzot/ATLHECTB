@@ -74,7 +74,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4double   bryr_z = 350.0*cm; //in ATLAS = 129.55*cm;
     auto solidWorld = new G4Box("World", 2.*bryr_x, 2*bryr_y, 2*bryr_z);
     auto logicWorld = new G4LogicalVolume(solidWorld, AirMaterial, "World");
-    //logicWorld->SetVisAttributes( G4VisAttributes::GetInvisible() );
+    logicWorld->SetVisAttributes( G4VisAttributes::GetInvisible() );
     auto physiWorld = new G4PVPlacement(0,                      //no rotation
                                         G4ThreeVector(),        //at (0,0,0)
                                         logicWorld,             //its LV

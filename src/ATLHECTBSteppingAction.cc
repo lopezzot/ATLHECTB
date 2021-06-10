@@ -80,21 +80,43 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
             fEventAction->AddelAr( edep );
             if ( step->GetTrack()->GetGlobalTime() <= 75. ){  // nanoseconds (ns)
                 fEventAction->AddBirkelAr( 
-                        fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
+                    fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
                 fEventAction->AddBirkeSlice( 
-                        fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl),
-                                                  cpNo, modulecpNo );
-                //test for position extraction
+                    fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl),
+                                              cpNo, modulecpNo );
+                //Fill by Layer
                 //
                 G4ThreeVector origin(0.,0.,0.);
-                G4ThreeVector vectPos = step->GetPreStepPoint()->GetTouchable()->
-                    GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
-                //G4cout<<"abs: "<<vectPos.getX()<<" "<<vectPos.getY()<<" "<<vectPos.getZ()<<G4endl;                
+                G4ThreeVector sliceorigin = step->GetPreStepPoint()->GetTouchable()->
+                GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
                 G4ThreeVector hitpos = step->GetPreStepPoint()->GetPosition();
-                G4ThreeVector relhitpos = hitpos-vectPos;
-                G4cout<<hitpos.getEta()<<" "<<fSCalculator->IndexL1(hitpos.getEta(),relhitpos.getX())<<G4endl;
-                //G4cout<<"hit: "<<hitpos.getX()<<" "<<hitpos.getY()<<" "<<hitpos.getZ()<<G4endl;
+                G4ThreeVector relhitpos = hitpos-sliceorigin;
+                if ( cpNo < 8 ){ //layer 1
+                    G4int index = 
+                        fSCalculator->IndexL1( hitpos.getEta(), relhitpos.getX() );
+                    fEventAction->AddL1BirkeLayer( modulecpNo, index, 
+                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
                 }
+                else if ( 8<=cpNo && cpNo<24 ){ //layer 2
+                    G4int index = 
+                        fSCalculator->IndexL2( hitpos.getEta(), relhitpos.getX() );
+                    fEventAction->AddL2BirkeLayer( modulecpNo, index, 
+                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
+                }
+                else if ( 24<=cpNo && cpNo<32 ){ //layer 3
+                    G4int index = 
+                        fSCalculator->IndexL3( hitpos.getEta(), relhitpos.getX() );
+                    fEventAction->AddL3BirkeLayer( modulecpNo, index, 
+                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
+                }
+                else if ( 32<=cpNo && cpNo<40 ){ //layer 4
+                    G4int index = 
+                        fSCalculator->IndexL4( hitpos.getEta(), relhitpos.getX() );
+                    fEventAction->AddL4BirkeLayer( modulecpNo, index, 
+                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
+                }
+
+            }
         }
     }
 

@@ -30,7 +30,19 @@ ATLHECTBEventAction::ATLHECTBEventAction()
     BirkelAr(0.),
     M1BirkeSlice{},
     M2BirkeSlice{},
-    M3BirkeSlice{}
+    M3BirkeSlice{},
+    M1L1BirkeLayer{},
+    M2L1BirkeLayer{},
+    M3L1BirkeLayer{},
+    M1L2BirkeLayer{},
+    M2L2BirkeLayer{},
+    M3L2BirkeLayer{},
+    M1L3BirkeLayer{},
+    M2L3BirkeLayer{},
+    M3L3BirkeLayer{},
+    M1L4BirkeLayer{},
+    M2L4BirkeLayer{},
+    M3L4BirkeLayer{}
 {}
 
 //Define deconstructor
@@ -53,9 +65,34 @@ void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
     M1BirkeSlice.clear();
     M2BirkeSlice.clear();
     M3BirkeSlice.clear();
+    M1L1BirkeLayer.clear();
+    M2L1BirkeLayer.clear();
+    M3L1BirkeLayer.clear();
+    M1L2BirkeLayer.clear();
+    M2L2BirkeLayer.clear();
+    M3L2BirkeLayer.clear();
+    M1L3BirkeLayer.clear();
+    M2L3BirkeLayer.clear();
+    M3L3BirkeLayer.clear();
+    M1L4BirkeLayer.clear();
+    M2L4BirkeLayer.clear();
+    M3L4BirkeLayer.clear();
+    
     for ( unsigned int i = 0; i<40; i++) { M1BirkeSlice.push_back(0.); }
     for ( unsigned int i = 0; i<40; i++) { M2BirkeSlice.push_back(0.); }
     for ( unsigned int i = 0; i<40; i++) { M3BirkeSlice.push_back(0.); }
+    for ( unsigned int i = 0; i<24; i++) { M1L1BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<24; i++) { M2L1BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<24; i++) { M3L1BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<23; i++) { M1L2BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<23; i++) { M2L2BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<23; i++) { M3L2BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<21; i++) { M1L3BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<21; i++) { M2L3BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<21; i++) { M3L3BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<20; i++) { M1L4BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<20; i++) { M2L4BirkeLayer.push_back(0.); }
+    for ( unsigned int i = 0; i<20; i++) { M3L4BirkeLayer.push_back(0.); }
 
 }
 
