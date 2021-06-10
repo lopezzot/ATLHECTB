@@ -25,6 +25,8 @@ class ATLHECTBSignalCalculator {
 
         G4double ApplyBirks( const G4double& de, const G4double& steplength );
 
+        G4int IndexL1( const G4double& eta, const G4double& relX );
+
 };
 
 #endif

@@ -33,6 +33,7 @@ class ATLHECTBEventAction : public G4UserEventAction {
         void AddelAr( G4double stepelAr );
         void AddBirkelAr( G4double stepBirkelAr );
         void AddBirkeSlice( G4double stepBirkeSlice, G4int sliceNo, G4int moduleNo );
+        //void AddM1L1BirkeSlice( G4double stepBirkeSlice, G4double relX, G4double relY );
         std::vector<G4double>& GetM1BirkeSlice() { return M1BirkeSlice; };
         std::vector<G4double>& GetM2BirkeSlice() { return M2BirkeSlice; };
         std::vector<G4double>& GetM3BirkeSlice() { return M3BirkeSlice; };
@@ -50,6 +51,7 @@ class ATLHECTBEventAction : public G4UserEventAction {
                                              // for Module 101, signal from <75*ns hits
         std::vector<G4double> M2BirkeSlice;  //     Module 102
         std::vector<G4double> M3BirkeSlice;  //     Module 103
+        //std::vector<G4double> M1L1BirkeSlice;
 };
 
 inline void ATLHECTBEventAction::SavePDGID( G4int ID){
