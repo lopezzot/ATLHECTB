@@ -80,10 +80,8 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
             fEventAction->AddelAr( edep );
             if ( step->GetTrack()->GetGlobalTime() <= 75. ){  // nanoseconds (ns)
                 fEventAction->AddBirkelAr( 
-                    fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl ) );
-                fEventAction->AddBirkeSlice( 
-                    fSCalculator->ApplyBirks( step->GetTotalEnergyDeposit(), stepl),
-                                              cpNo, modulecpNo );
+                    fSCalculator->ApplyBirks( edep, stepl ) );
+               
                 //Fill by Layer
                 //
                 G4ThreeVector origin(0.,0.,0.);
@@ -95,30 +93,30 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
                     G4int index = 
                         fSCalculator->IndexL1( hitpos.getEta(), relhitpos.getX() );
                     fEventAction->AddL1BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
+                        fSCalculator->ApplyBirks( edep, stepl ));
                 }
                 else if ( 8<=cpNo && cpNo<24 ){ //layer 2
                     G4int index = 
                         fSCalculator->IndexL2( hitpos.getEta(), relhitpos.getX() );
                     fEventAction->AddL2BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
+                        fSCalculator->ApplyBirks( edep, stepl ));
                 }
                 else if ( 24<=cpNo && cpNo<32 ){ //layer 3
                     G4int index = 
                         fSCalculator->IndexL3( hitpos.getEta(), relhitpos.getX() );
                     fEventAction->AddL3BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
+                        fSCalculator->ApplyBirks( edep, stepl ));
                 }
                 else if ( 32<=cpNo && cpNo<40 ){ //layer 4
                     G4int index = 
                         fSCalculator->IndexL4( hitpos.getEta(), relhitpos.getX() );
                     fEventAction->AddL4BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks(step->GetTotalEnergyDeposit(),stepl ));
+                        fSCalculator->ApplyBirks( edep ,stepl ));
                 }
 
-            }
-        }
-    }
+            } //if global time
+        } //if stepl and edep
+    } //if G4_lAr
 
 }
 

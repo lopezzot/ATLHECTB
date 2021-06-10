@@ -28,9 +28,6 @@ ATLHECTBEventAction::ATLHECTBEventAction()
     ecryostat(0.),
     elAr(0.),
     BirkelAr(0.),
-    M1BirkeSlice{},
-    M2BirkeSlice{},
-    M3BirkeSlice{},
     M1L1BirkeLayer{},
     M2L1BirkeLayer{},
     M3L1BirkeLayer{},
@@ -62,9 +59,6 @@ void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
     ecryostat = 0.;
     elAr = 0.;
     BirkelAr = 0.;
-    M1BirkeSlice.clear();
-    M2BirkeSlice.clear();
-    M3BirkeSlice.clear();
     M1L1BirkeLayer.clear();
     M2L1BirkeLayer.clear();
     M3L1BirkeLayer.clear();
@@ -78,9 +72,6 @@ void ATLHECTBEventAction::BeginOfEventAction( const G4Event* ){
     M2L4BirkeLayer.clear();
     M3L4BirkeLayer.clear();
     
-    for ( unsigned int i = 0; i<40; i++) { M1BirkeSlice.push_back(0.); }
-    for ( unsigned int i = 0; i<40; i++) { M2BirkeSlice.push_back(0.); }
-    for ( unsigned int i = 0; i<40; i++) { M3BirkeSlice.push_back(0.); }
     for ( unsigned int i = 0; i<24; i++) { M1L1BirkeLayer.push_back(0.); }
     for ( unsigned int i = 0; i<24; i++) { M2L1BirkeLayer.push_back(0.); }
     for ( unsigned int i = 0; i<24; i++) { M3L1BirkeLayer.push_back(0.); }

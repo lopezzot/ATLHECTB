@@ -40,9 +40,6 @@ ATLHECTBRunAction::ATLHECTBRunAction( ATLHECTBEventAction* eventAction )
     analysisManager->CreateNtupleDColumn("ecryostat");
     analysisManager->CreateNtupleDColumn("elAr");
     analysisManager->CreateNtupleDColumn("BirkelAr");
-    analysisManager->CreateNtupleDColumn("M1BirkeSlice", fEventAction->GetM1BirkeSlice() );
-    analysisManager->CreateNtupleDColumn("M2BirkeSlice", fEventAction->GetM2BirkeSlice() );
-    analysisManager->CreateNtupleDColumn("M3BirkeSlice", fEventAction->GetM3BirkeSlice() );
     analysisManager->CreateNtupleDColumn("M1L1BirkeLayer", fEventAction->GetM1L1BirkeLayer() );
     analysisManager->CreateNtupleDColumn("M2L1BirkeLayer", fEventAction->GetM2L1BirkeLayer() );
     analysisManager->CreateNtupleDColumn("M3L1BirkeLayer", fEventAction->GetM3L1BirkeLayer() );
