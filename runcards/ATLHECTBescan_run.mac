@@ -28,7 +28,7 @@
 # Run 4
 #
 /gun/energy 60 GeV
-/run/beamOn 5000
+/run/beamOn 50000
 #
 # Run 5
 #
