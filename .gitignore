@@ -1,6 +1,7 @@
 # Lorenzo Pezzotti .gitignore configuration
 *.swp #vim .swp files
 *.pyc #python *.pyc files
+*.root #ROOT *.root files  
 
 #Standard C++ .gitignore configuration below 
 
