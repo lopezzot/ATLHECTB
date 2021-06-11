@@ -94,5 +94,5 @@
 # Run 17
 #
 /gun/energy 147.8 GeV
-/run/bramOn 50000
+/run/beamOn 50000
 #
