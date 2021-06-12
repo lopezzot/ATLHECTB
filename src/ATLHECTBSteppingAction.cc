@@ -78,7 +78,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
         G4double edep = step->GetTotalEnergyDeposit();
         if ( stepl > 0. && edep > 0. ){
             fEventAction->AddelAr( edep );
-            if ( step->GetTrack()->GetGlobalTime() <= 75. ){  // nanoseconds (ns)
+            if ( step->GetTrack()->GetGlobalTime()-14. <= 75. ){  // nanoseconds (ns)
                 fEventAction->AddBirkelAr( 
                     fSCalculator->ApplyBirks( edep, stepl ) );
                
