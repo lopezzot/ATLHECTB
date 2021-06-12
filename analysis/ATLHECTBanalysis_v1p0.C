@@ -20,6 +20,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     double erresponses[emenergies.size()];
     double zeros[emenergies.size()];
     memset( zeros, 0., emenergies.size()*sizeof(double));
+    double Sampfraction[emenergies.size()];
 
     //For loop over Runs (energies)
     //
@@ -105,7 +106,17 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         //response
         //
         auto H1Response = new TH1F("e-Response","e-Response",
-                                   nBins, 0., 100. );
+                                   nBins, 30, 70. );
+
+        //reconstructed energy
+        //
+        auto H1Recenergy = new TH1F("e-Reconstructedenergy",
+                "e-Reconstructedenergy", nBins*10, 0., 200. );
+
+        //sampling fraction
+        //
+        auto H1Sampfraction = new TH1F("e-SamplingFraction",
+                "e-SamplingFraction", nBins, 0., 0.1);
 
         //auto H1MaxS = new TH1F("e-MaxS", "e-MaxS", 
                              // nBins, 0., emenergies[RunNo]*100. );
@@ -120,7 +131,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1TotS->Fill(BelAr);
             H1Econt->Fill(emenergies[RunNo]-lenergy/1000.-cenergy/1000.);
             H1Etot->Fill( (edep+lenergy+cenergy)/1000. );
-
+            H1Sampfraction->Fill(elAr/edep);
 
             //MaxSignalIndex = std::max_element(M2L1BelAr->begin(),M2L1BelAr->end())
               //                                -M2L1BelAr->begin();
@@ -147,12 +158,15 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1TotCutSignal->Fill( addchannels );
             H1Channels->Fill(channels);
             H1Response->Fill( addchannels / (edep/1000.) ); 
+            // average response 44.8059 a.u./GeV
+            H1Recenergy->Fill( addchannels / 44.8059 ); 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
         ratiomaxtotS[RunNo] = 0;//H1MaxS->GetMean() / H1TotS->GetMean();
         responses[RunNo] = H1Response->GetMean();
         erresponses[RunNo] = H1Response->GetMeanError();
+        Sampfraction[RunNo] = H1Sampfraction->GetMean();
 
         outputfile->cd();
         H1Leak->Write();
@@ -165,11 +179,14 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         delete H1TotS;
         H1Etot->Write();
         delete H1Etot;
+        H1Sampfraction->Write();
+        delete H1Sampfraction;
        
         H1TotCutSignal->Write();
         H1Channels->Write();
         H1Signals->Write();
         H1Response->Write();
+        H1Recenergy->Write();
        // H1MaxS->Write();
        // delete H1MaxS;
 }
@@ -190,9 +207,16 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     G1responses->Write();
     delete G1responses;
     //delete G1ratiomaxtotS;
+   
+
+    auto G1Sampfraction = new TGraph( emenergies.size(), energies, Sampfraction );
+    G1Sampfraction->SetName("e-samplingFraction");
+    G1Sampfraction->SetTitle("e-samplingFraction");
+    G1Sampfraction->Write();
+    delete G1Sampfraction;
+    
     outputfile->Close();
     delete outputfile;
-
     // Final print out
     //
     double k;
@@ -313,9 +337,9 @@ void ATLHECTBanalysis_v1p0(){
     // Analysis of e- data
     // energies 6, 20, 50, 100, 200 GeV
     //
-    vector<double> emenergies = {20.,40.,50.,80.,100.,119.1};
+    vector<double> emenergies = {20.,40.,50.,80.,100.,119.1,147.8};
     vector<string> emfiles;
-    for ( unsigned int i=0; i<6; i++ ){
+    for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
     emanalysis( emenergies, emfiles );
