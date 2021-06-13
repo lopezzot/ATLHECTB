@@ -21,6 +21,11 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     double zeros[emenergies.size()];
     memset( zeros, 0., emenergies.size()*sizeof(double));
     double Sampfraction[emenergies.size()];
+    double ersampfraction[emenergies.size()];
+    double recenergies[emenergies.size()];
+    double errecenergies[emenergies.size()];
+    double energyresolution[emenergies.size()];
+    double erenergyresolution[emenergies.size()];
 
     //For loop over Runs (energies)
     //
@@ -116,7 +121,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         //sampling fraction
         //
         auto H1Sampfraction = new TH1F("e-SamplingFraction",
-                "e-SamplingFraction", nBins, 0., 0.1);
+                "e-SamplingFraction", nBins, 0., 10.);
 
         //auto H1MaxS = new TH1F("e-MaxS", "e-MaxS", 
                              // nBins, 0., emenergies[RunNo]*100. );
@@ -131,7 +136,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1TotS->Fill(BelAr);
             H1Econt->Fill(emenergies[RunNo]-lenergy/1000.-cenergy/1000.);
             H1Etot->Fill( (edep+lenergy+cenergy)/1000. );
-            H1Sampfraction->Fill(elAr/edep);
+            H1Sampfraction->Fill((elAr/edep)*100.);
 
             //MaxSignalIndex = std::max_element(M2L1BelAr->begin(),M2L1BelAr->end())
               //                                -M2L1BelAr->begin();
@@ -167,6 +172,16 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         responses[RunNo] = H1Response->GetMean();
         erresponses[RunNo] = H1Response->GetMeanError();
         Sampfraction[RunNo] = H1Sampfraction->GetMean();
+        ersampfraction[RunNo] = H1Sampfraction->GetMeanError();
+        
+        H1Recenergy->Fit("gaus","Q");
+        recenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParameter(1);
+        errecenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParError(1);
+        double res =(H1Recenergy->GetFunction("gaus")->GetParameter(2)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*sqrt(energies[RunNo])*100.;
+        energyresolution[RunNo] = res;
+        erenergyresolution[RunNo] = (H1Recenergy->GetFunction("gaus")->GetParError(2)/H1Recenergy->GetFunction("gaus")->GetParameter(2) + H1Recenergy->GetFunction("gaus")->GetParError(1)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*res;
+
+
 
         outputfile->cd();
         H1Leak->Write();
@@ -189,7 +204,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         H1Recenergy->Write();
        // H1MaxS->Write();
        // delete H1MaxS;
-}
+    }
 
     // Finalize objects over multiple runs
     //
@@ -203,18 +218,83 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     //G1ratiomaxtotS->SetTitle("e-ratiomaxtotS");
     G1responses->SetName("e-responses");
     G1responses->SetTitle("e-responses");
+    G1responses->GetYaxis()->SetTitle("Response [a.u./GeV]");
+    G1responses->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     //G1ratiomaxtotS->Write();
     G1responses->Write();
     delete G1responses;
     //delete G1ratiomaxtotS;
-   
 
-    auto G1Sampfraction = new TGraph( emenergies.size(), energies, Sampfraction );
+    auto G1Sampfraction = new TGraphErrors( emenergies.size(), energies, Sampfraction, zeros, ersampfraction );
+    G1Sampfraction->GetYaxis()->SetRangeUser(4.,6.);
     G1Sampfraction->SetName("e-samplingFraction");
     G1Sampfraction->SetTitle("e-samplingFraction");
+    G1Sampfraction->GetYaxis()->SetTitle("f_{samp} [%]");
+    G1Sampfraction->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1Sampfraction->SetMarkerStyle(8);
     G1Sampfraction->Write();
     delete G1Sampfraction;
-    
+
+    auto G1recenergy = new TGraphErrors( emenergies.size(), energies, recenergies, zeros, errecenergies );
+    G1recenergy->SetMarkerStyle(8);
+    G1recenergy->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1recenergy->GetYaxis()->SetTitle("Energy [GeV]");
+    G1recenergy->SetTitle("e-reconstructedenergy");
+    G1recenergy->SetName("e-reconstructedenergy");
+    G1recenergy->Write();
+    delete G1recenergy;
+
+    auto G1energyresolution = new TGraphErrors( emenergies.size(), energies, energyresolution, zeros, erenergyresolution );
+    G1energyresolution->SetMarkerStyle(8);
+    G1energyresolution->SetMarkerColor(kRed);
+    G1energyresolution->SetLineColor(kRed);
+    G1energyresolution->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1energyresolution->GetYaxis()->SetTitle("#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
+    G1energyresolution->GetYaxis()->SetRangeUser(19.,25.);
+    G1energyresolution->GetXaxis()->SetRangeUser(0.,170.);
+    G1energyresolution->SetTitle("e-energyresolution");
+    G1energyresolution->SetName("e-energyresolution");
+    auto F1energyres = new TF1("e-energyres","[0]",20.,150.);
+    F1energyres->SetLineWidth(3);
+    F1energyres->SetLineColor(kRed);
+    G1energyresolution->Fit(F1energyres, "QR");
+    cout<<"->Average a term in resolution "<<F1energyres->GetParameter(0)<<" +- "<<F1energyres->GetParError(0)<<" % GeV^0.5"<<endl;
+    F1energyres->Write();
+    G1energyresolution->Write();
+
+    double ATLASenres[7] = {22.2, 21.6, 21.5, 22.30, 22.0, 21.2, 21.3};
+    double erATLASenres[7] = {22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30, 22.32-22.0, 21.46-21.2, 21.57-21.3};
+    auto G1ATLASenres = new TGraphErrors( emenergies.size(), energies, ATLASenres, zeros, erATLASenres );
+    G1ATLASenres->SetMarkerStyle(8);
+    G1ATLASenres->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1ATLASenres->GetYaxis()->SetTitle("#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
+    G1ATLASenres->GetYaxis()->SetRangeUser(19.,25.);
+    G1ATLASenres->GetXaxis()->SetRangeUser(0.,170.);
+    G1ATLASenres->SetTitle("e-ATLASenergyresolution");
+    G1ATLASenres->SetName("e-ATLASenergyresolution");
+    auto F1ATLASenergyres = new TF1("e-ATLASenergyres","21.68",20.,150.);
+    F1ATLASenergyres->SetLineWidth(3);
+    F1ATLASenergyres->SetLineColor(kBlack);
+    F1ATLASenergyres->Write();
+    G1ATLASenres->Write();
+
+    //Create canvas
+    //
+    auto C1eneres = new TCanvas("e-Canvas_eneres", "", 600, 600);
+    G1ATLASenres->Draw("AP");
+    G1energyresolution->Draw("P SAME");
+    F1ATLASenergyres->Draw("L SAME");
+    auto legend = new TLegend(0.1,0.7,0.53,0.9);
+    legend->AddEntry(G1ATLASenres,"#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}","ep");
+    legend->AddEntry(G1energyresolution,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+    legend->Draw("same");
+    C1eneres->Write();
+    delete C1eneres;
+
+    delete F1ATLASenergyres;
+    delete F1energyres;
+    delete G1energyresolution;
+    delete G1ATLASenres;
     outputfile->Close();
     delete outputfile;
     // Final print out
