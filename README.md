@@ -40,6 +40,15 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 - Lorenzo Pezzotti (CERN EP-SFT) - lorenzo.pezzotti@cern.ch 
 - Supervisor: Alberto Ribon (CERN EP-SFT)
 
+<!--Available datasets and analyses-->
+## Available datasets and analyses
+We provide datasets and ROOT analyses, as well as instructions for their reproducibility.
+Ask authors for access to datasets.
+
+| ATLHECTB version | Reproduce data | Reproduce analysis | Comments     |
+| -------------    | ----------     | -----------        | -----------  |
+| v1.0 <br />Dataset #1 | Geant4.10.07.p01 <br />ATLHECTB v1.0 <br /> ./ATLHECTB -m            | v1.0               | v1.0         |
+
 <!--How to:-->
 ## How to
 
