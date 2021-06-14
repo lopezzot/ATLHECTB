@@ -14,6 +14,7 @@
   <ol>
     <li><a href="#project-description">Project description</a></li>
     <li><a href="#authors-and-contacts">Authors and contacts</a></li>
+    <li><a href="#available-datasets-and-analyses">Available datasets and analyses</a></li>
     <li>
       <a href="#how-to">How to</a>
       <ul>
@@ -47,7 +48,7 @@ Ask authors for access to datasets.
 
 | ATLHECTB version | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
-| v1.0 <br />Dataset #1 | Geant4.10.07.p01 <br />ATLHECTB v1.0 <br /> ./ATLHECTB -m            | v1.0               | v1.0         |
+| v1.0 <br /> Dataset #1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p0.C  | reproducable with v1.0 <br /> results for e-, assuming Data1/ in alongside root macro |
 
 <!--How to:-->
 ## How to
