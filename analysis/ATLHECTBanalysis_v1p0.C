@@ -1,6 +1,6 @@
 //**************************************************
 // \file ATLHECTBanalysis_v1p0.cc
-// \brief: Analysis #0 of ATLHECTB data from v1.0 
+// \brief: Analysis #1 of ATLHECTB data from v1.0 
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim) @lopezzot
 // \start date: 4 June 2021
 //**************************************************
@@ -181,12 +181,29 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         energyresolution[RunNo] = res;
         erenergyresolution[RunNo] = (H1Recenergy->GetFunction("gaus")->GetParError(2)/H1Recenergy->GetFunction("gaus")->GetParameter(2) + H1Recenergy->GetFunction("gaus")->GetParError(1)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*res;
 
-
-
         outputfile->cd();
         H1Leak->Write();
         delete H1Leak;
         H2LeakvsEdep->Write();
+        if ( RunNo == 6 ){
+            auto C1LeakvsEdep = new TCanvas("e-Canvas_LeakvsEdep", "", 600, 600);
+            //gPad->SetLeftMargin(0.15);
+            H2LeakvsEdep->SetMarkerSize(0.5);
+            H2LeakvsEdep->SetMarkerStyle(8);
+            H2LeakvsEdep->GetXaxis()->SetTitle("E_{Leak} [GeV]");
+            H2LeakvsEdep->GetYaxis()->SetTitle("E_{Vis} [GeV]");
+            H2LeakvsEdep->GetYaxis()->SetRangeUser(100.,162.);
+            H2LeakvsEdep->Draw("P");
+            auto LeakvsEdeplegend = new TLegend(0.14,0.2,0.6,0.29);
+            gPad->SetLeftMargin(0.13);
+            LeakvsEdeplegend->SetLineWidth(0);
+            LeakvsEdeplegend->SetHeader("Beam: e- 147.8 GeV", "C");
+            LeakvsEdeplegend->AddEntry(H2LeakvsEdep,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+            LeakvsEdeplegend->Draw("same");
+            C1LeakvsEdep->Write();
+            delete C1LeakvsEdep;
+            delete LeakvsEdeplegend;
+        }
         delete H2LeakvsEdep; 
         H1Econt->Write();
         delete H1Econt;
@@ -226,13 +243,23 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     //delete G1ratiomaxtotS;
 
     auto G1Sampfraction = new TGraphErrors( emenergies.size(), energies, Sampfraction, zeros, ersampfraction );
-    G1Sampfraction->GetYaxis()->SetRangeUser(4.,6.);
+    G1Sampfraction->GetYaxis()->SetRangeUser(4.5,4.53);
     G1Sampfraction->SetName("e-samplingFraction");
     G1Sampfraction->SetTitle("e-samplingFraction");
     G1Sampfraction->GetYaxis()->SetTitle("f_{samp} [%]");
     G1Sampfraction->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1Sampfraction->SetMarkerStyle(8);
     G1Sampfraction->Write();
+    auto C1Sampfraction = new TCanvas("e-Canvas_Sampfraction", "", 600, 600);
+    gPad->SetLeftMargin(0.15);
+    G1Sampfraction->Draw("AP");
+    auto Sampfractionlegend = new TLegend(0.2,0.8,0.6,0.89);
+    Sampfractionlegend->SetLineWidth(0);
+    //Sampfractionlegend->SetHeader("Sampling fraction e-", "C");
+    Sampfractionlegend->AddEntry(G1Sampfraction,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+    Sampfractionlegend->Draw("same");
+    C1Sampfraction->Write();
+    delete C1Sampfraction;
     delete G1Sampfraction;
 
     auto G1recenergy = new TGraphErrors( emenergies.size(), energies, recenergies, zeros, errecenergies );
@@ -278,15 +305,16 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     F1ATLASenergyres->Write();
     G1ATLASenres->Write();
 
-    //Create canvas
+    //Create canvas e- energy resolution comparison
     //
     auto C1eneres = new TCanvas("e-Canvas_eneres", "", 600, 600);
     G1ATLASenres->Draw("AP");
     G1energyresolution->Draw("P SAME");
     F1ATLASenergyres->Draw("L SAME");
-    auto legend = new TLegend(0.1,0.7,0.53,0.9);
+    auto legend = new TLegend(0.15,0.7,0.58,0.89);
     legend->AddEntry(G1ATLASenres,"#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}","ep");
     legend->AddEntry(G1energyresolution,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+    legend->SetLineWidth(0);
     legend->Draw("same");
     C1eneres->Write();
     delete C1eneres;
