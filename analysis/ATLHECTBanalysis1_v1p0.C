@@ -34,7 +34,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         
         //Initiate objects through single Run
         //   
-        string filename = "../../"+emfiles[RunNo];
+        string filename = "Data1/"+emfiles[RunNo];
         double energy = emenergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
@@ -440,7 +440,7 @@ void pianalysis( const vector<double>& emenergies, const vector<string>& emfiles
 
 };
 */
-void ATLHECTBanalysis_v1p0(){
+void ATLHECTBanalysis1_v1p0(){
     
     // Analysis of e- data
     // energies 6, 20, 50, 100, 200 GeV
