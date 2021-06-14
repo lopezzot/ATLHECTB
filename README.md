@@ -46,7 +46,7 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 We provide datasets and ROOT analyses, as well as instructions for their reproducibility.
 Ask authors for access to datasets.
 
-| ATLHECTB version | Reproduce data | Reproduce analysis | Comments     |
+| ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
 | v1.0 <br /> Dataset #1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p0.C  | reproducable with v1.0 <br /> results for e-, assuming Data1/ in alongside root macro |
 
