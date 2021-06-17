@@ -350,6 +350,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     //double errecenergies[pienergies.size()];
     //double energyresolution[pienergies.size()];
     //double erenergyresolution[pienergies.size()];
+    double F1[pienergies.size()];
+    double erF1[pienergies.size()];
 
     //For loop over Runs (energies)
     //
@@ -444,6 +446,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         //auto H1Recenergy = new TH1F( "pi-Reconstructedenergy",
         //        "pi-Reconstructedenergy", nBins*10, 0., 200. );
 
+        //F1 fraction of energy first layer
+        //
+        auto H1F1 = new TH1F("pi-F1","pi-F1",nBins,0.,1.2);
+
         //For loop over events
         //
         for ( unsigned int eventNo = 0; eventNo<tree->GetEntries(); eventNo++ ){
@@ -455,23 +461,27 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             H1Econt->Fill(pienergies[RunNo]-lenergy/1000.-cenergy/1000.);
             H1Etot->Fill( (edep+lenergy+cenergy)/1000. );
 
-            double addchannels=0;
+            double addchannels= 0 ;
+            double addchannelsF1 = 0;
             int channels = 0;
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
                 if ( M2L1BelAr->at(i) > 0.4 ) { 
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
+                    addchannelsF1 += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
                 if ( M1L1BelAr->at(i) > 0.4 ) { 
                     channels += 1;
                     addchannels += M1L1BelAr->at(i);
+                    addchannelsF1 += M1L1BelAr->at(i);
                     H1Signals->Fill( M1L1BelAr->at(i)) ;
                 }
                 if ( M3L1BelAr->at(i) > 0.4 ) { 
                     channels += 1;
                     addchannels += M3L1BelAr->at(i);
+                    addchannelsF1 += M3L1BelAr->at(i);
                     H1Signals->Fill( M3L1BelAr->at(i)) ;
                 }
             }
@@ -528,6 +538,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             }
             
             H1TotCutSignal->Fill( addchannels );
+            H1F1->Fill( addchannelsF1/addchannels );
             H1Channels->Fill(channels);
             H1Response->Fill( (addchannels / pienergies[RunNo])/44.8059 ); 
             H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.8059 );
@@ -553,6 +564,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         //energyresolution[RunNo] = res;
         //erenergyresolution[RunNo] = (H1Recenergy->GetFunction("gaus")->GetParError(2)/H1Recenergy->GetFunction("gaus")->GetParameter(2) + H1Recenergy->GetFunction("gaus")->GetParError(1)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*res;
 
+        F1[RunNo] = H1F1->GetMean();
+        erF1[RunNo] = H1F1->GetMeanError();
+
         outputfile->cd();
         H1Leak->Write();
         delete H1Leak;
@@ -566,6 +580,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         delete H1Etot;
        
         H1TotCutSignal->Write();
+        H1F1->Write();
         H1Channels->Write();
         H1Signals->Write();
         H1Response->Write();
@@ -605,6 +620,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1responses->Write();
     delete G1responses;
     //delete G1ratiomaxtotS;
+     
+    auto G1F1 = new TGraphErrors( pienergies.size(), energies,                                   F1,zeros, erF1 );
+    G1F1->GetYaxis()->SetRangeUser(0.2,0.4);
+    G1F1->SetMarkerStyle(8); 
+    G1F1->SetName("pi-F1");
+    G1F1->SetTitle("pi-F1");
+    G1F1->GetYaxis()->SetTitle("F");
+    G1F1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1F1->Write();
+    delete G1F1;
     /*
     auto G1recenergy = new TGraphErrors( pienergies.size(), energies, recenergies, zeros, errecenergies );
     G1recenergy->SetMarkerStyle(8);
