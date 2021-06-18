@@ -7,7 +7,7 @@
 
 #include <string>
 #include <array>
-/*
+
 void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles ){
 
     //Initiate objects through all the analysis
@@ -334,7 +334,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     cout<<"->Average response to e-: "<<k/double(emenergies.size())<<" a.u./GeV"<<endl;
     cout<<"ATLHECTB end of analysis of e- runs"<<endl;
 };
-*/
+
 void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles ){
 
     //Initiate objects through all the analysis
@@ -768,7 +768,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
 };
 
 void ATLHECTBanalysis1_v1p0(){
-    /*
+    
     // Analysis of e- data
     // energies 6, 20, 50, 100, 200 GeV
     //
@@ -778,7 +778,7 @@ void ATLHECTBanalysis1_v1p0(){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
     emanalysis( emenergies, emfiles );
-    */
+    
     // Analysis of pi- data
     // energies 6, 20, 50, 100, 200 GeV
     //
