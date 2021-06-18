@@ -143,16 +143,17 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             
             double addchannels=0;
             int channels = 0;
+            double ecut = 26.;
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( M2L1BelAr->at(i) > 5. ) { 
+                if ( M2L1BelAr->at(i) > ecut ) { 
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( M2L2BelAr->at(i) > 5. ) { 
+                if ( M2L2BelAr->at(i) > ecut ) { 
                     channels += 1;
                     addchannels+= M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
@@ -164,7 +165,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1Channels->Fill(channels);
             H1Response->Fill( addchannels / (edep/1000.) ); 
             // average response 44.8059 a.u./GeV
-            H1Recenergy->Fill( addchannels / 44.8059 ); 
+            H1Recenergy->Fill( addchannels / 44.2729 ); 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
@@ -476,7 +477,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             double addchannelsF3 = 0;
             double addchannelsF4 = 0;
             int channels = 0;
-            double picut = 0.6;
+            double picut = 1.98;
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
                 if ( M2L1BelAr->at(i) > picut ) { 
@@ -565,8 +566,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             H1F3->Fill( addchannelsF3/addchannels );
             H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
-            H1Response->Fill( (addchannels / pienergies[RunNo])/44.8059 ); 
-            H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.8059 );
+            H1Response->Fill( (addchannels / pienergies[RunNo])/44.2729 ); 
+            H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.2729 );
             // average response xxx a.u./GeV
             //H1Recenergy->Fill( addchannels / 44.8059 ); 
         }
