@@ -352,7 +352,13 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     //double erenergyresolution[pienergies.size()];
     double F1[pienergies.size()];
     double erF1[pienergies.size()];
-
+    double F2[pienergies.size()];
+    double erF2[pienergies.size()];
+    double F3[pienergies.size()];
+    double erF3[pienergies.size()];
+    double F4[pienergies.size()];
+    double erF4[pienergies.size()];
+    
     //For loop over Runs (energies)
     //
     for (unsigned RunNo = 0; RunNo<emfiles.size(); RunNo++ ){
@@ -394,8 +400,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         vector<double>* M3L3BelAr = NULL; 
         tree->SetBranchAddress( "M3L3BirkeLayer", &M3L3BelAr );
         vector<double>* M3L4BelAr = NULL; 
-        tree->SetBranchAddress( "M2L4BirkeLayer", &M3L4BelAr );
-        
+        tree->SetBranchAddress( "M3L4BirkeLayer", &M3L4BelAr );
+         
         int nBins = 100;
 
         //total leak (world+crostat)
@@ -446,15 +452,18 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         //auto H1Recenergy = new TH1F( "pi-Reconstructedenergy",
         //        "pi-Reconstructedenergy", nBins*10, 0., 200. );
 
-        //F1 fraction of energy first layer
+        //F1 fraction of energy first layer, same for F2, F3 and F4
         //
         auto H1F1 = new TH1F("pi-F1","pi-F1",nBins,0.,1.2);
+        auto H1F2 = new TH1F("pi-F2","pi-F2",nBins,0.,1.2);
+        auto H1F3 = new TH1F("pi-F3","pi-F3",nBins,0.,1.2);
+        auto H1F4 = new TH1F("pi-F4","pi-F4",nBins,0.,1.2);
 
         //For loop over events
         //
         for ( unsigned int eventNo = 0; eventNo<tree->GetEntries(); eventNo++ ){
             tree->GetEntry(eventNo);
-            if ( (lenergy+cenergy)/1000. < 10. ){
+            if ( true ){ //(lenergy+cenergy)/1000. < 10. ) 
             H1Leak->Fill((lenergy+cenergy)/1000.);
             H1TotS->Fill(BelAr);
             H1TotnoBS->Fill(elAr);
@@ -463,22 +472,26 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
 
             double addchannels= 0 ;
             double addchannelsF1 = 0;
+            double addchannelsF2 = 0;
+            double addchannelsF3 = 0;
+            double addchannelsF4 = 0;
             int channels = 0;
+            double picut = 0.6;
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( M2L1BelAr->at(i) > 0.4 ) { 
+                if ( M2L1BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     addchannelsF1 += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
-                if ( M1L1BelAr->at(i) > 0.4 ) { 
+                if ( M1L1BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels += M1L1BelAr->at(i);
                     addchannelsF1 += M1L1BelAr->at(i);
                     H1Signals->Fill( M1L1BelAr->at(i)) ;
                 }
-                if ( M3L1BelAr->at(i) > 0.4 ) { 
+                if ( M3L1BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels += M3L1BelAr->at(i);
                     addchannelsF1 += M3L1BelAr->at(i);
@@ -486,59 +499,71 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( M2L2BelAr->at(i) > 0.4 ) { 
+                if ( M2L2BelAr->at(i) > picut ) { 
                     channels += 1;
-                    addchannels+= M2L2BelAr->at(i);
+                    addchannels += M2L2BelAr->at(i);
+                    addchannelsF2 += M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
                 }
-                if ( M1L2BelAr->at(i) > 0.4 ) { 
+                if ( M1L2BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels+= M1L2BelAr->at(i);
+                    addchannelsF2 += M1L2BelAr->at(i);
                     H1Signals->Fill( M1L2BelAr->at(i)); 
                 }
-                if ( M3L2BelAr->at(i) > 0.4 ) { 
+                if ( M3L2BelAr->at(i) > picut ) { 
                     channels += 1;
-                    addchannels+= M3L2BelAr->at(i);
+                    addchannels += M3L2BelAr->at(i);
+                    addchannelsF2 += M3L2BelAr->at(i);
                     H1Signals->Fill( M3L2BelAr->at(i)); 
                 }
             }
             for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
-                if ( M2L3BelAr->at(i) > 0.4 ) { 
+                if ( M2L3BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels+= 2.*M2L3BelAr->at(i);
+                    addchannelsF3 += 2.*M2L3BelAr->at(i);
                     H1Signals->Fill( M2L3BelAr->at(i)); 
                 }
-                if ( M1L3BelAr->at(i) > 0.4 ) { 
+                if ( M1L3BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels+= 2.*M1L3BelAr->at(i);
+                    addchannelsF3 += 2.*M1L3BelAr->at(i);
                     H1Signals->Fill( M1L3BelAr->at(i)); 
                 }
-                if ( M3L3BelAr->at(i) > 0.4 ) { 
+                if ( M3L3BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels+= 2.*M3L3BelAr->at(i);
+                    addchannelsF3 += 2.*M3L3BelAr->at(i);
                     H1Signals->Fill( M3L3BelAr->at(i)); 
                 }
             }
             for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
-                if ( M2L4BelAr->at(i) > 0.4 ) { 
+                if ( M2L4BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels+= 2.*M2L4BelAr->at(i);
+                    addchannelsF4 += 2.*M2L4BelAr->at(i);
                     H1Signals->Fill( M2L4BelAr->at(i)); 
                 }
-                if ( M1L4BelAr->at(i) > 0.4 ) { 
+                if ( M1L4BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels+= 2.*M1L4BelAr->at(i);
+                    addchannelsF4 += 2.*M1L4BelAr->at(i);
                     H1Signals->Fill( M1L4BelAr->at(i)); 
                 }
-                if ( M3L4BelAr->at(i) > 0.4 ) { 
+                if ( M3L4BelAr->at(i) > picut ) { 
                     channels += 1;
                     addchannels+= 2.*M3L4BelAr->at(i);
+                    addchannelsF4 += 2.*M3L4BelAr->at(i);
                     H1Signals->Fill( M3L4BelAr->at(i)); 
                 }
             }
             
             H1TotCutSignal->Fill( addchannels );
             H1F1->Fill( addchannelsF1/addchannels );
+            H1F2->Fill( addchannelsF2/addchannels );
+            H1F3->Fill( addchannelsF3/addchannels );
+            H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
             H1Response->Fill( (addchannels / pienergies[RunNo])/44.8059 ); 
             H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.8059 );
@@ -566,6 +591,12 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
 
         F1[RunNo] = H1F1->GetMean();
         erF1[RunNo] = H1F1->GetMeanError();
+        F2[RunNo] = H1F2->GetMean();
+        erF2[RunNo] = H1F2->GetMeanError();
+        F3[RunNo] = H1F3->GetMean();
+        erF3[RunNo] = H1F3->GetMeanError();
+        F4[RunNo] = H1F4->GetMean();
+        erF4[RunNo] = H1F4->GetMeanError();
 
         outputfile->cd();
         H1Leak->Write();
@@ -581,6 +612,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
        
         H1TotCutSignal->Write();
         H1F1->Write();
+        H1F2->Write();
+        H1F3->Write();
+        H1F4->Write();
         H1Channels->Write();
         H1Signals->Write();
         H1Response->Write();
@@ -620,8 +654,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1responses->Write();
     delete G1responses;
     //delete G1ratiomaxtotS;
-     
-    auto G1F1 = new TGraphErrors( pienergies.size(), energies,                                   F1,zeros, erF1 );
+
+    auto G1F1 = new TGraphErrors( pienergies.size(), energies,                                                             F1, zeros, erF1 );
     G1F1->GetYaxis()->SetRangeUser(0.2,0.4);
     G1F1->SetMarkerStyle(8); 
     G1F1->SetName("pi-F1");
@@ -630,7 +664,34 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F1->Write();
     delete G1F1;
-    /*
+    auto G1F2 = new TGraphErrors( pienergies.size(), energies,                                                             F2, zeros, erF2 );
+    G1F2->GetYaxis()->SetRangeUser(0.51,0.57);
+    G1F2->SetMarkerStyle(8); 
+    G1F2->SetName("pi-F2");
+    G1F2->SetTitle("pi-F2");
+    G1F2->GetYaxis()->SetTitle("F");
+    G1F2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1F2->Write();
+    delete G1F2;
+    auto G1F3 = new TGraphErrors( pienergies.size(), energies,                                                             F3, zeros, erF3 );
+    G1F3->GetYaxis()->SetRangeUser(0.08,0.22);
+    G1F3->SetMarkerStyle(8); 
+    G1F3->SetName("pi-F3");
+    G1F3->SetTitle("pi-F3");
+    G1F3->GetYaxis()->SetTitle("F");
+    G1F3->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1F3->Write();
+    delete G1F3;
+    auto G1F4 = new TGraphErrors( pienergies.size(), energies,                                                             F4, zeros, erF4 );
+    G1F4->GetYaxis()->SetRangeUser(0.,0.06);
+    G1F4->SetMarkerStyle(8); 
+    G1F4->SetName("pi-F4");
+    G1F4->SetTitle("pi-F4");
+    G1F4->GetYaxis()->SetTitle("F");
+    G1F4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1F4->Write();
+    delete G1F4;
+   /*
     auto G1recenergy = new TGraphErrors( pienergies.size(), energies, recenergies, zeros, errecenergies );
     G1recenergy->SetMarkerStyle(8);
     G1recenergy->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
@@ -721,9 +782,9 @@ void ATLHECTBanalysis1_v1p0(){
     // Analysis of pi- data
     // energies 6, 20, 50, 100, 200 GeV
     //
-    vector<double> pienergies = {20.,30.,40.,50.,60.,80.,100.,120.,150.};
+    vector<double> pienergies = {20.,30.,40.,50.,60.,80.,100.,120.,150.,180.,200.};
     vector<string> pifiles;
-    for ( unsigned int i=0; i<9; i++ ){
+    for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
     pianalysis( pienergies, pifiles );
