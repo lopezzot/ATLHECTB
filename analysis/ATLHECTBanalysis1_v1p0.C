@@ -31,7 +31,6 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     //
     for (unsigned RunNo = 0; RunNo<emfiles.size(); RunNo++ ){
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<emenergies[RunNo]<<endl;  
-        
         //Initiate objects through single Run
         //   
         string filename = "Data1/"+emfiles[RunNo];
@@ -690,12 +689,39 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     auto G1F1 = new TGraphErrors( pienergies.size(), energies,                                                             F1, zeros, erF1 );
     G1F1->GetYaxis()->SetRangeUser(0.2,0.4);
     G1F1->SetMarkerStyle(8); 
+    G1F1->SetMarkerColor(kRed);
+    G1F1->SetLineColor(kRed);
     G1F1->SetName("pi-F1");
     G1F1->SetTitle("pi-F1");
     G1F1->GetYaxis()->SetTitle("F");
     G1F1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F1->Write();
+    double ATLASF1[11] = {0.3604477611940299, 0.3171641791044777, 0.3067164179104478, 0.29179104477611945, 0.2776119402985075, 0.26268656716417915, 0.2492537313432836, 0.2373134328358209, 0.232089552238806, 0.2201492537313433, 0.21716417910447766};
+    double erATLASF1[11]; memset( erATLASF1, 0., 11*sizeof(double));
+    auto G1ATLASF1 =new TGraphErrors( pienergies.size(), energies,
+                                      ATLASF1, zeros, erATLASF1 );
+    G1ATLASF1->SetMarkerStyle(8); 
+    G1ATLASF1->GetYaxis()->SetRangeUser(0.2,0.4);
+    G1ATLASF1->GetYaxis()->SetTitle("F");
+    G1ATLASF1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    auto C1F1 = new TCanvas("pi-Canvas_F1", "", 600, 600);
+    G1ATLASF1->Draw("AP");
+    G1F1->Draw("same P");
+    gPad->SetLeftMargin(0.15);
+    auto F1legend = new TLegend(1.-0.18,0.7,1.-0.61,0.89);
+    F1legend->AddEntry(G1ATLASF1,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
+    F1legend->AddEntry(G1F1,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    F1legend->SetLineWidth(0);
+    F1legend->Draw("same");
+    C1F1->Write();
+    delete C1F1;
     delete G1F1;
+    delete G1ATLASF1;
+
     auto G1F2 = new TGraphErrors( pienergies.size(), energies,                                                             F2, zeros, erF2 );
     G1F2->GetYaxis()->SetRangeUser(0.50,0.57);
     G1F2->SetMarkerStyle(8); 
@@ -723,7 +749,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F4->Write();
     delete G1F4;
-   /*
+    /*
     auto G1recenergy = new TGraphErrors( pienergies.size(), energies, recenergies, zeros, errecenergies );
     G1recenergy->SetMarkerStyle(8);
     G1recenergy->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
@@ -1025,7 +1051,7 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    emanalysis( emenergies, emfiles );
+    //emanalysis( emenergies, emfiles );
      
     // Analysis of pi- data
     // energies 6, 20, 50, 100, 200 GeV
@@ -1039,11 +1065,11 @@ void ATLHECTBanalysis1_v1p0(){
 
     //Analysis of channels pi
     //
-    picalibrate(180., "ATLHECTBout_Run9.root");
+    //picalibrate(180., "ATLHECTBout_Run9.root");
     
     //Analysis of channels e-
     //
-    ecalibrate(147.8,"ATLHECTBout_Run17.root");    
+    //ecalibrate(147.8,"ATLHECTBout_Run17.root");    
 
 }
 
