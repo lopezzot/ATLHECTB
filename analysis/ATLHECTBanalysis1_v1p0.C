@@ -26,7 +26,6 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     double errecenergies[emenergies.size()];
     double energyresolution[emenergies.size()];
     double erenergyresolution[emenergies.size()];
-    double ecuts[7] = {3.2, 6.4, 8., 12.8, 16., 19.056, 23.648};
 
     //For loop over Runs (energies)
     //
@@ -144,17 +143,16 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             
             double addchannels=0;
             int channels = 0;
-            double ecut = ecuts[RunNo];
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( M2L1BelAr->at(i) > ecut ) { 
+                if ( i==2 || i==3 || i==4 || i==5 ) { 
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( M2L2BelAr->at(i) > ecut ) { 
+                if ( i== 4 || i== 5 ) { 
                     channels += 1;
                     addchannels+= M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
@@ -166,7 +164,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1Channels->Fill(channels);
             H1Response->Fill( addchannels / (edep/1000.) ); 
             // average response 
-            H1Recenergy->Fill( addchannels / 44.7456 ); 
+            H1Recenergy->Fill( addchannels / 44.7411 ); 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
@@ -524,7 +522,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
                 if ( i==2 || i==3 || i==4 || i==5 || i==6 || i==7 || 
-                     i==8 || i==9 || i==10 || i==11 ) { 
+                     i==8 || i==9 ) { 
                     channels += 1;
                     addchannels += M2L2BelAr->at(i);
                     addchannelsF2 += M2L2BelAr->at(i);
@@ -571,13 +569,13 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                     addchannelsF4 += 2.*M2L4BelAr->at(i);
                     H1Signals->Fill( M2L4BelAr->at(i)); 
                 }
-                if ( i==8 || i==10 ) { 
+                if ( i==8 ) { 
                     channels += 1;
                     addchannels+= 2.*M1L4BelAr->at(i);
                     addchannelsF4 += 2.*M1L4BelAr->at(i);
                     H1Signals->Fill( M1L4BelAr->at(i)); 
                 }
-                if ( i==9 || i== 11 ) { 
+                if ( i==9 ) { 
                     channels += 1;
                     addchannels+= 2.*M3L4BelAr->at(i);
                     addchannelsF4 += 2.*M3L4BelAr->at(i);
@@ -591,8 +589,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             H1F3->Fill( addchannelsF3/addchannels );
             H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
-            H1Response->Fill( (addchannels / pienergies[RunNo])/44.7456 ); //pi/e
-            H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.7456 ); //pi/e
+            H1Response->Fill( (addchannels / pienergies[RunNo])/44.7411 ); //pi/e
+            H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.7411 ); //pi/e
             // average response xxx a.u./GeV
             //H1Recenergy->Fill( addchannels / 44.8059 ); 
         } //end for loop events
@@ -867,7 +865,7 @@ void picalibrate( const double& pienergy, const string& pifile ){
             M3L4avg[i] += M3L4BelAr->at(i)/tree->GetEntries();
         }
     }
-        double picut = 1.8;
+        double picut = 2.1;
         int channels = 0;
 
         cout<<"List of channels with avg signal above cut"<<endl;
@@ -895,6 +893,113 @@ void picalibrate( const double& pienergy, const string& pifile ){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
+void ecalibrate( const double& eenergy, const string& efile ){
+
+    //Initiate objects through all the analysis
+    //
+    cout<<"ATLHECTB analysis of channels to be selected with e- runs"<<endl;
+    auto outputfile = new TFile( "ATLHECTBchannelse.root", "RECREATE" );
+    cout<<"---> Analysis at energy(GeV) "<<eenergy<<endl;  
+        
+    string filename = "Data1/"+efile;
+    TFile* file = TFile::Open( filename.c_str(), "READ" );
+    TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
+
+    vector<double>* M1L1BelAr = NULL; 
+    tree->SetBranchAddress( "M1L1BirkeLayer", &M1L1BelAr );
+    vector<double>* M1L2BelAr = NULL; 
+    tree->SetBranchAddress( "M1L2BirkeLayer", &M1L2BelAr );
+    vector<double>* M1L3BelAr = NULL; 
+    tree->SetBranchAddress( "M1L3BirkeLayer", &M1L3BelAr );
+    vector<double>* M1L4BelAr = NULL; 
+    tree->SetBranchAddress( "M1L4BirkeLayer", &M1L4BelAr );
+    vector<double>* M2L1BelAr = NULL; 
+    tree->SetBranchAddress( "M2L1BirkeLayer", &M2L1BelAr );
+    vector<double>* M2L2BelAr = NULL; 
+    tree->SetBranchAddress( "M2L2BirkeLayer", &M2L2BelAr );
+    vector<double>* M2L3BelAr = NULL; 
+    tree->SetBranchAddress( "M2L3BirkeLayer", &M2L3BelAr );
+    vector<double>* M2L4BelAr = NULL; 
+    tree->SetBranchAddress( "M2L4BirkeLayer", &M2L4BelAr );
+    vector<double>* M3L1BelAr = NULL; 
+    tree->SetBranchAddress( "M3L1BirkeLayer", &M3L1BelAr );
+    vector<double>* M3L2BelAr = NULL; 
+    tree->SetBranchAddress( "M3L2BirkeLayer", &M3L2BelAr );
+    vector<double>* M3L3BelAr = NULL; 
+    tree->SetBranchAddress( "M3L3BirkeLayer", &M3L3BelAr );
+    vector<double>* M3L4BelAr = NULL; 
+    tree->SetBranchAddress( "M3L4BirkeLayer", &M3L4BelAr );
+
+    double M1L1avg[24]; memset( M1L1avg, 0., 24*sizeof(double));
+    double M2L1avg[24]; memset( M2L1avg, 0., 24*sizeof(double));
+    double M3L1avg[24]; memset( M3L1avg, 0., 24*sizeof(double));
+         
+    double M1L2avg[23]; memset( M1L2avg, 0., 23*sizeof(double));
+    double M2L2avg[23]; memset( M2L2avg, 0., 23*sizeof(double));
+    double M3L2avg[23]; memset( M3L2avg, 0., 23*sizeof(double));
+
+    double M1L3avg[21]; memset( M1L3avg, 0., 21*sizeof(double));
+    double M2L3avg[21]; memset( M2L3avg, 0., 21*sizeof(double));
+    double M3L3avg[21]; memset( M3L3avg, 0., 21*sizeof(double));
+
+    double M1L4avg[20]; memset( M1L4avg, 0., 20*sizeof(double));
+    double M2L4avg[20]; memset( M2L4avg, 0., 20*sizeof(double));
+    double M3L4avg[20]; memset( M3L4avg, 0., 20*sizeof(double));
+
+    //loop over events
+    //
+    for (unsigned int evtNo = 0; evtNo<tree->GetEntries(); evtNo++){
+        tree->GetEntry(evtNo);
+
+        for (unsigned int i = 0; i<24; i++){
+            M2L1avg[i] += M2L1BelAr->at(i)/tree->GetEntries();
+            M1L1avg[i] += M1L1BelAr->at(i)/tree->GetEntries();
+            M3L1avg[i] += M3L1BelAr->at(i)/tree->GetEntries();
+        }
+        for (unsigned int i = 0; i<23; i++){
+            M2L2avg[i] += M2L2BelAr->at(i)/tree->GetEntries();
+            M1L2avg[i] += M1L2BelAr->at(i)/tree->GetEntries();
+            M3L2avg[i] += M3L2BelAr->at(i)/tree->GetEntries();
+        }
+        for (unsigned int i = 0; i<21; i++){
+            M2L3avg[i] += M2L3BelAr->at(i)/tree->GetEntries();
+            M1L3avg[i] += M1L3BelAr->at(i)/tree->GetEntries();
+            M3L3avg[i] += M3L3BelAr->at(i)/tree->GetEntries();
+        }
+        for (unsigned int i = 0; i<20; i++){
+            M2L4avg[i] += M2L4BelAr->at(i)/tree->GetEntries();
+            M1L4avg[i] += M1L4BelAr->at(i)/tree->GetEntries();
+            M3L4avg[i] += M3L4BelAr->at(i)/tree->GetEntries();
+        }
+    }
+        double ecut = 28.;
+        int channels = 0;
+
+        cout<<"List of channels with avg signal above cut"<<endl;
+        for (unsigned int i = 0; i<24; i++){
+            if (M2L1avg[i]>ecut){cout<<"M2L1 "<<i<<endl; channels=channels+1;}
+            if (M1L1avg[i]>ecut){cout<<"M1L1 "<<i<<endl;channels=channels+1;}
+            if (M3L1avg[i]>ecut){cout<<"M3L1 "<<i<<endl;channels=channels+1;}
+        }
+        for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
+            if (M2L2avg[i]>ecut){cout<<"M2L2 "<<i<<endl;channels=channels+1;}
+            if (M1L2avg[i]>ecut){cout<<"M1L2 "<<i<<endl;channels=channels+1;}
+            if (M3L2avg[i]>ecut){cout<<"M3L2 "<<i<<endl;channels=channels+1;}
+        }
+        for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
+            if (M2L3avg[i]>ecut){cout<<"M2L3 "<<i<<endl;channels=channels+1;}
+            if (M1L3avg[i]>ecut){cout<<"M1L3 "<<i<<endl;channels=channels+1;}
+            if (M3L3avg[i]>ecut){cout<<"M3L3 "<<i<<endl;channels=channels+1;}
+        }
+        for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
+            if (M2L4avg[i]>ecut){cout<<"M2L4 "<<i<<endl;channels=channels+1;}
+            if (M1L4avg[i]>ecut){cout<<"M1L4 "<<i<<endl;channels=channels+1;}
+            if (M3L4avg[i]>ecut){cout<<"M3L4 "<<i<<endl;channels=channels+1;}
+        }
+        cout<<"Number of channels above cut: "<<channels<<endl;
+}
+
+////////////////////////////////////////////////////////////////////////////////////
 void ATLHECTBanalysis1_v1p0(){
      
     // Analysis of e- data
@@ -905,7 +1010,7 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //emanalysis( emenergies, emfiles );
+    emanalysis( emenergies, emfiles );
      
     // Analysis of pi- data
     // energies 6, 20, 50, 100, 200 GeV
@@ -919,8 +1024,12 @@ void ATLHECTBanalysis1_v1p0(){
 
     //Analysis of channels pi
     //
-    picalibrate(180., "ATLHECTBout_Run9.root");
+    //picalibrate(180., "ATLHECTBout_Run9.root");
     
+    //Analysis of channels e-
+    //
+    //ecalibrate(147.8,"ATLHECTBout_Run17.root");    
+
 }
 
 //**************************************************
