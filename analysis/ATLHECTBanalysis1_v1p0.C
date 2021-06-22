@@ -10,7 +10,7 @@
 
 void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles ){
 
-    //Initiate objects through all the analysis
+    //Initiate objects for the entire analysis
     //
     cout<<"ATLHECTB analysis of e- runs"<<endl;
     auto outputfile = new TFile( "ATLHECTBanalysise-.root", "RECREATE" );
@@ -26,6 +26,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     double errecenergies[emenergies.size()];
     double energyresolution[emenergies.size()];
     double erenergyresolution[emenergies.size()];
+    double ecuts[7] = {3.2, 6.4, 8., 12.8, 16., 19.056, 23.648};
 
     //For loop over Runs (energies)
     //
@@ -69,7 +70,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         vector<double>* M3L3BelAr = NULL; 
         tree->SetBranchAddress( "M3L3BirkeLayer", &M3L3BelAr );
         vector<double>* M3L4BelAr = NULL; 
-        tree->SetBranchAddress( "M2L4BirkeLayer", &M3L4BelAr );
+        tree->SetBranchAddress( "M3L4BirkeLayer", &M3L4BelAr );
         
         int nBins = 100;
         //int MaxSignalIndex;
@@ -87,7 +88,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         //total signal no cuts
         //
         auto H1TotS = new TH1F("e-TotS", "e-TotS",
-                              nBins*20, 0., emenergies[RunNo]*100. );
+                              nBins*20, 0., emenergies[RunNo]*100 );
         //total vis energy deposited
         //
         auto H1Econt = new TH1F("e-Econt", "e-Econt", 
@@ -136,14 +137,14 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1TotS->Fill(BelAr);
             H1Econt->Fill(emenergies[RunNo]-lenergy/1000.-cenergy/1000.);
             H1Etot->Fill( (edep+lenergy+cenergy)/1000. );
-            H1Sampfraction->Fill((elAr/edep)*100.);
+            H1Sampfraction->Fill((elAr/edep)*100.); //percent value
 
             //MaxSignalIndex = std::max_element(M2L1BelAr->begin(),M2L1BelAr->end())
-              //                                -M2L1BelAr->begin();
+            //                                -M2L1BelAr->begin();
             
             double addchannels=0;
             int channels = 0;
-            double ecut = 26.;
+            double ecut = ecuts[RunNo];
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
                 if ( M2L1BelAr->at(i) > ecut ) { 
@@ -164,23 +165,33 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1TotCutSignal->Fill( addchannels );
             H1Channels->Fill(channels);
             H1Response->Fill( addchannels / (edep/1000.) ); 
-            // average response 44.8059 a.u./GeV
-            H1Recenergy->Fill( addchannels / 44.2729 ); 
+            // average response 
+            H1Recenergy->Fill( addchannels / 44.7456 ); 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
-        ratiomaxtotS[RunNo] = 0;//H1MaxS->GetMean() / H1TotS->GetMean();
+        //ratiomaxtotS[RunNo] = 0;//H1MaxS->GetMean() / H1TotS->GetMean();
         responses[RunNo] = H1Response->GetMean();
         erresponses[RunNo] = H1Response->GetMeanError();
         Sampfraction[RunNo] = H1Sampfraction->GetMean();
         ersampfraction[RunNo] = H1Sampfraction->GetMeanError();
-        
-        H1Recenergy->Fit("gaus","Q");
+
+        double xfitmin = H1Recenergy->GetXaxis()->
+            GetBinCenter(H1Recenergy->GetMaximumBin())-2.*H1Recenergy->GetStdDev();
+        double xfitmax = H1Recenergy->GetXaxis()->
+            GetBinCenter(H1Recenergy->GetMaximumBin())+2.*H1Recenergy->GetStdDev();
+        auto F1Recenergy = new TF1("gaus","gaus(0)",xfitmin,xfitmax);
+        H1Recenergy->Fit( F1Recenergy ,"QR");
         recenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParameter(1);
         errecenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParError(1);
-        double res =(H1Recenergy->GetFunction("gaus")->GetParameter(2)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*sqrt(energies[RunNo])*100.;
+        double res =(H1Recenergy->GetFunction("gaus")->GetParameter(2)/H1Recenergy->
+                    GetFunction("gaus")->GetParameter(1))*sqrt(energies[RunNo])*100.;
         energyresolution[RunNo] = res;
-        erenergyresolution[RunNo] = (H1Recenergy->GetFunction("gaus")->GetParError(2)/H1Recenergy->GetFunction("gaus")->GetParameter(2) + H1Recenergy->GetFunction("gaus")->GetParError(1)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*res;
+        erenergyresolution[RunNo] = (H1Recenergy->GetFunction("gaus")->
+                        GetParError(2)/H1Recenergy->GetFunction("gaus")->
+                        GetParameter(2) + H1Recenergy->GetFunction("gaus")->
+                        GetParError(1)/H1Recenergy->
+                        GetFunction("gaus")->GetParameter(1))*res;
 
         outputfile->cd();
         H1Leak->Write();
@@ -199,7 +210,8 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             gPad->SetLeftMargin(0.13);
             LeakvsEdeplegend->SetLineWidth(0);
             LeakvsEdeplegend->SetHeader("Beam: e- 147.8 GeV", "C");
-            LeakvsEdeplegend->AddEntry(H2LeakvsEdep,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+            LeakvsEdeplegend->AddEntry(H2LeakvsEdep,
+                    "#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
             LeakvsEdeplegend->Draw("same");
             C1LeakvsEdep->Write();
             delete C1LeakvsEdep;
@@ -227,23 +239,26 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     // Finalize objects over multiple runs
     //
     outputfile->cd();
+
     //auto G1ratiomaxtotS = new TGraph( emenergies.size(), energies, ratiomaxtotS ); 
+    //G1ratiomaxtotS->SetName("e-ratiomaxtotS");
+    //G1ratiomaxtotS->SetTitle("e-ratiomaxtotS");
+    //G1ratiomaxtotS->Write();
+    //delete G1ratiomaxtotS;
+
     auto G1responses = new TGraphErrors( emenergies.size(), energies, responses, 
                                          zeros, erresponses );
     G1responses->GetYaxis()->SetRangeUser(44.2,45.8);
     G1responses->SetMarkerStyle(8); 
-    //G1ratiomaxtotS->SetName("e-ratiomaxtotS");
-    //G1ratiomaxtotS->SetTitle("e-ratiomaxtotS");
     G1responses->SetName("e-responses");
     G1responses->SetTitle("e-responses");
     G1responses->GetYaxis()->SetTitle("Response [a.u./GeV]");
     G1responses->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    //G1ratiomaxtotS->Write();
     G1responses->Write();
     delete G1responses;
-    //delete G1ratiomaxtotS;
 
-    auto G1Sampfraction = new TGraphErrors( emenergies.size(), energies, Sampfraction, zeros, ersampfraction );
+    auto G1Sampfraction = new TGraphErrors( emenergies.size(), energies, Sampfraction,
+                                            zeros, ersampfraction );
     G1Sampfraction->GetYaxis()->SetRangeUser(4.5,4.53);
     G1Sampfraction->SetName("e-samplingFraction");
     G1Sampfraction->SetTitle("e-samplingFraction");
@@ -257,13 +272,15 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     auto Sampfractionlegend = new TLegend(0.2,0.8,0.6,0.89);
     Sampfractionlegend->SetLineWidth(0);
     //Sampfractionlegend->SetHeader("Sampling fraction e-", "C");
-    Sampfractionlegend->AddEntry(G1Sampfraction,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+    Sampfractionlegend->AddEntry(G1Sampfraction,
+            "#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
     Sampfractionlegend->Draw("same");
     C1Sampfraction->Write();
     delete C1Sampfraction;
     delete G1Sampfraction;
 
-    auto G1recenergy = new TGraphErrors( emenergies.size(), energies, recenergies, zeros, errecenergies );
+    auto G1recenergy = new TGraphErrors( emenergies.size(), energies, recenergies,
+                                         zeros, errecenergies );
     G1recenergy->SetMarkerStyle(8);
     G1recenergy->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1recenergy->GetYaxis()->SetTitle("Energy [GeV]");
@@ -272,12 +289,14 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     G1recenergy->Write();
     delete G1recenergy;
 
-    auto G1energyresolution = new TGraphErrors( emenergies.size(), energies, energyresolution, zeros, erenergyresolution );
+    auto G1energyresolution = new TGraphErrors( emenergies.size(), energies, 
+                                energyresolution, zeros, erenergyresolution );
     G1energyresolution->SetMarkerStyle(8);
     G1energyresolution->SetMarkerColor(kRed);
     G1energyresolution->SetLineColor(kRed);
     G1energyresolution->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    G1energyresolution->GetYaxis()->SetTitle("#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
+    G1energyresolution->GetYaxis()->SetTitle(
+            "#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
     G1energyresolution->GetYaxis()->SetRangeUser(19.,25.);
     G1energyresolution->GetXaxis()->SetRangeUser(0.,170.);
     G1energyresolution->SetTitle("e-energyresolution");
@@ -286,16 +305,20 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     F1energyres->SetLineWidth(3);
     F1energyres->SetLineColor(kRed);
     G1energyresolution->Fit(F1energyres, "QR");
-    cout<<"->Average a term in resolution "<<F1energyres->GetParameter(0)<<" +- "<<F1energyres->GetParError(0)<<" % GeV^0.5"<<endl;
+    cout<<"->Average a term in resolution "<<F1energyres->GetParameter(0)<<
+        " +- "<<F1energyres->GetParError(0)<<" % GeV^0.5"<<endl;
     F1energyres->Write();
     G1energyresolution->Write();
 
     double ATLASenres[7] = {22.2, 21.6, 21.5, 22.30, 22.0, 21.2, 21.3};
-    double erATLASenres[7] = {22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30, 22.32-22.0, 21.46-21.2, 21.57-21.3};
-    auto G1ATLASenres = new TGraphErrors( emenergies.size(), energies, ATLASenres, zeros, erATLASenres );
+    double erATLASenres[7] = {22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30,
+                              22.32-22.0, 21.46-21.2, 21.57-21.3};
+    auto G1ATLASenres = new TGraphErrors( emenergies.size(), energies, 
+            ATLASenres, zeros, erATLASenres );
     G1ATLASenres->SetMarkerStyle(8);
     G1ATLASenres->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    G1ATLASenres->GetYaxis()->SetTitle("#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
+    G1ATLASenres->GetYaxis()->SetTitle(
+            "#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
     G1ATLASenres->GetYaxis()->SetRangeUser(19.,25.);
     G1ATLASenres->GetXaxis()->SetRangeUser(0.,170.);
     G1ATLASenres->SetTitle("e-ATLASenergyresolution");
@@ -313,8 +336,10 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     G1energyresolution->Draw("P SAME");
     F1ATLASenergyres->Draw("L SAME");
     auto legend = new TLegend(0.15,0.7,0.58,0.89);
-    legend->AddEntry(G1ATLASenres,"#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}","ep");
-    legend->AddEntry(G1energyresolution,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+    legend->AddEntry(G1ATLASenres,
+        "#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}", "ep");
+    legend->AddEntry(G1energyresolution,
+            "#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
     C1eneres->Write();
@@ -326,6 +351,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     delete G1ATLASenres;
     outputfile->Close();
     delete outputfile;
+
     // Final print out
     //
     double k;
@@ -336,6 +362,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     cout<<"ATLHECTB end of analysis of e- runs"<<endl;
 };
 
+////////////////////////////////////////////////////////////////////////////////////
 void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles ){
 
     //Initiate objects through all the analysis
@@ -409,7 +436,6 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         //
         auto H1Leak = new TH1F("pi-ELeak", "pi-ELeak",
                               nBins*10, 0., pienergies[RunNo]/5. );
-            //H1MaxS->Fill(M2L1BelAr->at(MaxSignalIndex));
         //total signal no cuts
         //
         auto H1TotS = new TH1F("pi-TotS", "pi-TotS",
@@ -442,12 +468,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         //
         auto H1Response = new TH1F("pi-Response","pi-Response",
                                    2*120, 0., 1.2 );
-
         //response no Birks
         //
         auto H1ResponsenoB = new TH1F("pi-ResnoB","pi-ResnoB",
                                       nBins,0.,1.2 );
-
         //reconstructed energy
         //
         //auto H1Recenergy = new TH1F( "pi-Reconstructedenergy",
@@ -464,7 +488,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         //
         for ( unsigned int eventNo = 0; eventNo<tree->GetEntries(); eventNo++ ){
             tree->GetEntry(eventNo);
-            if ( true ){ //(lenergy+cenergy)/1000. < 10. ) 
+
             H1Leak->Fill((lenergy+cenergy)/1000.);
             H1TotS->Fill(BelAr);
             H1TotnoBS->Fill(elAr);
@@ -477,22 +501,21 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             double addchannelsF3 = 0;
             double addchannelsF4 = 0;
             int channels = 0;
-            double picut = 1.98;
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( M2L1BelAr->at(i) > picut ) { 
+                if ( i==0 || i==1 || i==2 || i==3 || i==4 || i==5 ) { 
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     addchannelsF1 += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
-                if ( M1L1BelAr->at(i) > picut ) { 
+                if ( i==2 || i==4 ) { 
                     channels += 1;
                     addchannels += M1L1BelAr->at(i);
                     addchannelsF1 += M1L1BelAr->at(i);
                     H1Signals->Fill( M1L1BelAr->at(i)) ;
                 }
-                if ( M3L1BelAr->at(i) > picut ) { 
+                if ( i==3 || i==5 ) { 
                     channels += 1;
                     addchannels += M3L1BelAr->at(i);
                     addchannelsF1 += M3L1BelAr->at(i);
@@ -500,19 +523,20 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( M2L2BelAr->at(i) > picut ) { 
+                if ( i==2 || i==3 || i==4 || i==5 || i==6 || i==7 || 
+                     i==8 || i==9 || i==10 || i==11 ) { 
                     channels += 1;
                     addchannels += M2L2BelAr->at(i);
                     addchannelsF2 += M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
                 }
-                if ( M1L2BelAr->at(i) > picut ) { 
+                if ( i==2 || i==4 || i==6 || i==8 ) { 
                     channels += 1;
                     addchannels+= M1L2BelAr->at(i);
                     addchannelsF2 += M1L2BelAr->at(i);
                     H1Signals->Fill( M1L2BelAr->at(i)); 
                 }
-                if ( M3L2BelAr->at(i) > picut ) { 
+                if ( i==3 || i==5 || i==7 || i==9 ) { 
                     channels += 1;
                     addchannels += M3L2BelAr->at(i);
                     addchannelsF2 += M3L2BelAr->at(i);
@@ -520,19 +544,20 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                 }
             }
             for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
-                if ( M2L3BelAr->at(i) > picut ) { 
+                if ( i==4 || i==5 || i==6 || i==7 || i==8 || i==9 ||
+                     i==10 || i==11 ) { 
                     channels += 1;
                     addchannels+= 2.*M2L3BelAr->at(i);
                     addchannelsF3 += 2.*M2L3BelAr->at(i);
                     H1Signals->Fill( M2L3BelAr->at(i)); 
                 }
-                if ( M1L3BelAr->at(i) > picut ) { 
+                if ( i==4 || i==6 || i==8 || i==10 ) { 
                     channels += 1;
                     addchannels+= 2.*M1L3BelAr->at(i);
                     addchannelsF3 += 2.*M1L3BelAr->at(i);
                     H1Signals->Fill( M1L3BelAr->at(i)); 
                 }
-                if ( M3L3BelAr->at(i) > picut ) { 
+                if ( i==5 || i==7 || i==9 || i==11 ) { 
                     channels += 1;
                     addchannels+= 2.*M3L3BelAr->at(i);
                     addchannelsF3 += 2.*M3L3BelAr->at(i);
@@ -540,19 +565,19 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                 }
             }
             for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
-                if ( M2L4BelAr->at(i) > picut ) { 
+                if ( i==6 || i==7 || i==8 || i==9 || i==10 || i==11 ) { 
                     channels += 1;
                     addchannels+= 2.*M2L4BelAr->at(i);
                     addchannelsF4 += 2.*M2L4BelAr->at(i);
                     H1Signals->Fill( M2L4BelAr->at(i)); 
                 }
-                if ( M1L4BelAr->at(i) > picut ) { 
+                if ( i==8 || i==10 ) { 
                     channels += 1;
                     addchannels+= 2.*M1L4BelAr->at(i);
                     addchannelsF4 += 2.*M1L4BelAr->at(i);
                     H1Signals->Fill( M1L4BelAr->at(i)); 
                 }
-                if ( M3L4BelAr->at(i) > picut ) { 
+                if ( i==9 || i== 11 ) { 
                     channels += 1;
                     addchannels+= 2.*M3L4BelAr->at(i);
                     addchannelsF4 += 2.*M3L4BelAr->at(i);
@@ -566,22 +591,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             H1F3->Fill( addchannelsF3/addchannels );
             H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
-            H1Response->Fill( (addchannels / pienergies[RunNo])/44.2729 ); 
-            H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.2729 );
+            H1Response->Fill( (addchannels / pienergies[RunNo])/44.7456 ); //pi/e
+            H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.7456 ); //pi/e
             // average response xxx a.u./GeV
             //H1Recenergy->Fill( addchannels / 44.8059 ); 
-        }
         } //end for loop events
 
         energies[RunNo] = pienergies[RunNo];
-        double xfitmin = H1Response->GetXaxis()->
-            GetBinCenter(H1Response->GetMaximumBin())-2.*H1Response->GetStdDev();
-        double xfitmax = H1Response->GetXaxis()->
-            GetBinCenter(H1Response->GetMaximumBin())+2.*H1Response->GetStdDev();
-        auto F1piresponse = new TF1("piresponse","gaus(0)",xfitmin,xfitmax);
-        H1Response->Fit(F1piresponse, "QR");
-        responses[RunNo] = H1Response->GetFunction("piresponse")->GetParameter(1);
-        erresponses[RunNo] = 10.*H1Response->GetFunction("piresponse")->GetParError(1);
+
+        responses[RunNo] = H1Response->GetMean();
+        erresponses[RunNo] = 10.*H1Response->GetMeanError();
         
         //H1Recenergy->Fit("gaus","Q");
         //recenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParameter(1);
@@ -621,8 +640,6 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         H1Response->Write();
         H1ResponsenoB->Write();
         //H1Recenergy->Write();
-        //H1MaxS->Write();
-        //delete H1MaxS;
     }
 
     // Finalize objects over multiple runs
@@ -647,7 +664,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1responses->Draw("AP");
     gPad->SetLeftMargin(0.15);
     auto legend = new TLegend(0.18,0.7,0.61,0.89);
-    legend->AddEntry(G1responses,"#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}","ep");
+    legend->AddEntry(G1responses,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
     C1piresponse->Write();
@@ -666,7 +685,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F1->Write();
     delete G1F1;
     auto G1F2 = new TGraphErrors( pienergies.size(), energies,                                                             F2, zeros, erF2 );
-    G1F2->GetYaxis()->SetRangeUser(0.51,0.57);
+    G1F2->GetYaxis()->SetRangeUser(0.50,0.57);
     G1F2->SetMarkerStyle(8); 
     G1F2->SetName("pi-F2");
     G1F2->SetTitle("pi-F2");
@@ -768,8 +787,116 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     cout<<"ATLHECTB end of analysis of pi- runs"<<endl;
 };
 
+////////////////////////////////////////////////////////////////////////////////////
+void picalibrate( const double& pienergy, const string& pifile ){
+
+    //Initiate objects through all the analysis
+    //
+    cout<<"ATLHECTB analysis of channels to be selected with pi- runs"<<endl;
+    auto outputfile = new TFile( "ATLHECTBchannelspi.root", "RECREATE" );
+    cout<<"---> Analysis at energy(GeV) "<<pienergy<<endl;  
+        
+    string filename = "Data1/"+pifile;
+    TFile* file = TFile::Open( filename.c_str(), "READ" );
+    TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
+
+    vector<double>* M1L1BelAr = NULL; 
+    tree->SetBranchAddress( "M1L1BirkeLayer", &M1L1BelAr );
+    vector<double>* M1L2BelAr = NULL; 
+    tree->SetBranchAddress( "M1L2BirkeLayer", &M1L2BelAr );
+    vector<double>* M1L3BelAr = NULL; 
+    tree->SetBranchAddress( "M1L3BirkeLayer", &M1L3BelAr );
+    vector<double>* M1L4BelAr = NULL; 
+    tree->SetBranchAddress( "M1L4BirkeLayer", &M1L4BelAr );
+    vector<double>* M2L1BelAr = NULL; 
+    tree->SetBranchAddress( "M2L1BirkeLayer", &M2L1BelAr );
+    vector<double>* M2L2BelAr = NULL; 
+    tree->SetBranchAddress( "M2L2BirkeLayer", &M2L2BelAr );
+    vector<double>* M2L3BelAr = NULL; 
+    tree->SetBranchAddress( "M2L3BirkeLayer", &M2L3BelAr );
+    vector<double>* M2L4BelAr = NULL; 
+    tree->SetBranchAddress( "M2L4BirkeLayer", &M2L4BelAr );
+    vector<double>* M3L1BelAr = NULL; 
+    tree->SetBranchAddress( "M3L1BirkeLayer", &M3L1BelAr );
+    vector<double>* M3L2BelAr = NULL; 
+    tree->SetBranchAddress( "M3L2BirkeLayer", &M3L2BelAr );
+    vector<double>* M3L3BelAr = NULL; 
+    tree->SetBranchAddress( "M3L3BirkeLayer", &M3L3BelAr );
+    vector<double>* M3L4BelAr = NULL; 
+    tree->SetBranchAddress( "M3L4BirkeLayer", &M3L4BelAr );
+
+    double M1L1avg[24]; memset( M1L1avg, 0., 24*sizeof(double));
+    double M2L1avg[24]; memset( M2L1avg, 0., 24*sizeof(double));
+    double M3L1avg[24]; memset( M3L1avg, 0., 24*sizeof(double));
+         
+    double M1L2avg[23]; memset( M1L2avg, 0., 23*sizeof(double));
+    double M2L2avg[23]; memset( M2L2avg, 0., 23*sizeof(double));
+    double M3L2avg[23]; memset( M3L2avg, 0., 23*sizeof(double));
+
+    double M1L3avg[21]; memset( M1L3avg, 0., 21*sizeof(double));
+    double M2L3avg[21]; memset( M2L3avg, 0., 21*sizeof(double));
+    double M3L3avg[21]; memset( M3L3avg, 0., 21*sizeof(double));
+
+    double M1L4avg[20]; memset( M1L4avg, 0., 20*sizeof(double));
+    double M2L4avg[20]; memset( M2L4avg, 0., 20*sizeof(double));
+    double M3L4avg[20]; memset( M3L4avg, 0., 20*sizeof(double));
+
+    //loop over events
+    //
+    for (unsigned int evtNo = 0; evtNo<tree->GetEntries(); evtNo++){
+        tree->GetEntry(evtNo);
+
+        for (unsigned int i = 0; i<24; i++){
+            M2L1avg[i] += M2L1BelAr->at(i)/tree->GetEntries();
+            M1L1avg[i] += M1L1BelAr->at(i)/tree->GetEntries();
+            M3L1avg[i] += M3L1BelAr->at(i)/tree->GetEntries();
+        }
+        for (unsigned int i = 0; i<23; i++){
+            M2L2avg[i] += M2L2BelAr->at(i)/tree->GetEntries();
+            M1L2avg[i] += M1L2BelAr->at(i)/tree->GetEntries();
+            M3L2avg[i] += M3L2BelAr->at(i)/tree->GetEntries();
+        }
+        for (unsigned int i = 0; i<21; i++){
+            M2L3avg[i] += M2L3BelAr->at(i)/tree->GetEntries();
+            M1L3avg[i] += M1L3BelAr->at(i)/tree->GetEntries();
+            M3L3avg[i] += M3L3BelAr->at(i)/tree->GetEntries();
+        }
+        for (unsigned int i = 0; i<20; i++){
+            M2L4avg[i] += M2L4BelAr->at(i)/tree->GetEntries();
+            M1L4avg[i] += M1L4BelAr->at(i)/tree->GetEntries();
+            M3L4avg[i] += M3L4BelAr->at(i)/tree->GetEntries();
+        }
+    }
+        double picut = 1.8;
+        int channels = 0;
+
+        cout<<"List of channels with avg signal above cut"<<endl;
+        for (unsigned int i = 0; i<24; i++){
+            if (M2L1avg[i]>picut){cout<<"M2L1 "<<i<<endl; channels=channels+1;}
+            if (M1L1avg[i]>picut){cout<<"M1L1 "<<i<<endl;channels=channels+1;}
+            if (M3L1avg[i]>picut){cout<<"M3L1 "<<i<<endl;channels=channels+1;}
+        }
+        for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
+            if (M2L2avg[i]>picut){cout<<"M2L2 "<<i<<endl;channels=channels+1;}
+            if (M1L2avg[i]>picut){cout<<"M1L2 "<<i<<endl;channels=channels+1;}
+            if (M3L2avg[i]>picut){cout<<"M3L2 "<<i<<endl;channels=channels+1;}
+        }
+        for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
+            if (M2L3avg[i]>picut){cout<<"M2L3 "<<i<<endl;channels=channels+1;}
+            if (M1L3avg[i]>picut){cout<<"M1L3 "<<i<<endl;channels=channels+1;}
+            if (M3L3avg[i]>picut){cout<<"M3L3 "<<i<<endl;channels=channels+1;}
+        }
+        for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
+            if (M2L4avg[i]>picut){cout<<"M2L4 "<<i<<endl;channels=channels+1;}
+            if (M1L4avg[i]>picut){cout<<"M1L4 "<<i<<endl;channels=channels+1;}
+            if (M3L4avg[i]>picut){cout<<"M3L4 "<<i<<endl;channels=channels+1;}
+        }
+        cout<<"Number of channels above cut: "<<channels<<endl;
+}
+
+////////////////////////////////////////////////////////////////////////////////////
 void ATLHECTBanalysis1_v1p0(){
-    
+     
     // Analysis of e- data
     // energies 6, 20, 50, 100, 200 GeV
     //
@@ -778,8 +905,8 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    emanalysis( emenergies, emfiles );
-    
+    //emanalysis( emenergies, emfiles );
+     
     // Analysis of pi- data
     // energies 6, 20, 50, 100, 200 GeV
     //
@@ -788,7 +915,12 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    pianalysis( pienergies, pifiles );
+    //pianalysis( pienergies, pifiles );
+
+    //Analysis of channels pi
+    //
+    picalibrate(180., "ATLHECTBout_Run9.root");
+    
 }
 
 //**************************************************
