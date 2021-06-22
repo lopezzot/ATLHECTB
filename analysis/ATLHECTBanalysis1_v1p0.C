@@ -152,7 +152,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( i== 4 || i== 5 ) { 
+                if ( i== 4 || i== 5 || i==6 ) { 
                     channels += 1;
                     addchannels+= M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
@@ -164,7 +164,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1Channels->Fill(channels);
             H1Response->Fill( addchannels / (edep/1000.) ); 
             // average response 
-            H1Recenergy->Fill( addchannels / 44.7411 ); 
+            H1Recenergy->Fill( addchannels / 44.7987 ) ; 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
@@ -465,11 +465,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         //response
         //
         auto H1Response = new TH1F("pi-Response","pi-Response",
-                                   2*120, 0., 1.2 );
-        //response no Birks
-        //
-        auto H1ResponsenoB = new TH1F("pi-ResnoB","pi-ResnoB",
-                                      nBins,0.,1.2 );
+                                   2*120, 0., 1.0 );
         //reconstructed energy
         //
         //auto H1Recenergy = new TH1F( "pi-Reconstructedenergy",
@@ -589,8 +585,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             H1F3->Fill( addchannelsF3/addchannels );
             H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
-            H1Response->Fill( (addchannels / pienergies[RunNo])/44.7411 ); //pi/e
-            H1ResponsenoB->Fill( (elAr / pienergies[RunNo])/44.7411 ); //pi/e
+            H1Response->Fill( (addchannels / pienergies[RunNo])/44.7987 ); //pi/e
             // average response xxx a.u./GeV
             //H1Recenergy->Fill( addchannels / 44.8059 ); 
         } //end for loop events
@@ -636,32 +631,51 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         H1Channels->Write();
         H1Signals->Write();
         H1Response->Write();
-        H1ResponsenoB->Write();
         //H1Recenergy->Write();
     }
 
     // Finalize objects over multiple runs
     //
     outputfile->cd();
-    //auto G1ratiomaxtotS = new TGraph( emenergies.size(), energies, ratiomaxtotS ); 
+
     auto G1responses = new TGraphErrors( pienergies.size(), energies, responses, 
                                          zeros, erresponses );
     G1responses->GetYaxis()->SetRangeUser(0.75,0.9);
+    G1responses->GetXaxis()->SetRangeUser(0.,220.);
     G1responses->SetMarkerStyle(8); 
-    //G1ratiomaxtotS->SetName("pi-ratiomaxtotS");
-    //G1ratiomaxtotS->SetTitle("pi-ratiomaxtotS");
+    G1responses->SetMarkerColor(kRed);
+    G1responses->SetLineColor(kRed);
     G1responses->SetName("pi-responses");
     G1responses->SetTitle("pi-responses");
     G1responses->GetYaxis()->SetTitle("#pi / e");
     G1responses->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    //G1ratiomaxtotS->Write();
+
+    double ATLASresponse[7] = {0.777, 0.796, 0.8026, 0.819, 0.825, 0.829, 0.840};
+    double erATLASresponse[7] = {0.79-0.777, 0.8095-0.796, 0.816-0.8026, 
+                                0.833-0.819, 0.84-0.825, 0.844-0.829, 0.854-0.840};
+    double ATLASresenergies[7] = {20.,40.,50.,80.,100.,120.,150.};
+    double ATLASzeros[7]; memset( ATLASzeros, 0., 7*sizeof(double));
+    auto G1ATLASresponse = new TGraphErrors( 7, ATLASresenergies, ATLASresponse,
+                                                ATLASzeros, erATLASresponse );
+    G1ATLASresponse->SetMarkerStyle(8);
+    G1ATLASresponse->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1ATLASresponse->GetYaxis()->SetTitle("#pi/e");
+    G1ATLASresponse->GetYaxis()->SetRangeUser(0.75,0.9);
+    G1ATLASresponse->GetXaxis()->SetRangeUser(0.,220.);
+    G1ATLASresponse->SetTitle("pi-ATLASresponse");
+    G1ATLASresponse->SetName("pi-ATLASresponse");
+    G1ATLASresponse->Write();
 
     //Create canvas pi- response
     //
     auto C1piresponse = new TCanvas("pi-Canvas_response", "", 600, 600);
-    G1responses->Draw("AP");
+    G1ATLASresponse->Draw("AP");
+    G1responses->Draw("same P");
     gPad->SetLeftMargin(0.15);
     auto legend = new TLegend(0.18,0.7,0.61,0.89);
+    legend->AddEntry(G1ATLASresponse,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
     legend->AddEntry(G1responses,
     "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
@@ -671,7 +685,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete C1piresponse;
     G1responses->Write();
     delete G1responses;
-    //delete G1ratiomaxtotS;
+    delete G1ATLASresponse;
 
     auto G1F1 = new TGraphErrors( pienergies.size(), energies,                                                             F1, zeros, erF1 );
     G1F1->GetYaxis()->SetRangeUser(0.2,0.4);
@@ -972,12 +986,12 @@ void ecalibrate( const double& eenergy, const string& efile ){
             M3L4avg[i] += M3L4BelAr->at(i)/tree->GetEntries();
         }
     }
-        double ecut = 28.;
+        double ecut = 10.0;
         int channels = 0;
 
         cout<<"List of channels with avg signal above cut"<<endl;
         for (unsigned int i = 0; i<24; i++){
-            if (M2L1avg[i]>ecut){cout<<"M2L1 "<<i<<endl; channels=channels+1;}
+            if (M2L1avg[i]>ecut){cout<<"M2L1 "<<i<<endl;channels=channels+1;}
             if (M1L1avg[i]>ecut){cout<<"M1L1 "<<i<<endl;channels=channels+1;}
             if (M3L1avg[i]>ecut){cout<<"M3L1 "<<i<<endl;channels=channels+1;}
         }
@@ -997,6 +1011,7 @@ void ecalibrate( const double& eenergy, const string& efile ){
             if (M3L4avg[i]>ecut){cout<<"M3L4 "<<i<<endl;channels=channels+1;}
         }
         cout<<"Number of channels above cut: "<<channels<<endl;
+        cout<<"take first 7"<<endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1020,15 +1035,15 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //pianalysis( pienergies, pifiles );
+    pianalysis( pienergies, pifiles );
 
     //Analysis of channels pi
     //
-    //picalibrate(180., "ATLHECTBout_Run9.root");
+    picalibrate(180., "ATLHECTBout_Run9.root");
     
     //Analysis of channels e-
     //
-    //ecalibrate(147.8,"ATLHECTBout_Run17.root");    
+    ecalibrate(147.8,"ATLHECTBout_Run17.root");    
 
 }
 
