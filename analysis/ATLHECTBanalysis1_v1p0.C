@@ -766,7 +766,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F1->Write();
     double ATLASF1[11] = {0.3604477611940299, 0.3171641791044777, 0.3067164179104478, 0.29179104477611945, 0.2776119402985075, 0.26268656716417915, 0.2492537313432836, 0.2373134328358209, 0.232089552238806, 0.2201492537313433, 0.21716417910447766};
-    double erATLASF1[11]; memset( erATLASF1, 0., 11*sizeof(double));
+    double erATLASF1[11] = {0.005,0.005, 0.005, 0.005, 0.005, 0.005, 
+                            0.005, 0.005, 0.005, 0.005, 0.005};
     auto G1ATLASF1 =new TGraphErrors( pienergies.size(), energies,
                                       ATLASF1, zeros, erATLASF1 );
     G1ATLASF1->SetMarkerStyle(8); 
@@ -802,7 +803,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F2->Write();
     double ATLASF2[11] = {0.5226759644691121,0.5413080964409817,0.5420448049714781,0.5453379347967886,0.547879650383653,0.5519099631171358,0.5500750702671934,0.5521509469764354,0.5542111692223760,0.5543160066887254,0.5547372540648239};
-    double erATLASF2[11]; memset( erATLASF1, 0., 11*sizeof(double));
+    double erATLASF2[11] = {0.005,0.005, 0.005, 0.005, 0.005, 0.005, 
+                            0.005, 0.005, 0.005, 0.005, 0.005};
     auto G1ATLASF2 =new TGraphErrors( pienergies.size(), energies,
                                       ATLASF2, zeros, erATLASF2 );
     G1ATLASF2->SetMarkerStyle(8); 
@@ -874,7 +876,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F4->Write();
     double ATLASF4[11] = {0.015242718446601938,0.019223300970873783,0.02029126213592232,0.025728155339805818,0.029126213592233004,0.03223300970873785,0.03601941747572815,0.03796116504854368,0.04106796116504853,0.043495145631067954,0.04436893203883494};
-    double erATLASF4[11]; memset( erATLASF4, 0., 11*sizeof(double));
+    double erATLASF4[11]; memset( erATLASF1, 0., 11*sizeof(double));
     auto G1ATLASF4 = new TGraphErrors( pienergies.size(), energies,
                                       ATLASF4, zeros, erATLASF4 );
     G1ATLASF4->SetMarkerStyle(8); 
