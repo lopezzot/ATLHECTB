@@ -685,7 +685,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1responses->Write();
     delete G1responses;
     delete G1ATLASresponse;
-
+    
+    //Graphs and canvases for spatial development
+    //
     auto G1F1 = new TGraphErrors( pienergies.size(), energies,                                                             F1, zeros, erF1 );
     G1F1->GetYaxis()->SetRangeUser(0.2,0.4);
     G1F1->SetMarkerStyle(8); 
@@ -693,7 +695,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F1->SetLineColor(kRed);
     G1F1->SetName("pi-F1");
     G1F1->SetTitle("pi-F1");
-    G1F1->GetYaxis()->SetTitle("F");
+    G1F1->GetYaxis()->SetTitle("Signal Layer 1 / Signal");
     G1F1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F1->Write();
     double ATLASF1[11] = {0.3604477611940299, 0.3171641791044777, 0.3067164179104478, 0.29179104477611945, 0.2776119402985075, 0.26268656716417915, 0.2492537313432836, 0.2373134328358209, 0.232089552238806, 0.2201492537313433, 0.21716417910447766};
@@ -723,32 +725,113 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete G1ATLASF1;
 
     auto G1F2 = new TGraphErrors( pienergies.size(), energies,                                                             F2, zeros, erF2 );
-    G1F2->GetYaxis()->SetRangeUser(0.50,0.57);
+    G1F2->GetYaxis()->SetRangeUser(0.50,0.6);
     G1F2->SetMarkerStyle(8); 
+    G1F2->SetMarkerColor(kRed);
+    G1F2->SetLineColor(kRed);
     G1F2->SetName("pi-F2");
     G1F2->SetTitle("pi-F2");
     G1F2->GetYaxis()->SetTitle("F");
     G1F2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F2->Write();
+    double ATLASF2[11] = {0.5226759644691121,0.5413080964409817,0.5420448049714781,0.5453379347967886,0.547879650383653,0.5519099631171358,0.5500750702671934,0.5521509469764354,0.5542111692223760,0.5543160066887254,0.5547372540648239};
+    double erATLASF2[11]; memset( erATLASF1, 0., 11*sizeof(double));
+    auto G1ATLASF2 =new TGraphErrors( pienergies.size(), energies,
+                                      ATLASF2, zeros, erATLASF2 );
+    G1ATLASF2->SetMarkerStyle(8); 
+    G1ATLASF2->GetYaxis()->SetRangeUser(0.5,0.6);
+    G1ATLASF2->GetYaxis()->SetTitle("Signal Layer 2 / Signal");
+    G1ATLASF2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    auto C1F2 = new TCanvas("pi-Canvas_F2", "", 600, 600);
+    G1ATLASF2->Draw("AP");
+    G1F2->Draw("same P");
+    gPad->SetLeftMargin(0.15);
+    auto F2legend = new TLegend(1.-0.18,0.7,1.-0.61,0.89);
+    F2legend->AddEntry(G1ATLASF2,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
+    F2legend->AddEntry(G1F2,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    F2legend->SetLineWidth(0);
+    F2legend->Draw("same");
+    C1F2->Write();
+    delete C1F2;
     delete G1F2;
+    delete G1ATLASF2;
+
     auto G1F3 = new TGraphErrors( pienergies.size(), energies,                                                             F3, zeros, erF3 );
-    G1F3->GetYaxis()->SetRangeUser(0.08,0.22);
+    G1F3->GetYaxis()->SetRangeUser(0.08,0.2);
     G1F3->SetMarkerStyle(8); 
+    G1F3->SetMarkerColor(kRed);
+    G1F3->SetLineColor(kRed);
     G1F3->SetName("pi-F3");
     G1F3->SetTitle("pi-F3");
     G1F3->GetYaxis()->SetTitle("F");
     G1F3->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F3->Write();
+    double ATLASF3[11] = {0.10217391304347825,0.12260869565217392,0.1317391304347826,0.1382608695652174,0.14739130434782607,0.1547826086956522,0.1656521739130435,0.17347826086956522,0.1739130434782609,0.18304347826086959,0.1839130434782609};
+    double erATLASF3[11]; memset( erATLASF1, 0., 11*sizeof(double));
+    auto G1ATLASF3 =new TGraphErrors( pienergies.size(), energies,
+                                      ATLASF3, zeros, erATLASF3 );
+    G1ATLASF3->SetMarkerStyle(8); 
+    G1ATLASF3->GetYaxis()->SetRangeUser(0.08,0.2);
+    G1ATLASF3->GetYaxis()->SetTitle("Signal Layer 3 / Signal");
+    G1ATLASF3->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    auto C1F3 = new TCanvas("pi-Canvas_F3", "", 600, 600);
+    G1ATLASF3->Draw("AP");
+    G1F3->Draw("same P");
+    gPad->SetLeftMargin(0.15);
+    auto F3legend = new TLegend(1.-0.18,1.2-0.7,1.-0.61,1.2-0.89);
+    F3legend->AddEntry(G1ATLASF3,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
+    F3legend->AddEntry(G1F3,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    F3legend->SetLineWidth(0);
+    F3legend->Draw("same");
+    C1F3->Write();
+    delete C1F3;
     delete G1F3;
+    delete G1ATLASF3;
+
     auto G1F4 = new TGraphErrors( pienergies.size(), energies,                                                             F4, zeros, erF4 );
     G1F4->GetYaxis()->SetRangeUser(0.,0.06);
     G1F4->SetMarkerStyle(8); 
+    G1F4->SetMarkerColor(kRed);
+    G1F4->SetLineColor(kRed);
     G1F4->SetName("pi-F4");
     G1F4->SetTitle("pi-F4");
     G1F4->GetYaxis()->SetTitle("F");
     G1F4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F4->Write();
+    double ATLASF4[11] = {0.015242718446601938,0.019223300970873783,0.02029126213592232,0.025728155339805818,0.029126213592233004,0.03223300970873785,0.03601941747572815,0.03796116504854368,0.04106796116504853,0.043495145631067954,0.04436893203883494};
+    double erATLASF4[11]; memset( erATLASF4, 0., 11*sizeof(double));
+    auto G1ATLASF4 = new TGraphErrors( pienergies.size(), energies,
+                                      ATLASF4, zeros, erATLASF4 );
+    G1ATLASF4->SetMarkerStyle(8); 
+    G1ATLASF4->GetYaxis()->SetRangeUser(0.0,0.06);
+    G1ATLASF4->GetYaxis()->SetTitle("Signal Layer4 / Signal");
+    G1ATLASF4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    auto C1F4 = new TCanvas("pi-Canvas_F4", "", 600, 600);
+    G1ATLASF4->Draw("AP");
+    G1F4->Draw("same P");
+    gPad->SetLeftMargin(0.15);
+    auto F4legend = new TLegend(1.-0.18,1.2-0.7,1.-0.61,1.2-0.89);
+    F4legend->AddEntry(G1ATLASF4,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
+    F4legend->AddEntry(G1F4,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    F4legend->SetLineWidth(0);
+    F4legend->Draw("same");
+    C1F4->Write();
+    delete C1F4;
     delete G1F4;
+    delete G1ATLASF4;
+
     /*
     auto G1recenergy = new TGraphErrors( pienergies.size(), energies, recenergies, zeros, errecenergies );
     G1recenergy->SetMarkerStyle(8);
