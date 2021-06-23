@@ -371,10 +371,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     double erresponses[pienergies.size()];
     double zeros[pienergies.size()];
     memset( zeros, 0., pienergies.size()*sizeof(double));
-    //double recenergies[pienergies.size()];
-    //double errecenergies[pienergies.size()];
-    //double energyresolution[pienergies.size()];
-    //double erenergyresolution[pienergies.size()];
+    double recenergies[pienergies.size()];
+    double errecenergies[pienergies.size()];
+    double energyresolution[pienergies.size()];
+    double erenergyresolution[pienergies.size()];
     double F1[pienergies.size()];
     double erF1[pienergies.size()];
     double F2[pienergies.size()];
@@ -467,8 +467,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                                    2*120, 0., 1.0 );
         //reconstructed energy
         //
-        //auto H1Recenergy = new TH1F( "pi-Reconstructedenergy",
-        //        "pi-Reconstructedenergy", nBins*10, 0., 200. );
+        auto H1Recenergy = new TH1F( "pi-Reconstructedenergy",
+                "pi-Reconstructedenergy", nBins*10, 0., 200. );
 
         //F1 fraction of energy first layer, same for F2, F3 and F4
         //
@@ -585,8 +585,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
             H1Response->Fill( (addchannels / pienergies[RunNo])/44.7987 ); //pi/e
-            // average response xxx a.u./GeV
-            //H1Recenergy->Fill( addchannels / 44.8059 ); 
+            // average response 44.7987 a.u./GeV
+            H1Recenergy->Fill( addchannels / 44.7987 ); 
         } //end for loop events
 
         energies[RunNo] = pienergies[RunNo];
@@ -594,12 +594,20 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         responses[RunNo] = H1Response->GetMean();
         erresponses[RunNo] = 10.*H1Response->GetMeanError();
         
-        //H1Recenergy->Fit("gaus","Q");
-        //recenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParameter(1);
-        //errecenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParError(1);
-        //double res =(H1Recenergy->GetFunction("gaus")->GetParameter(2)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*sqrt(energies[RunNo])*100.;
-        //energyresolution[RunNo] = res;
-        //erenergyresolution[RunNo] = (H1Recenergy->GetFunction("gaus")->GetParError(2)/H1Recenergy->GetFunction("gaus")->GetParameter(2) + H1Recenergy->GetFunction("gaus")->GetParError(1)/H1Recenergy->GetFunction("gaus")->GetParameter(1))*res;
+        double xfitmin = H1Recenergy->GetMean()-2.*H1Recenergy->GetStdDev();
+        double xfitmax = H1Recenergy->GetMean()+2.*H1Recenergy->GetStdDev();
+        auto F1Recenergy = new TF1("rgaus","gaus(0)",xfitmin,xfitmax);
+        H1Recenergy->Fit(F1Recenergy,"QR");
+        recenergies[RunNo] = H1Recenergy->
+            GetFunction("rgaus")->GetParameter(1)/pienergies[RunNo];
+        errecenergies[RunNo] = H1Recenergy->
+            GetFunction("rgaus")->GetParError(1)/pienergies[RunNo];
+        energyresolution[RunNo] =100.*H1Recenergy->GetFunction("rgaus")->
+            GetParameter(2)/H1Recenergy->GetFunction("rgaus")->GetParameter(1);
+        erenergyresolution[RunNo] = (H1Recenergy->GetFunction("rgaus")->
+                GetParError(2)/H1Recenergy->GetFunction("rgaus")->GetParameter(2) +
+                H1Recenergy->GetFunction("rgaus")->GetParError(1)/
+                H1Recenergy->GetFunction("rgaus")->GetParameter(1))*energyresolution[RunNo];
 
         F1[RunNo] = H1F1->GetMean();
         erF1[RunNo] = H1F1->GetMeanError();
@@ -630,13 +638,75 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         H1Channels->Write();
         H1Signals->Write();
         H1Response->Write();
-        //H1Recenergy->Write();
+        H1Recenergy->Write();
     }
 
     // Finalize objects over multiple runs
     //
     outputfile->cd();
+   
+    //Part for reconstructed energy and energy resolution
+    //
+    auto G1recenergies = new TGraphErrors( pienergies.size(), energies, recenergies,
+                                           zeros, errecenergies);
+    G1recenergies->GetYaxis()->SetRangeUser(0.75,0.9);
+    G1recenergies->GetXaxis()->SetRangeUser(0.,220.);
+    G1recenergies->SetMarkerStyle(8); 
+    G1recenergies->SetMarkerColor(kRed);
+    G1recenergies->SetLineColor(kRed);
+    G1recenergies->SetName("pi-recenergies");
+    G1recenergies->SetTitle("pi-recenergies");
+    G1recenergies->GetYaxis()->SetTitle("#pi / e");
+    G1recenergies->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1recenergies->Draw("AP");
+    G1recenergies->Write();
+    delete G1recenergies;
 
+    auto G1energyresolution = new TGraphErrors( pienergies.size(), energies,
+            energyresolution, zeros, erenergyresolution );
+    G1energyresolution->SetMarkerStyle(8);
+    G1energyresolution->SetMarkerColor(kRed);
+    G1energyresolution->SetLineColor(kRed);
+    G1energyresolution->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1energyresolution->GetYaxis()->SetTitle("#sigma_{0}/E_{0} [%]");
+    G1energyresolution->GetYaxis()->SetRangeUser(0.,20.);
+    G1energyresolution->GetXaxis()->SetRangeUser(0.,220.);
+    G1energyresolution->SetTitle("pi-energyresolution");
+    G1energyresolution->SetName("pi-energyresolution");
+    G1energyresolution->Write();
+    double ATLASres[11] = {13.465587044534415,13.465587044534415,11.546558704453442,
+                           11.279352226720649,11.060728744939272,10.137651821862349,
+                           9.433198380566802,8.777327935222674,8.000000000000002,
+                           7.465587044534413,7.684210526315789};
+    double erATLASres[11] = {14.47-13.47,13.89-13.47, 11.85-11.55, 11.52-11.28,11.27-11.06,
+                            0.001, 0.001, 0.001, 0.001, 0.001, 0.001};
+    auto G1ATLASres =new TGraphErrors( pienergies.size(), energies,
+                                      ATLASres, zeros, erATLASres );
+    G1ATLASres->SetMarkerStyle(8); 
+    G1ATLASres->GetYaxis()->SetRangeUser(0.,20.);
+    G1ATLASres->GetXaxis()->SetRangeUser(0.,220.);
+    G1ATLASres->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1ATLASres->GetYaxis()->SetTitle("#sigma_{0}/E_{0} [%]");
+    auto C1res = new TCanvas("pi-Canvas_resolution", "", 600, 600);
+    G1ATLASres->Draw("AP");
+    G1energyresolution->Draw("same P");
+    gPad->SetLeftMargin(0.15);
+    auto Freslegend = new TLegend(1.-0.18,0.7,1.-0.61,0.89);
+    Freslegend->AddEntry(G1ATLASres,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
+    Freslegend->AddEntry(G1energyresolution,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    Freslegend->SetLineWidth(0);
+    Freslegend->Draw("same");
+    C1res->Write();
+    delete C1res;
+    delete G1energyresolution;
+    delete G1ATLASres;
+
+    //Part for pi/e
+    //
     auto G1responses = new TGraphErrors( pienergies.size(), energies, responses, 
                                          zeros, erresponses );
     G1responses->GetYaxis()->SetRangeUser(0.75,0.9);
@@ -664,9 +734,6 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1ATLASresponse->SetTitle("pi-ATLASresponse");
     G1ATLASresponse->SetName("pi-ATLASresponse");
     G1ATLASresponse->Write();
-
-    //Create canvas pi- response
-    //
     auto C1piresponse = new TCanvas("pi-Canvas_response", "", 600, 600);
     G1ATLASresponse->Draw("AP");
     G1responses->Draw("same P");
@@ -833,14 +900,6 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete G1ATLASF4;
 
     /*
-    auto G1recenergy = new TGraphErrors( pienergies.size(), energies, recenergies, zeros, errecenergies );
-    G1recenergy->SetMarkerStyle(8);
-    G1recenergy->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    G1recenergy->GetYaxis()->SetTitle("Energy [GeV]");
-    G1recenergy->SetTitle("pi-reconstructedenergy");
-    G1recenergy->SetName("pi-reconstructedenergy");
-    G1recenergy->Write();
-    delete G1recenergy;
     
     auto G1energyresolution = new TGraphErrors( pienergies.size(), energies, energyresolution, zeros, erenergyresolution );
     G1energyresolution->SetMarkerStyle(8);
