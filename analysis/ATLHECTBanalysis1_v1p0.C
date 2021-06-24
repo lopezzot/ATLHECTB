@@ -383,6 +383,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     double erF3[pienergies.size()];
     double F4[pienergies.size()];
     double erF4[pienergies.size()];
+    double L0[pienergies.size()];
+    double sigmaL0[pienergies.size()];
     
     //For loop over Runs (energies)
     //
@@ -607,7 +609,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         erenergyresolution[RunNo] = (H1Recenergy->GetFunction("rgaus")->
                 GetParError(2)/H1Recenergy->GetFunction("rgaus")->GetParameter(2) +
                 H1Recenergy->GetFunction("rgaus")->GetParError(1)/
-                H1Recenergy->GetFunction("rgaus")->GetParameter(1))*energyresolution[RunNo];
+                H1Recenergy->GetFunction("rgaus")->GetParameter(1))
+                                                    *energyresolution[RunNo];
 
         F1[RunNo] = H1F1->GetMean();
         erF1[RunNo] = H1F1->GetMeanError();
@@ -617,6 +620,17 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
         erF3[RunNo] = H1F3->GetMeanError();
         F4[RunNo] = H1F4->GetMean();
         erF4[RunNo] = H1F4->GetMeanError();
+        L0[RunNo] = (28.05/2.)*F1[RunNo]+(28.05+53.6/2.)*F2[RunNo]+
+                    (28.05+53.6+53.35/2.)*F3[RunNo]+
+                    (28.05+53.6+53.35+46.8/2)*F4[RunNo];
+        double depths[4] = {28.05/2.,28.05+53.6/2.,
+                         28.05+53.6+53.35/2.,
+                         28.05+53.6+53.35+46.8/2};
+        double residual = std::pow(depths[0]*F1[RunNo],2.)+
+                          std::pow(depths[1]*F2[RunNo],2.)+
+                          std::pow(depths[2]*F3[RunNo],2.)+
+                          std::pow(depths[3]*F4[RunNo],2.);
+        sigmaL0[RunNo] = 2.*std::sqrt(residual/4.); 
 
         outputfile->cd();
         H1Leak->Write();
@@ -678,8 +692,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                            11.279352226720649,11.060728744939272,10.137651821862349,
                            9.433198380566802,8.777327935222674,8.000000000000002,
                            7.465587044534413,7.684210526315789};
-    double erATLASres[11] = {14.47-13.47,13.89-13.47, 11.85-11.55, 11.52-11.28,11.27-11.06,
-                            0.001, 0.001, 0.001, 0.001, 0.001, 0.001};
+    double erATLASres[11] = {14.47-13.47,13.89-13.47, 11.85-11.55, 11.52-11.28,
+                            11.27-11.06, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001};
     auto G1ATLASres =new TGraphErrors( pienergies.size(), energies,
                                       ATLASres, zeros, erATLASres );
     G1ATLASres->SetMarkerStyle(8); 
@@ -765,7 +779,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F1->GetYaxis()->SetTitle("Signal Layer 1 / Signal");
     G1F1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F1->Write();
-    double ATLASF1[11] = {0.3604477611940299, 0.3171641791044777, 0.3067164179104478, 0.29179104477611945, 0.2776119402985075, 0.26268656716417915, 0.2492537313432836, 0.2373134328358209, 0.232089552238806, 0.2201492537313433, 0.21716417910447766};
+    double ATLASF1[11] = {0.3604477611940299, 0.3171641791044777, 0.3067164179104478, 
+        0.29179104477611945, 0.2776119402985075, 0.26268656716417915, 
+        0.2492537313432836, 0.2373134328358209, 0.232089552238806, 0.2201492537313433, 
+        0.21716417910447766};
     double erATLASF1[11] = {0.005,0.005, 0.005, 0.005, 0.005, 0.005, 
                             0.005, 0.005, 0.005, 0.005, 0.005};
     auto G1ATLASF1 =new TGraphErrors( pienergies.size(), energies,
@@ -802,7 +819,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F2->GetYaxis()->SetTitle("F");
     G1F2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F2->Write();
-    double ATLASF2[11] = {0.5226759644691121,0.5413080964409817,0.5420448049714781,0.5453379347967886,0.547879650383653,0.5519099631171358,0.5500750702671934,0.5521509469764354,0.5542111692223760,0.5543160066887254,0.5547372540648239};
+    double ATLASF2[11] = {0.5226759644691121,0.5413080964409817,0.5420448049714781,
+        0.5453379347967886,0.547879650383653,0.5519099631171358,0.5500750702671934,
+        0.5521509469764354,0.5542111692223760,0.5543160066887254,0.5547372540648239};
     double erATLASF2[11] = {0.005,0.005, 0.005, 0.005, 0.005, 0.005, 
                             0.005, 0.005, 0.005, 0.005, 0.005};
     auto G1ATLASF2 =new TGraphErrors( pienergies.size(), energies,
@@ -839,7 +858,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F3->GetYaxis()->SetTitle("F");
     G1F3->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F3->Write();
-    double ATLASF3[11] = {0.10217391304347825,0.12260869565217392,0.1317391304347826,0.1382608695652174,0.14739130434782607,0.1547826086956522,0.1656521739130435,0.17347826086956522,0.1739130434782609,0.18304347826086959,0.1839130434782609};
+    double ATLASF3[11] = {0.10217391304347825,0.12260869565217392,0.1317391304347826,
+        0.1382608695652174,0.14739130434782607,0.1547826086956522,0.1656521739130435,
+        0.17347826086956522,0.1739130434782609,0.18304347826086959,0.1839130434782609};
     double erATLASF3[11]; memset( erATLASF1, 0., 11*sizeof(double));
     auto G1ATLASF3 =new TGraphErrors( pienergies.size(), energies,
                                       ATLASF3, zeros, erATLASF3 );
@@ -851,7 +872,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1ATLASF3->Draw("AP");
     G1F3->Draw("same P");
     gPad->SetLeftMargin(0.15);
-    auto F3legend = new TLegend(1.-0.18,1.2-0.7,1.-0.61,1.2-0.89);
+    auto F3legend = new TLegend(1.-0.18,1.05-0.7,1.-0.61,1.05-0.89);
     F3legend->AddEntry(G1ATLASF3,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
@@ -875,7 +896,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1F4->GetYaxis()->SetTitle("F");
     G1F4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F4->Write();
-    double ATLASF4[11] = {0.015242718446601938,0.019223300970873783,0.02029126213592232,0.025728155339805818,0.029126213592233004,0.03223300970873785,0.03601941747572815,0.03796116504854368,0.04106796116504853,0.043495145631067954,0.04436893203883494};
+    double ATLASF4[11] = {0.015242718446601938,0.019223300970873783,
+        0.02029126213592232,0.025728155339805818,0.029126213592233004,
+        0.03223300970873785,0.03601941747572815,0.03796116504854368,
+        0.04106796116504853,0.043495145631067954,0.04436893203883494};
     double erATLASF4[11]; memset( erATLASF1, 0., 11*sizeof(double));
     auto G1ATLASF4 = new TGraphErrors( pienergies.size(), energies,
                                       ATLASF4, zeros, erATLASF4 );
@@ -887,7 +911,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1ATLASF4->Draw("AP");
     G1F4->Draw("same P");
     gPad->SetLeftMargin(0.15);
-    auto F4legend = new TLegend(1.-0.18,1.2-0.7,1.-0.61,1.2-0.89);
+    auto F4legend = new TLegend(1.-0.18,1.05-0.7,1.-0.61,1.05-0.89);
     F4legend->AddEntry(G1ATLASF4,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
@@ -901,62 +925,88 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete G1F4;
     delete G1ATLASF4;
 
-    /*
-    
-    auto G1energyresolution = new TGraphErrors( pienergies.size(), energies, energyresolution, zeros, erenergyresolution );
-    G1energyresolution->SetMarkerStyle(8);
-    G1energyresolution->SetMarkerColor(kRed);
-    G1energyresolution->SetLineColor(kRed);
-    G1energyresolution->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    G1energyresolution->GetYaxis()->SetTitle("#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
-    G1energyresolution->GetYaxis()->SetRangeUser(19.,25.);
-    G1energyresolution->GetXaxis()->SetRangeUser(0.,170.);
-    G1energyresolution->SetTitle("pi-energyresolution");
-    G1energyresolution->SetName("pi-energyresolution");
-    auto F1energyres = new TF1("pi-energyres","[0]",20.,150.);
-    F1energyres->SetLineWidth(3);
-    F1energyres->SetLineColor(kRed);
-    G1energyresolution->Fit(F1energyres, "QR");
-    cout<<"->Average a term in resolution "<<F1energyres->GetParameter(0)<<" +- "<<F1energyres->GetParError(0)<<" % GeV^0.5"<<endl;
-    F1energyres->Write();
-    G1energyresolution->Write();
-    
-    double ATLASenres[7] = {22.2, 21.6, 21.5, 22.30, 22.0, 21.2, 21.3};
-    double erATLASenres[7] = {22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30, 22.32-22.0, 21.46-21.2, 21.57-21.3};
-    auto G1ATLASenres = new TGraphErrors( pienergies.size(), energies, ATLASenres, zeros, erATLASenres );
-    G1ATLASenres->SetMarkerStyle(8);
-    G1ATLASenres->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    G1ATLASenres->GetYaxis()->SetTitle("#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
-    G1ATLASenres->GetYaxis()->SetRangeUser(19.,25.);
-    G1ATLASenres->GetXaxis()->SetRangeUser(0.,170.);
-    G1ATLASenres->SetTitle("pi-ATLASenergyresolution");
-    G1ATLASenres->SetName("pi-ATLASenergyresolution");
-    auto F1ATLASenergyres = new TF1("pi-ATLASenergyres","21.68",20.,150.);
-    F1ATLASenergyres->SetLineWidth(3);
-    F1ATLASenergyres->SetLineColor(kBlack);
-    F1ATLASenergyres->Write();
-    G1ATLASenres->Write();
-    */
-    /*
-    //Create canvas pi- energy resolution comparison
+    //Graph and canvas L0 and sigmaL0
     //
-    auto C1eneres = new TCanvas("pi-Canvas_eneres", "", 600, 600);
-    G1ATLASenres->Draw("AP");
-    G1energyresolution->Draw("P SAME");
-    F1ATLASenergyres->Draw("L SAME");
-    auto legend = new TLegend(0.15,0.7,0.58,0.89);
-    legend->AddEntry(G1ATLASenres,"#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}","ep");
-    legend->AddEntry(G1energyresolution,"#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
-    legend->SetLineWidth(0);
-    legend->Draw("same");
-    C1eneres->Write();
-    delete C1eneres;
+    auto G1L0 = new TGraphErrors( pienergies.size(), energies,                                                            L0, zeros, zeros );
+    G1L0->GetYaxis()->SetRangeUser(42.,62.);
+    G1L0->SetMarkerStyle(8); 
+    G1L0->SetMarkerColor(kRed);
+    G1L0->SetLineColor(kRed);
+    G1L0->SetName("pi-L0");
+    G1L0->SetTitle("pi-L0");
+    G1L0->GetYaxis()->SetTitle("L_{0} [cm]");
+    G1L0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1L0->Write();
+    double ATLASL0[11] = {47.20989874689059,50.415242855641324,51.444637789482286,
+        52.951825942751704,54.405759865463,5.72198021652049,57.223749518259424,
+        58.30097983112803,58.86865124318264,60.04659745173835,60.27474978686629};
+    //double ATLASL0[11] = {2.443793103448276,2.613312390414962,2.66645675043834,
+    //    2.746760666277031,2.8231808883693748,2.8919739918176504,2.972400642898889,
+    //    3.0295558153126825,3.0622735242548216,3.1260257159555813,3.1379178842781994};
+    double erATLASL0[11]; memset( erATLASL0, 0., 11*sizeof(double));
+    auto G1ATLASL0 = new TGraphErrors( pienergies.size(), energies,
+                                      ATLASL0, zeros, erATLASL0 );
+    G1ATLASL0->SetMarkerStyle(8); 
+    G1ATLASL0->GetYaxis()->SetRangeUser(42.,62.);
+    G1ATLASL0->GetYaxis()->SetTitle("L_{0} [cm]");
+    G1ATLASL0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    auto C1L0 = new TCanvas("pi-Canvas_L0", "", 600, 600);
+    G1ATLASL0->Draw("AP");
+    G1L0->Draw("same P");
+    gPad->SetLeftMargin(0.15);
+    auto L0legend = new TLegend(1.-0.18,1.05-0.7,1.-0.61,1.05-0.89);
+    L0legend->AddEntry(G1ATLASL0,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
+    L0legend->AddEntry(G1L0,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    L0legend->SetLineWidth(0);
+    L0legend->Draw("same");
+    C1L0->Write();
+    delete C1L0;
+    delete G1L0;
+    delete G1ATLASL0;
 
-    delete F1ATLASenergyres;
-    delete F1energyres;
-    delete G1energyresolution;
-    delete G1ATLASenres;
-    */
+    auto G1sigmaL0 = new TGraphErrors( pienergies.size(), energies,                                                            sigmaL0, zeros, zeros );
+    G1sigmaL0->GetYaxis()->SetRangeUser(30.,38.);
+    G1sigmaL0->SetMarkerStyle(8); 
+    G1sigmaL0->SetMarkerColor(kRed);
+    G1sigmaL0->SetLineColor(kRed);
+    G1sigmaL0->SetName("pi-sigmaL0");
+    G1sigmaL0->SetTitle("pi-sigmaL0");
+    G1sigmaL0->GetYaxis()->SetTitle("#sigma_{L} [cm]");
+    G1sigmaL0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    G1sigmaL0->Write();
+    double ATLASsigmaL0[11] = {31.561680356622446,32.623646745172536,
+        33.04349844031647,33.923354237050305,34.50614698802983,
+        34.94316059883212,35.591168629313415,35.798147808347814,
+        36.09916133280085,36.380940559327335,36.45373298649713};
+    double erATLASsigmaL0[11]; memset( erATLASsigmaL0, 0., 11*sizeof(double));
+    auto G1ATLASsigmaL0 = new TGraphErrors( pienergies.size(), energies,
+                                      ATLASsigmaL0, zeros, erATLASsigmaL0 );
+    G1ATLASsigmaL0->SetMarkerStyle(8); 
+    G1ATLASsigmaL0->GetYaxis()->SetRangeUser(30.,38.);
+    G1ATLASsigmaL0->GetYaxis()->SetTitle("#sigma_{L} [cm]");
+    G1ATLASsigmaL0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
+    auto C1sigmaL0 = new TCanvas("pi-Canvas_sigmaL0", "", 600, 600);
+    G1ATLASsigmaL0->Draw("AP");
+    G1sigmaL0->Draw("same P");
+    gPad->SetLeftMargin(0.15);
+    auto sigmaL0legend = new TLegend(1.-0.18,1.05-0.7,1.-0.61,1.05-0.89);
+    sigmaL0legend->AddEntry(G1ATLASsigmaL0,
+    "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
+    "ep");
+    sigmaL0legend->AddEntry(G1sigmaL0,
+    "#splitline{ATLHECTB v1.0 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    sigmaL0legend->SetLineWidth(0);
+    sigmaL0legend->Draw("same");
+    C1sigmaL0->Write();
+    delete C1sigmaL0;
+    delete G1sigmaL0;
+    delete G1ATLASsigmaL0;
+
     outputfile->Close();
     delete outputfile;
     // Final print out
