@@ -1,6 +1,6 @@
 //**************************************************
-// \file ATLHECTBanalysis_v1p0.cc
-// \brief: Analysis #1 of ATLHECTB data from v1.0 
+// \file ATLHECTBanalysis_v1p1.cc
+// \brief: Analysis #1 of ATLHECTB data from v1.1 
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim) @lopezzot
 // \start date: 4 June 2021
 //**************************************************
@@ -1416,7 +1416,7 @@ void ecalibrate( const double& eenergy, const string& efile ){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
-void ATLHECTBanalysis1_v1p0(){
+void ATLHECTBanalysis1_v1p1(){
      
     // Analysis of e- data
     // energies 6, 20, 50, 100, 200 GeV
@@ -1436,7 +1436,7 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //pianalysis( pienergies, pifiles );
+    pianalysis( pienergies, pifiles );
 
     //Analysis of channels pi
     //
