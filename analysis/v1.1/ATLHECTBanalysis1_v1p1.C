@@ -1,8 +1,8 @@
 //**************************************************
-// \file ATLHECTBanalysis_v1p1.cc
+// \file ATLHECTBanalysis1_v1p1.cc
 // \brief: Analysis #1 of ATLHECTB data from v1.1 
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim) @lopezzot
-// \start date: 4 June 2021
+// \start date: 14 June 2021
 //**************************************************
 
 #include <string>
