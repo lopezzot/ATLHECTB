@@ -318,7 +318,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             "#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]");
     G1ATLASenres->GetYaxis()->SetRangeUser(19.,25.);
     G1ATLASenres->GetXaxis()->SetRangeUser(0.,170.);
-    G1ATLASenres->SetTitle("e-ATLASenergyresolution");
+    G1ATLASenres->SetTitle("");
     G1ATLASenres->SetName("e-ATLASenergyresolution");
     auto F1ATLASenergyres = new TF1("e-ATLASenergyres","21.68",20.,150.);
     F1ATLASenergyres->SetLineWidth(3);
@@ -328,7 +328,11 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
 
     //Create canvas e- energy resolution comparison
     //
-    auto C1eneres = new TCanvas("e-Canvas_eneres", "", 600, 600);
+    auto C1eneres = new TCanvas("e-Canvas_eneres", "", 700, 900);
+    auto *p2 = new TPad("p2","p2",0.,0.02,1.,0.32); p2->Draw();
+    auto *p1 = new TPad("p1","p1",0.,0.3,1.,1.);  p1->Draw();
+    p1->cd();
+    gPad->SetLeftMargin(0.15);
     G1ATLASenres->Draw("AP");
     G1energyresolution->Draw("P SAME");
     F1ATLASenergyres->Draw("L SAME");
@@ -339,9 +343,25 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             "#splitline{ATLHECTB v1.0 }{Geant4.10.7.p01 FTFP_BERT }","ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
-    C1eneres->Write();
+    p2->cd();
+    gPad->SetLeftMargin(0.15);
+    TGraphErrors* ratio = new TGraphErrors(emenergies.size()); ratio->SetTitle("");
+    for (unsigned int i=0; i<emenergies.size(); i++){
+        ratio->SetPoint(i, emenergies[i], energyresolution[i]/ATLASenres[i]);
+        ratio->SetPointError(i, 0.,
+                (erenergyresolution[i]/energyresolution[i]+
+                 erATLASenres[i]/ATLASenres[i])
+                *energyresolution[i]/ATLASenres[i]);
+    }
+    ratio->GetYaxis()->SetTitle("MC/Data");
+    ratio->SetMarkerStyle(8);
+    ratio->GetYaxis()->SetLabelSize(0.09); ratio->GetXaxis()->SetLabelSize(0.09);
+    ratio->GetYaxis()->SetTitleSize(0.09); ratio->GetYaxis()->SetTitleOffset(0.65);
+    ratio->GetYaxis()->SetRangeUser(0.8,1.2);
+    ratio->Draw("AP");
+    C1eneres->Write(); 
+    delete ratio; delete p1; delete p2;
     delete C1eneres;
-
     delete F1ATLASenergyres;
     delete F1energyres;
     delete G1energyresolution;
@@ -700,7 +720,11 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1ATLASres->GetXaxis()->SetRangeUser(0.,220.);
     G1ATLASres->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1ATLASres->GetYaxis()->SetTitle("#sigma_{0}/E_{0} [%]");
-    auto C1res = new TCanvas("pi-Canvas_resolution", "", 600, 600);
+    auto C1res = new TCanvas("pi-Canvas_resolution", "", 700, 900);
+    auto *p2res = new TPad("p2","p2",0.,0.02,1.,0.32); p2res->Draw();
+    auto *p1res = new TPad("p1","p1",0.,0.3,1.,1.);  p1res->Draw();
+    p1res->cd();
+    G1ATLASres->SetTitle("");
     G1ATLASres->Draw("AP");
     G1energyresolution->Draw("same P");
     gPad->SetLeftMargin(0.15);
@@ -713,7 +737,23 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     "ep");
     Freslegend->SetLineWidth(0);
     Freslegend->Draw("same");
+    p2res->cd();
+    gPad->SetLeftMargin(0.15);
+    TGraphErrors* ratiores = new TGraphErrors(pienergies.size());ratiores->SetTitle("");
+    for (unsigned int i=0; i<pienergies.size(); i++){
+        ratiores->SetPoint(i, energies[i], energyresolution[i]/ATLASres[i]);
+        ratiores->SetPointError(i, 0.,
+                (erenergyresolution[i]/energyresolution[i]+
+                 erATLASres[i]/ATLASres[i])*energyresolution[i]/ATLASres[i]);
+    }
+    ratiores->GetYaxis()->SetTitle("MC/Data");
+    ratiores->SetMarkerStyle(8);
+    ratiores->GetYaxis()->SetLabelSize(0.09);ratiores->GetXaxis()->SetLabelSize(0.09);
+    ratiores->GetYaxis()->SetTitleSize(0.09);ratiores->GetYaxis()->SetTitleOffset(0.65);
+    ratiores->GetYaxis()->SetRangeUser(0.7,1.2);
+    ratiores->Draw("AP");
     C1res->Write();
+    delete p1res; delete p2res, delete ratiores;
     delete C1res;
     delete G1energyresolution;
     delete G1ATLASres;
@@ -731,7 +771,6 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1responses->SetTitle("pi-responses");
     G1responses->GetYaxis()->SetTitle("#pi / e");
     G1responses->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-
     double ATLASresponse[7] = {0.777, 0.796, 0.8026, 0.819, 0.825, 0.829, 0.840};
     double erATLASresponse[7] = {0.79-0.777, 0.8095-0.796, 0.816-0.8026, 
                                 0.833-0.819, 0.84-0.825, 0.844-0.829, 0.854-0.840};
@@ -744,10 +783,13 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1ATLASresponse->GetYaxis()->SetTitle("#pi/e");
     G1ATLASresponse->GetYaxis()->SetRangeUser(0.75,0.9);
     G1ATLASresponse->GetXaxis()->SetRangeUser(0.,220.);
-    G1ATLASresponse->SetTitle("pi-ATLASresponse");
+    G1ATLASresponse->SetTitle("");
     G1ATLASresponse->SetName("pi-ATLASresponse");
     G1ATLASresponse->Write();
-    auto C1piresponse = new TCanvas("pi-Canvas_response", "", 600, 600);
+    auto C1piresponse = new TCanvas("pi-Canvas_response", "", 700, 900);
+    auto *p2resp = new TPad("p2","p2",0.,0.02,1.,0.32); p2resp->Draw();
+    auto *p1resp = new TPad("p1","p1",0.,0.3,1.,1.);  p1resp->Draw();
+    p1resp->cd();
     G1ATLASresponse->Draw("AP");
     G1responses->Draw("same P");
     gPad->SetLeftMargin(0.15);
@@ -760,7 +802,29 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     "ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
+    p2resp->cd();
+    gPad->SetLeftMargin(0.15);
+    TGraphErrors* ratioresp = new TGraphErrors(pienergies.size());
+    ratioresp->SetTitle("");
+    int modindex[7] = {0,2,3,5,6,7,8};
+    int index = 0;
+    for (unsigned int i=0; i<7; i++){
+        index = modindex[i];
+        ratioresp->SetPoint(i, ATLASresenergies[i], 
+                responses[index]/ATLASresponse[i]);
+        ratioresp->SetPointError(i, 0.,
+                (erresponses[index]/responses[index]+
+                erATLASresponse[i]/ATLASresponse[i])*responses[index]/ATLASresponse[i]);
+    }
+    ratioresp->GetYaxis()->SetTitle("MC/Data");
+    ratioresp->SetMarkerStyle(8);
+    ratioresp->GetYaxis()->SetLabelSize(0.09);ratioresp->GetXaxis()->SetLabelSize(0.09);
+    ratioresp->GetYaxis()->SetTitleSize(0.09);
+    ratioresp->GetYaxis()->SetTitleOffset(0.65);
+    ratioresp->GetYaxis()->SetRangeUser(0.7,1.2);
+    ratioresp->Draw("AP");
     C1piresponse->Write();
+    delete p1resp; delete p2resp; delete ratioresp;
     delete C1piresponse;
     G1responses->Write();
     delete G1responses;
@@ -788,9 +852,13 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                                       ATLASF1, zeros, erATLASF1 );
     G1ATLASF1->SetMarkerStyle(8); 
     G1ATLASF1->GetYaxis()->SetRangeUser(0.2,0.4);
-    G1ATLASF1->GetYaxis()->SetTitle("F");
+    G1ATLASF1->GetYaxis()->SetTitle("Signal Layer 1 / Signal");
     G1ATLASF1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1F1 = new TCanvas("pi-Canvas_F1", "", 600, 600);
+    auto C1F1 = new TCanvas("pi-Canvas_F1", "", 700, 900);
+    auto *p2F1 = new TPad("p2","p2",0.,0.02,1.,0.32); p2F1->Draw();
+    auto *p1F1 = new TPad("p1","p1",0.,0.3,1.,1.);  p1F1->Draw();
+    p1F1->cd();
+    G1ATLASF1->SetTitle("Layer 1");
     G1ATLASF1->Draw("AP");
     G1F1->Draw("same P");
     gPad->SetLeftMargin(0.15);
@@ -803,7 +871,22 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     "ep");
     F1legend->SetLineWidth(0);
     F1legend->Draw("same");
+    p2F1->cd();
+    gPad->SetLeftMargin(0.15);
+    TGraphErrors* ratioF1 = new TGraphErrors(pienergies.size()); ratioF1->SetTitle("");
+    for (unsigned int i=0; i<pienergies.size(); i++){
+        ratioF1->SetPoint(i, energies[i], F1[i]/ATLASF1[i]);
+        ratioF1->SetPointError(i, 0.,
+                (erF1[i]/F1[i]+erATLASF1[i]/ATLASF1[i])*F1[i]/ATLASF1[i]);
+    }
+    ratioF1->GetYaxis()->SetTitle("MC/Data");
+    ratioF1->SetMarkerStyle(8);
+    ratioF1->GetYaxis()->SetLabelSize(0.09); ratioF1->GetXaxis()->SetLabelSize(0.09);
+    ratioF1->GetYaxis()->SetTitleSize(0.09); ratioF1->GetYaxis()->SetTitleOffset(0.65);
+    ratioF1->GetYaxis()->SetRangeUser(0.8,1.2);
+    ratioF1->Draw("AP");
     C1F1->Write();
+    delete ratioF1; delete p1F1; delete p2F1;
     delete C1F1;
     delete G1F1;
     delete G1ATLASF1;
@@ -829,7 +912,11 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1ATLASF2->GetYaxis()->SetRangeUser(0.5,0.6);
     G1ATLASF2->GetYaxis()->SetTitle("Signal Layer 2 / Signal");
     G1ATLASF2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1F2 = new TCanvas("pi-Canvas_F2", "", 600, 600);
+    auto C1F2 = new TCanvas("pi-Canvas_F2", "", 700, 900);
+    auto *p2F2 = new TPad("p2","p2",0.,0.02,1.,0.32); p2F2->Draw();
+    auto *p1F2 = new TPad("p1","p1",0.,0.3,1.,1.);  p1F2->Draw();
+    p1F2->cd();
+    G1ATLASF2->SetTitle("Layer 2");
     G1ATLASF2->Draw("AP");
     G1F2->Draw("same P");
     gPad->SetLeftMargin(0.15);
@@ -842,10 +929,26 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     "ep");
     F2legend->SetLineWidth(0);
     F2legend->Draw("same");
+    p2F2->cd();
+    gPad->SetLeftMargin(0.15);
+    TGraphErrors* ratioF2 = new TGraphErrors(pienergies.size()); ratioF2->SetTitle("");
+    for (unsigned int i=0; i<pienergies.size(); i++){
+        ratioF2->SetPoint(i, energies[i], F2[i]/ATLASF2[i]);
+        ratioF2->SetPointError(i, 0.,
+                (erF2[i]/F2[i]+erATLASF2[i]/ATLASF2[i])*F2[i]/ATLASF2[i]);
+    }
+    ratioF2->GetYaxis()->SetTitle("MC/Data");
+    ratioF2->SetMarkerStyle(8);
+    ratioF2->GetYaxis()->SetLabelSize(0.09); ratioF2->GetXaxis()->SetLabelSize(0.09);
+    ratioF2->GetYaxis()->SetTitleSize(0.09); ratioF2->GetYaxis()->SetTitleOffset(0.65);
+    ratioF2->GetYaxis()->SetRangeUser(0.8,1.2);
+    ratioF2->Draw("AP");
     C1F2->Write();
+    delete p2F2; delete p1F2;
     delete C1F2;
     delete G1F2;
     delete G1ATLASF2;
+    delete ratioF2;
 
     auto G1F3 = new TGraphErrors( pienergies.size(), energies,                                                             F3, zeros, erF3 );
     G1F3->GetYaxis()->SetRangeUser(0.08,0.2);
@@ -868,7 +971,11 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     G1ATLASF3->GetYaxis()->SetRangeUser(0.08,0.2);
     G1ATLASF3->GetYaxis()->SetTitle("Signal Layer 3 / Signal");
     G1ATLASF3->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1F3 = new TCanvas("pi-Canvas_F3", "", 600, 600);
+    auto C1F3 = new TCanvas("pi-Canvas_F3", "", 700, 900);
+    auto *p2F3 = new TPad("p2","p2",0.,0.02,1.,0.32); p2F3->Draw();
+    auto *p1F3 = new TPad("p1","p1",0.,0.3,1.,1.);  p1F3->Draw();
+    p1F3->cd();
+    G1ATLASF3->SetTitle("Layer 3");
     G1ATLASF3->Draw("AP");
     G1F3->Draw("same P");
     gPad->SetLeftMargin(0.15);
@@ -881,8 +988,24 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     "ep");
     F3legend->SetLineWidth(0);
     F3legend->Draw("same");
+    p2F3->cd();
+    gPad->SetLeftMargin(0.15);
+    TGraphErrors* ratioF3 = new TGraphErrors(pienergies.size()); ratioF3->SetTitle("");
+    for (unsigned int i=0; i<pienergies.size(); i++){
+        ratioF3->SetPoint(i, energies[i], F3[i]/ATLASF3[i]);
+        ratioF3->SetPointError(i, 0.,
+                (erF3[i]/F3[i]+erATLASF3[i]/ATLASF3[i])*F3[i]/ATLASF3[i]);
+    }
+    ratioF3->GetYaxis()->SetTitle("MC/Data");
+    ratioF3->SetMarkerStyle(8);
+    ratioF3->GetYaxis()->SetLabelSize(0.09); ratioF3->GetXaxis()->SetLabelSize(0.09);
+    ratioF3->GetYaxis()->SetTitleSize(0.09); ratioF3->GetYaxis()->SetTitleOffset(0.65);
+    ratioF3->GetYaxis()->SetRangeUser(0.8,1.2);
+    ratioF3->Draw("AP");
     C1F3->Write();
+    delete p1F3; delete p2F3;
     delete C1F3;
+    delete ratioF3; 
     delete G1F3;
     delete G1ATLASF3;
 
@@ -1303,7 +1426,7 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //emanalysis( emenergies, emfiles );
+    emanalysis( emenergies, emfiles );
      
     // Analysis of pi- data
     // energies 6, 20, 50, 100, 200 GeV
@@ -1313,7 +1436,7 @@ void ATLHECTBanalysis1_v1p0(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    pianalysis( pienergies, pifiles );
+    //pianalysis( pienergies, pifiles );
 
     //Analysis of channels pi
     //
