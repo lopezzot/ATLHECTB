@@ -14,6 +14,12 @@
   <ol>
     <li><a href="#project-description">Project description</a></li>
     <li><a href="#authors-and-contacts">Authors and contacts</a></li>
+      <li>
+      <a href="#documentation-and-results">Documentation and results</a>
+      <ul>
+        <li><a href="#presentations">Presentations</a></li>
+      </ul>
+    </li>
     <li><a href="#available-datasets-and-analyses">Available datasets and analyses</a></li>
     <li>
       <a href="#how-to">How to</a>
@@ -40,6 +46,12 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 ## Authors and contacts
 - Lorenzo Pezzotti (CERN EP-SFT) - lorenzo.pezzotti@cern.ch 
 - Supervisor: Alberto Ribon (CERN EP-SFT)
+
+<!--Documentation and results-->
+## Documentation and results
+
+### Presentations
+- EP-SFT Simulation meeting 15/6/2021, **First results from the Geant4 ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1049152/contributions/4407943/attachments/2264354/3844295/G4SW_lopezzot_15_6_2021.pdf)
 
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
