@@ -1,6 +1,6 @@
 //**************************************************
-// \file G4ATLHECTB.cc
-// \brief: main() of G4ATLHECTB project
+// \file ATLHECTB.cc
+// \brief: main() of ATLHECTB project
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim) @lopezzot
 // \start date: 11 May 2021
 //**************************************************
@@ -27,8 +27,8 @@
 //
 namespace PrintUsageError {
     void UsageError() {
-    G4cerr << "->G4ATLHECTB usage: " << G4endl;
-    G4cerr << "G4ATLHECTB [-m macro] [-u UIsession] [-t nThreads]" << G4endl;
+    G4cerr << "->ATLHECTB usage: " << G4endl;
+    G4cerr << "ATLHECTB [-m macro] [-u UIsession] [-t nThreads]" << G4endl;
     }
 }
 

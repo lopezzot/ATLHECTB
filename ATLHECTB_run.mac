@@ -1,5 +1,5 @@
 #
-# Macro file for example run of G4ATLHECTB
+# Macro file for example run of ATLHECTB
 # 
 # Can be run in batch, without graphic
 # or interactively: Idle> /control/execute G4ATLTBHEC_run.mac

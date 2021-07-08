@@ -10,7 +10,7 @@
 # Run menu :
 /gui/addMenu run Run
 /gui/addButton run "beamOn 1" "/run/beamOn 1"
-/gui/addButton run run1 "/control/execute G4ATLHECTB_run.mac"
+/gui/addButton run run1 "/control/execute ATLHECTB_run.mac"
 #
 # Viewer menu :
 /gui/addMenu viewer Viewer

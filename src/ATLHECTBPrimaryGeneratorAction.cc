@@ -1,6 +1,6 @@
 //**************************************************
 // \file ATLHECTBPrimaryGeneratorAction.cc
-// \brief: Implementation of G4ATLHECTBPrimaryGeneratorAction class
+// \brief: Implementation of ATLHECTBPrimaryGeneratorAction class
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim) @lopezzot
 // \start date: 11 May 2021
 //**************************************************

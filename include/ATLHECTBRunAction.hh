@@ -1,6 +1,6 @@
 //**************************************************
 // \file ATLHECTBRunAction.hh 
-// \brief: Definition of G4ATLHECTBRunAction class 
+// \brief: Definition of ATLHECTBRunAction class 
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim) @lopezzot
 // \start date: 11 May 2021
 //**************************************************
