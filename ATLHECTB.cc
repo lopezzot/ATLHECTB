@@ -28,7 +28,8 @@
 namespace PrintUsageError {
     void UsageError() {
     G4cerr << "->ATLHECTB usage: " << G4endl;
-    G4cerr << "ATLHECTB [-m macro] [-u UIsession] [-t nThreads]" << G4endl;
+    G4cerr << "ATLHECTB [-m macro] [-u UIsession] [-t nThreads] [-pl PhysicsList]" 
+        << G4endl;
     }
 }
 
