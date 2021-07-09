@@ -37,7 +37,7 @@ namespace PrintUsageError {
 //
 int main( int argc, char** argv ) {
     
-    //Error in argument numbers/
+    //Error in argument numbers
     //
     if ( argc > 9 ){
         PrintUsageError::UsageError();
