@@ -370,7 +370,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     solidModule = new G4Polycone("ATLHECModule", modulePhistart, moduleDeltaPhi, 
                                  numberZplane, zCoordinate, innerRadius, outerRadius);
 
-    logicModule = new G4LogicalVolume(solidModule, AirMaterial, "ATLHECModule"); //Caveat: in ATLAS Module material is lAr
+    logicModule = new G4LogicalVolume(solidModule, AirMaterial, "ATLHECModule"); 
+    //Caveat: in ATLAS Module material is lAr
 
     //auto ModuleVisAttributes = new G4VisAttributes();      //for image display
     //ModuleVisAttributes->SetForceWireframe( true );        //for image display
