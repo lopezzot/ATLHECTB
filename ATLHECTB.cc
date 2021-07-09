@@ -58,7 +58,8 @@ int main( int argc, char** argv ) {
         else if ( G4String( argv[i] ) == "-u" ) session = argv[i+1];
         else if ( G4String( argv[i] ) == "-pl" ) custom_pl = argv[i+1];
         #ifdef G4MULTITHREADED
-        else if ( G4String( argv[i] ) == "-t" ) {nthreads = G4UIcommand::ConvertToInt(argv[i+1]);} 
+        else if ( G4String( argv[i] ) == "-t" ) {
+            nthreads = G4UIcommand::ConvertToInt(argv[i+1]);} 
         #endif  
         else {
         PrintUsageError::UsageError();
