@@ -669,8 +669,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 					             (spacerDiameter[indexWheel]/2.)
                                                      + 2.*mm,
                                                      rodSize/2.,0.*deg,360.*deg);
-            logicTieRodZone[indexWheel] =new G4LogicalVolume(solidTieRodZone[indexWheel],                                                             lArMaterial,
-                                                             tieRodZoneName,0,0,0);
+            logicTieRodZone[indexWheel] =new G4LogicalVolume(solidTieRodZone[indexWheel],lArMaterial,
+                                                            tieRodZoneName,0,0,0);
             //logicTieRodZone[indexWheel]->SetVisAttributes(SliceVisAttributes);//for image display
             logicTieRodZone[indexWheel]->SetVisAttributes( G4VisAttributes::GetInvisible() );
         }
