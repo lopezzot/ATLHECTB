@@ -5,9 +5,13 @@
 // \start date: 11 May 2021
 //**************************************************
 
+//Prevent including header multiple times
+//
 #ifndef ATLHECTBSignalCalculator_h
 #define ATLHECTBSignalCalculator_h 1
 
+//Includers from Geant4
+//
 #include "globals.hh"
 
 class ATLHECTBSignalCalculator {
