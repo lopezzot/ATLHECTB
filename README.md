@@ -147,6 +147,15 @@ Parser options
    ```sh
    condor_wait -status log/*.log
    ```
+6. additional info from HTCondor (optional) \
+   rm all your jobs
+    ```sh
+   condor_rm username
+   ```
+   inspect your accounting group
+   ```sh
+   condor_q owner $LOGNAME -long | grep '^AccountingGroup' | sort | uniq -c
+   ```
 
 ### Get ATLAS HEC geo parameters from mysql database
 Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instructions to get geo parameters from ATLAS mysql database are intended for comparisons only.
