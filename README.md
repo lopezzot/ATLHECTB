@@ -221,5 +221,5 @@ Here is my standard Geant4 installation (example with Geant4.10.7.p01) starting 
    
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
-- Geant4 evaluation with test-beam data (NIM A560 (2006)):  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
-- Beam tests performance (NIM A482 (2002)): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
+- <em>GEANT4 physics evaluation with testbeam data of the ATLAS hadronic end-cap calorimeter</em>, NIM A560 (2006): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
+- <em>Performance of the ATLAS hadronic end-cap calorimeter in beam tests</em>, NIM A482 (2002): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
