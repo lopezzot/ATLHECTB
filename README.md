@@ -160,6 +160,18 @@ Parser options
    ```sh
    haggis group list
    ```
+   display your accounting groups
+    ```sh
+   haggis rights
+   ```
+   check what accounting group a job has
+   ```sh
+   condor_q jobid.0 -af AccountingGroup
+   ```
+   specify the accounting group for yout job, to be added in the .sub file
+   ```sh
+   +AccountingGroup = "group_u_*"
+   ```
    
 ### Get ATLAS HEC geo parameters from mysql database
 Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instructions to get geo parameters from ATLAS mysql database are intended for comparisons only.
