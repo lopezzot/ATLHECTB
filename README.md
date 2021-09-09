@@ -176,6 +176,10 @@ Parser options
    ```sh
    condor_q -l jobid.0 | grep CPUsUsage
    ```
+   ssh to machine where job is running
+   ```sh
+   condor_ssh_to_job jobid.0
+   ```
    
 ### Get ATLAS HEC geo parameters from mysql database
 Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instructions to get geo parameters from ATLAS mysql database are intended for comparisons only.
