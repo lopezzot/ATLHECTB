@@ -172,6 +172,10 @@ Parser options
    ```sh
    +AccountingGroup = "group_u_*"
    ```
+   check job CPU usage
+   ```sh
+   condor_q -l jobid.0 | grep CPUsUsage
+   ```
    
 ### Get ATLAS HEC geo parameters from mysql database
 Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instructions to get geo parameters from ATLAS mysql database are intended for comparisons only.
