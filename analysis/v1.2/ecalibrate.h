@@ -15,7 +15,6 @@ void ecalibrate( const double& eenergy, const string& efile ){
     //Initiate objects through all the analysis
     //
     cout<<"ATLHECTB analysis of channels to be selected with e- runs"<<endl;
-    auto outputfile = new TFile( "ATLHECTBchannelse.root", "RECREATE" );
     cout<<"---> Analysis at energy(GeV) "<<eenergy<<endl;  
         
     string filename = "Data1/"+efile;

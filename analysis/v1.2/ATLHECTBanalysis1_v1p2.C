@@ -28,7 +28,7 @@ void ATLHECTBanalysis1_v1p2(){
     for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    emanalysis( emenergies, emfiles );
+    //emanalysis( emenergies, emfiles );
      
     // Analysis of pi- data
     // energies 20, 30, 40, 50, 60, 80, 100, 120, 150, 180, 200 GeV
@@ -38,7 +38,7 @@ void ATLHECTBanalysis1_v1p2(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    pianalysis( pienergies, pifiles );
+    //pianalysis( pienergies, pifiles );
 
     //Analysis to select channels for pi- analysis
     //
@@ -46,7 +46,7 @@ void ATLHECTBanalysis1_v1p2(){
     
     //Analysis to select channels for e- analysis
     //
-    //ecalibrate(147.8,"ATLHECTBout_Run17.root");    
+    ecalibrate(147.8,"ATLHECTBout_Run17.root");    
 
 }
 
