@@ -42,11 +42,11 @@ void ATLHECTBanalysis1_v1p2(){
 
     //Analysis to select channels for pi- analysis
     //
-    picalibrate(180., "ATLHECTBout_Run9.root");
+    //picalibrate(180., "ATLHECTBout_Run9.root");
     
     //Analysis to select channels for e- analysis
     //
-    //ecalibrate(147.8,"ATLHECTBout_Run17.root");    
+    ecalibrate(147.8,"ATLHECTBout_Run17.root");    
 
 }
 

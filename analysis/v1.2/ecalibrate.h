@@ -103,14 +103,14 @@ void ecalibrate( const double& eenergy, const string& efile ){
             if (M3L2avg[i]>ecut){cout<<"M3L2 "<<i<<endl;channels=channels+1;}
         }
         for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
-            if (M2L3avg[i]>ecut){cout<<"M2L3 "<<i<<endl;channels=channels+1;}
-            if (M1L3avg[i]>ecut){cout<<"M1L3 "<<i<<endl;channels=channels+1;}
-            if (M3L3avg[i]>ecut){cout<<"M3L3 "<<i<<endl;channels=channels+1;}
+            if (M2L3avg[i]>(ecut/2.)){cout<<"M2L3 "<<i<<endl;channels=channels+1;}
+            if (M1L3avg[i]>(ecut/2.)){cout<<"M1L3 "<<i<<endl;channels=channels+1;}
+            if (M3L3avg[i]>(ecut/2.)){cout<<"M3L3 "<<i<<endl;channels=channels+1;}
         }
         for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
-            if (M2L4avg[i]>ecut){cout<<"M2L4 "<<i<<endl;channels=channels+1;}
-            if (M1L4avg[i]>ecut){cout<<"M1L4 "<<i<<endl;channels=channels+1;}
-            if (M3L4avg[i]>ecut){cout<<"M3L4 "<<i<<endl;channels=channels+1;}
+            if (M2L4avg[i]>(ecut/2.)){cout<<"M2L4 "<<i<<endl;channels=channels+1;}
+            if (M1L4avg[i]>(ecut/2.)){cout<<"M1L4 "<<i<<endl;channels=channels+1;}
+            if (M3L4avg[i]>(ecut/2.)){cout<<"M3L4 "<<i<<endl;channels=channels+1;}
         }
         cout<<"Number of channels above cut: "<<channels<<endl;
         cout<<"take first 7"<<endl;
