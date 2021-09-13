@@ -15,10 +15,9 @@ void picalibrate( const double& pienergy, const string& pifile ){
     //Initiate objects through all the analysis
     //
     cout<<"ATLHECTB analysis of channels to be selected with pi- runs"<<endl;
-    auto outputfile = new TFile( "ATLHECTBchannelspi.root", "RECREATE" );
     cout<<"---> Analysis at energy(GeV) "<<pienergy<<endl;  
         
-    string filename = "Data1/"+pifile;
+    string filename = "Data2/"+pifile;
     TFile* file = TFile::Open( filename.c_str(), "READ" );
     TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
 
