@@ -17,7 +17,7 @@ void ecalibrate( const double& eenergy, const string& efile ){
     cout<<"ATLHECTB analysis of channels to be selected with e- runs"<<endl;
     cout<<"---> Analysis at energy(GeV) "<<eenergy<<endl;  
         
-    string filename = "Data2/"+efile;
+    string filename = "Data1/"+efile;
     TFile* file = TFile::Open( filename.c_str(), "READ" );
     TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
 

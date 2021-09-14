@@ -35,7 +35,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<emenergies[RunNo]<<endl;  
         //Initiate objects through single Run
         //   
-        string filename = "Data2/"+emfiles[RunNo];
+        string filename = "Data1/"+emfiles[RunNo];
         double energy = emenergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );

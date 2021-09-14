@@ -42,7 +42,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<pienergies[RunNo]<<endl;  
         //Initiate objects through single Run
         //   
-        string filename = "Data2/"+pifiles[RunNo];
+        string filename = "Data1/"+pifiles[RunNo];
         double energy = pienergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );

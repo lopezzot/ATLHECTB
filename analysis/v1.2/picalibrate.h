@@ -17,7 +17,7 @@ void picalibrate( const double& pienergy, const string& pifile ){
     cout<<"ATLHECTB analysis of channels to be selected with pi- runs"<<endl;
     cout<<"---> Analysis at energy(GeV) "<<pienergy<<endl;  
         
-    string filename = "Data2/"+pifile;
+    string filename = "Data1/"+pifile;
     TFile* file = TFile::Open( filename.c_str(), "READ" );
     TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
 
