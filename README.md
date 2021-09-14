@@ -63,6 +63,7 @@ Ask authors for access to datasets.
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
+| v1.2 <br /> Dataset #1 <br /> tag 1.2_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.2 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_beam1_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p2.C  | Analysis reproducable with v1.2 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, Dataset is identical to tag 1.0_1 but with different beam position |
 | v1.0 <br /> Dataset #1 <br /> tag 1.0_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p1.C  | Analysis reproducable with v1.1 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, Dataset is identical to v1.0 |
 | v1.0 <br /> Dataset #1 <br /> tag 1.0_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p0.C  | reproducable with v1.0 <br /> results for e-, assuming Data1/ is alongside root macro |
 
@@ -147,7 +148,40 @@ Parser options
    ```sh
    condor_wait -status log/*.log
    ```
-
+6. additional info from HTCondor (optional) \
+   rm all your jobs
+    ```sh
+   condor_rm username
+   ```
+   inspect your accounting group
+   ```sh
+   condor_q owner $LOGNAME -long | grep '^AccountingGroup' | sort | uniq -c
+   ```
+   display all accounting groups
+   ```sh
+   haggis group list
+   ```
+   display your accounting groups
+    ```sh
+   haggis rights
+   ```
+   check what accounting group a job has
+   ```sh
+   condor_q jobid.0 -af AccountingGroup
+   ```
+   specify the accounting group for yout job, to be added in the .sub file
+   ```sh
+   +AccountingGroup = "group_u_*"
+   ```
+   check job CPU usage
+   ```sh
+   condor_q -l jobid.0 | grep CPUsUsage
+   ```
+   ssh to machine where job is running
+   ```sh
+   condor_ssh_to_job jobid.0
+   ```
+   
 ### Get ATLAS HEC geo parameters from mysql database
 Caveat: ATLHECTB geo parameters are hardcoded in the DetectorConstruction, instructions to get geo parameters from ATLAS mysql database are intended for comparisons only.
 
@@ -212,5 +246,5 @@ Here is my standard Geant4 installation (example with Geant4.10.7.p01) starting 
    
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
-- Geant4 evaluation with test-beam data (NIM A560 (2006)):  [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
-- Beam tests performance (NIM A482 (2002)): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
+- <em>GEANT4 physics evaluation with testbeam data of the ATLAS hadronic end-cap calorimeter</em>, NIM A560 (2006): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
+- <em>Performance of the ATLAS hadronic end-cap calorimeter in beam tests</em>, NIM A482 (2002): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
