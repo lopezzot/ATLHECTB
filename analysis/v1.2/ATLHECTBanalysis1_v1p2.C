@@ -38,11 +38,11 @@ void ATLHECTBanalysis1_v1p2(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //pianalysis( pienergies, pifiles );
+    pianalysis( pienergies, pifiles );
 
     //Analysis to select channels for pi- analysis
     //
-    picalibrate(180., "ATLHECTBout_Run9.root");
+    //picalibrate(180., "ATLHECTBout_Run9.root");
     
     //Analysis to select channels for e- analysis
     //

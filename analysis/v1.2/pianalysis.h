@@ -10,7 +10,7 @@
 #ifndef pianalysis_H
 #define pianalysis_H
 
-void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles ){
+void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles ){
 
     //Initiate objects through all the analysis
     //
@@ -38,11 +38,11 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     
     //For loop over Runs (energies)
     //
-    for (unsigned RunNo = 0; RunNo<emfiles.size(); RunNo++ ){
+    for (unsigned int RunNo = 0; RunNo<pifiles.size(); RunNo++ ){
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<pienergies[RunNo]<<endl;  
         //Initiate objects through single Run
         //   
-        string filename = "Data1/"+emfiles[RunNo];
+        string filename = "Data2/"+pifiles[RunNo];
         double energy = pienergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
@@ -147,40 +147,34 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             int channels = 0;
 
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( i==0 || i==1 || i==2 || i==3 || i==4 || i==5 ) { 
+                if ( i==0 || i==1 || i==2 || i==3 || i==4 || i==5 ) { //M2L1 
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     addchannelsF1 += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
-                if ( i==2 || i==4 ) { 
-                    channels += 1;
-                    addchannels += M1L1BelAr->at(i);
-                    addchannelsF1 += M1L1BelAr->at(i);
-                    H1Signals->Fill( M1L1BelAr->at(i)) ;
-                }
-                if ( i==3 || i==5 ) { 
+                if ( i==1 || i==3 || i==5 ) { //M3L1 
                     channels += 1;
                     addchannels += M3L1BelAr->at(i);
                     addchannelsF1 += M3L1BelAr->at(i);
-                    H1Signals->Fill( M3L1BelAr->at(i)) ;
+                    H1Signals->Fill( M3L1BelAr->at(i) ) ;
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
                 if ( i==2 || i==3 || i==4 || i==5 || i==6 || i==7 || 
-                     i==8 || i==9 ) { 
+                     i==8 || i==9 ) { //M2L2 
                     channels += 1;
                     addchannels += M2L2BelAr->at(i);
                     addchannelsF2 += M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
                 }
-                if ( i==2 || i==4 || i==6 || i==8 ) { 
+                if ( i==2 || i==4 || i==6 || i==8 ) { //M1L2 
                     channels += 1;
                     addchannels+= M1L2BelAr->at(i);
                     addchannelsF2 += M1L2BelAr->at(i);
                     H1Signals->Fill( M1L2BelAr->at(i)); 
                 }
-                if ( i==3 || i==5 || i==7 || i==9 ) { 
+                if ( i==3 || i==5 || i==7 || i==9 ) { //M3L2
                     channels += 1;
                     addchannels += M3L2BelAr->at(i);
                     addchannelsF2 += M3L2BelAr->at(i);
@@ -189,19 +183,19 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             }
             for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
                 if ( i==4 || i==5 || i==6 || i==7 || i==8 || i==9 ||
-                     i==10 || i==11 ) { 
+                     i==10 || i==11 ) { //M2L3 
                     channels += 1;
                     addchannels+= 2.*M2L3BelAr->at(i);
                     addchannelsF3 += 2.*M2L3BelAr->at(i);
                     H1Signals->Fill( M2L3BelAr->at(i)); 
                 }
-                if ( i==4 || i==6 || i==8 || i==10 ) { 
+                if ( i==4 || i==6 || i==8 || i==10 ) { //M1L3 
                     channels += 1;
                     addchannels+= 2.*M1L3BelAr->at(i);
                     addchannelsF3 += 2.*M1L3BelAr->at(i);
                     H1Signals->Fill( M1L3BelAr->at(i)); 
                 }
-                if ( i==5 || i==7 || i==9 || i==11 ) { 
+                if ( i==5 || i==7 || i==9 || i==11 ) { //M3L3 
                     channels += 1;
                     addchannels+= 2.*M3L3BelAr->at(i);
                     addchannelsF3 += 2.*M3L3BelAr->at(i);
@@ -209,19 +203,19 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
                 }
             }
             for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
-                if ( i==6 || i==7 || i==8 || i==9 || i==10 || i==11 ) { 
+                if ( i==6 || i==7 || i==8 || i==9 || i==10 || i==11 ) { //M2L4 
                     channels += 1;
                     addchannels+= 2.*M2L4BelAr->at(i);
                     addchannelsF4 += 2.*M2L4BelAr->at(i);
                     H1Signals->Fill( M2L4BelAr->at(i)); 
                 }
-                if ( i==8 ) { 
+                if ( i==8 ) { //M1L4 
                     channels += 1;
                     addchannels+= 2.*M1L4BelAr->at(i);
                     addchannelsF4 += 2.*M1L4BelAr->at(i);
                     H1Signals->Fill( M1L4BelAr->at(i)); 
                 }
-                if ( i==9 ) { 
+                if ( i==7 || i==9 || i==11 ) { //M3L4 
                     channels += 1;
                     addchannels+= 2.*M3L4BelAr->at(i);
                     addchannelsF4 += 2.*M3L4BelAr->at(i);
@@ -235,9 +229,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
             H1F3->Fill( addchannelsF3/addchannels );
             H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
-            H1Response->Fill( (addchannels / pienergies[RunNo])/44.7987 ); //pi/e
-            // average response 44.7987 a.u./GeV
-            H1Recenergy->Fill( addchannels / 44.7987 ); 
+            H1Response->Fill( (addchannels / pienergies[RunNo])/44.7472); //pi/e
+            H1Recenergy->Fill( addchannels /44.7472); 
         } //end for loop events
 
         energies[RunNo] = pienergies[RunNo];
@@ -307,7 +300,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     // Finalize objects over multiple runs
     //
     outputfile->cd();
-   
+     
     //Part for reconstructed energy and energy resolution
     //
     auto G1recenergies = new TGraphErrors( pienergies.size(), energies, recenergies,
@@ -462,7 +455,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     
     //Graphs and canvases for spatial development
     //
-    auto G1F1 = new TGraphErrors( pienergies.size(), energies,                                                             F1, zeros, erF1 );
+    auto G1F1 = new TGraphErrors( pienergies.size(), energies, F1, zeros, erF1 );
     G1F1->GetYaxis()->SetRangeUser(0.2,0.4);
     G1F1->SetMarkerStyle(8); 
     G1F1->SetMarkerColor(kRed);
@@ -521,7 +514,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete G1F1;
     delete G1ATLASF1;
 
-    auto G1F2 = new TGraphErrors( pienergies.size(), energies,                                                             F2, zeros, erF2 );
+    auto G1F2 = new TGraphErrors( pienergies.size(), energies, F2, zeros, erF2 );
     G1F2->GetYaxis()->SetRangeUser(0.50,0.6);
     G1F2->SetMarkerStyle(8); 
     G1F2->SetMarkerColor(kRed);
@@ -580,7 +573,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete G1ATLASF2;
     delete ratioF2;
 
-    auto G1F3 = new TGraphErrors( pienergies.size(), energies,                                                             F3, zeros, erF3 );
+    auto G1F3 = new TGraphErrors( pienergies.size(), energies, F3, zeros, erF3 );
     G1F3->GetYaxis()->SetRangeUser(0.08,0.2);
     G1F3->SetMarkerStyle(8); 
     G1F3->SetMarkerColor(kRed);
@@ -639,7 +632,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete G1F3;
     delete G1ATLASF3;
 
-    auto G1F4 = new TGraphErrors( pienergies.size(), energies,                                                             F4, zeros, erF4 );
+    auto G1F4 = new TGraphErrors( pienergies.size(), energies, F4, zeros, erF4 );
     G1F4->GetYaxis()->SetRangeUser(0.,0.06);
     G1F4->SetMarkerStyle(8); 
     G1F4->SetMarkerColor(kRed);
@@ -702,7 +695,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
 
     //Graph and canvas L0 and sigmaL0
     //
-    auto G1L0 = new TGraphErrors( pienergies.size(), energies,                                                            L0, zeros, zeros );
+    auto G1L0 = new TGraphErrors( pienergies.size(), energies, L0, zeros, zeros );
     G1L0->GetYaxis()->SetRangeUser(42.,62.);
     G1L0->SetMarkerStyle(8); 
     G1L0->SetMarkerColor(kRed);
@@ -761,7 +754,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     delete G1L0;
     delete G1ATLASL0;
 
-    auto G1sigmaL0 = new TGraphErrors( pienergies.size(), energies,                                                            sigmaL0, zeros, zeros );
+    auto G1sigmaL0 = new TGraphErrors( pienergies.size(), energies, sigmaL0, zeros, zeros );
     G1sigmaL0->GetYaxis()->SetRangeUser(30.,38.);
     G1sigmaL0->SetMarkerStyle(8); 
     G1sigmaL0->SetMarkerColor(kRed);
@@ -828,7 +821,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& emfiles
     }
     cout<<"->Average response to pi-: "<<k/double(pienergies.size())<<" a.u./GeV"<<endl;
     cout<<"ATLHECTB end of analysis of pi- runs"<<endl;
-
+    
 };
 
 #endif
