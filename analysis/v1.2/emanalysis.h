@@ -31,11 +31,11 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
 
     //For loop over Runs (energies)
     //
-    for (unsigned RunNo = 0; RunNo<emfiles.size(); RunNo++ ){
+    for (unsigned int RunNo = 0; RunNo<emfiles.size(); RunNo++ ){
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<emenergies[RunNo]<<endl;  
         //Initiate objects through single Run
         //   
-        string filename = "Data1/"+emfiles[RunNo];
+        string filename = "Data2/"+emfiles[RunNo];
         double energy = emenergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
@@ -73,7 +73,6 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         tree->SetBranchAddress( "M3L4BirkeLayer", &M3L4BelAr );
         
         int nBins = 100;
-        //int MaxSignalIndex;
 
         //total leak (world+cryostat) vs. vis energy deposited
         //
@@ -124,9 +123,6 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         auto H1Sampfraction = new TH1F("e-SamplingFraction",
                 "e-SamplingFraction", nBins, 0., 10.);
 
-        //auto H1MaxS = new TH1F("e-MaxS", "e-MaxS", 
-                             // nBins, 0., emenergies[RunNo]*100. );
-
         //For loop over events
         //
         for ( unsigned int eventNo = 0; eventNo<tree->GetEntries(); eventNo++ ){
@@ -139,37 +135,42 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             H1Etot->Fill( (edep+lenergy+cenergy)/1000. );
             H1Sampfraction->Fill((elAr/edep)*100.); //percent value
 
-            //MaxSignalIndex = std::max_element(M2L1BelAr->begin(),M2L1BelAr->end())
-            //                                -M2L1BelAr->begin();
-            
             double addchannels=0;
             int channels = 0;
 
+						//channels selected with ecalibrate.h
+						//
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( i==2 || i==3 || i==4 || i==5 ) { 
+                if ( i==2 || i==3 || i==5 ) { 
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( i== 4 || i== 5 || i==6 ) { 
+                if ( i== 3 || i== 4 || i==5 ) { 
                     channels += 1;
                     addchannels+= M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
                 }
             }
-            
-            //H1MaxS->Fill(M2L1BelAr->at(MaxSignalIndex));
+            for (unsigned int i = 0; i<M3L1BelAr->size(); i++){
+                if ( i== 3 ) { 
+                    channels += 1;
+                    addchannels+= M3L1BelAr->at(i);
+                    H1Signals->Fill( M3L1BelAr->at(i)); 
+                }
+            } //end of channels selection
+
             H1TotCutSignal->Fill( addchannels );
-            H1Channels->Fill(channels);
-            H1Response->Fill( addchannels / (edep/1000.) ); 
+            H1Channels->Fill( channels );
             // average response 
-            H1Recenergy->Fill( addchannels / 44.7987 ) ; 
+						//
+            H1Response->Fill( addchannels / (edep/1000.) ); 
+            H1Recenergy->Fill( addchannels / 44.7472) ; 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
-        //ratiomaxtotS[RunNo] = 0;//H1MaxS->GetMean() / H1TotS->GetMean();
         responses[RunNo] = H1Response->GetMean();
         erresponses[RunNo] = H1Response->GetMeanError();
         Sampfraction[RunNo] = H1Sampfraction->GetMean();
@@ -196,7 +197,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         H1Leak->Write();
         delete H1Leak;
         H2LeakvsEdep->Write();
-        if ( RunNo == 6 ){
+        /*if ( RunNo == 6 ){
             auto C1LeakvsEdep = new TCanvas("e-Canvas_LeakvsEdep", "", 600, 600);
             //gPad->SetLeftMargin(0.15);
             H2LeakvsEdep->SetMarkerSize(0.5);
@@ -215,7 +216,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             C1LeakvsEdep->Write();
             delete C1LeakvsEdep;
             delete LeakvsEdeplegend;
-        }
+        }*/
         delete H2LeakvsEdep; 
         H1Econt->Write();
         delete H1Econt;
@@ -231,19 +232,12 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         H1Signals->Write();
         H1Response->Write();
         H1Recenergy->Write();
-       // H1MaxS->Write();
-       // delete H1MaxS;
-    }
+    } //end of loop over runs
 
     // Finalize objects over multiple runs
     //
+	
     outputfile->cd();
-
-    //auto G1ratiomaxtotS = new TGraph( emenergies.size(), energies, ratiomaxtotS ); 
-    //G1ratiomaxtotS->SetName("e-ratiomaxtotS");
-    //G1ratiomaxtotS->SetTitle("e-ratiomaxtotS");
-    //G1ratiomaxtotS->Write();
-    //delete G1ratiomaxtotS;
 
     auto G1responses = new TGraphErrors( emenergies.size(), energies, responses, 
                                          zeros, erresponses );
@@ -379,6 +373,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     }
     cout<<"->Average response to e-: "<<k/double(emenergies.size())<<" a.u./GeV"<<endl;
     cout<<"ATLHECTB end of analysis of e- runs"<<endl;
+		
 };
 
 #endif
