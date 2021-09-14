@@ -93,24 +93,24 @@ void picalibrate( const double& pienergy, const string& pifile ){
 
         cout<<"List of channels with avg signal above cut"<<endl;
         for (unsigned int i = 0; i<24; i++){
-            if (M2L1avg[i]>picut){cout<<"M2L1 "<<i<<endl; channels=channels+1;}
-            if (M1L1avg[i]>picut){cout<<"M1L1 "<<i<<endl;channels=channels+1;}
-            if (M3L1avg[i]>picut){cout<<"M3L1 "<<i<<endl;channels=channels+1;}
+            if (M2L1avg[i]>picut){cout<<"M2L1 "<<i<<" "<<M2L1avg[i]<<endl; channels=channels+1;}
+            if (M1L1avg[i]>picut){cout<<"M1L1 "<<i<<" "<<M1L1avg[i]<<endl;channels=channels+1;}
+            if (M3L1avg[i]>picut){cout<<"M3L1 "<<i<<" "<<M3L1avg[i]<<endl;channels=channels+1;}
         }
         for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-            if (M2L2avg[i]>picut){cout<<"M2L2 "<<i<<endl;channels=channels+1;}
-            if (M1L2avg[i]>picut){cout<<"M1L2 "<<i<<endl;channels=channels+1;}
-            if (M3L2avg[i]>picut){cout<<"M3L2 "<<i<<endl;channels=channels+1;}
+            if (M2L2avg[i]>picut){cout<<"M2L2 "<<i<<" "<<M2L2avg[i]<<endl;channels=channels+1;}
+            if (M1L2avg[i]>picut){cout<<"M1L2 "<<i<<" "<<M1L2avg[i]<<endl;channels=channels+1;}
+            if (M3L2avg[i]>picut){cout<<"M3L2 "<<i<<" "<<M3L2avg[i]<<endl;channels=channels+1;}
         }
         for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
-            if (M2L3avg[i]>(picut/2.)){cout<<"M2L3 "<<i<<endl;channels=channels+1;}
-            if (M1L3avg[i]>(picut/2.)){cout<<"M1L3 "<<i<<endl;channels=channels+1;}
-            if (M3L3avg[i]>(picut/2.)){cout<<"M3L3 "<<i<<endl;channels=channels+1;}
+            if (M2L3avg[i]>(picut/2.)){cout<<"M2L3 "<<i<<" "<<M2L3avg[i]<<endl;channels=channels+1;}
+            if (M1L3avg[i]>(picut/2.)){cout<<"M1L3 "<<i<<" "<<M1L3avg[i]<<endl;channels=channels+1;}
+            if (M3L3avg[i]>(picut/2.)){cout<<"M3L3 "<<i<<" "<<M3L3avg[i]<<endl;channels=channels+1;}
         }
         for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
-            if (M2L4avg[i]>(picut/2.)){cout<<"M2L4 "<<i<<endl;channels=channels+1;}
-            if (M1L4avg[i]>(picut/2.)){cout<<"M1L4 "<<i<<endl;channels=channels+1;}
-            if (M3L4avg[i]>(picut/2.)){cout<<"M3L4 "<<i<<endl;channels=channels+1;}
+            if (M2L4avg[i]>(picut/2.)){cout<<"M2L4 "<<i<<" "<<M2L4avg[i]<<endl;channels=channels+1;}
+            if (M1L4avg[i]>(picut/2.)){cout<<"M1L4 "<<i<<" "<<M1L4avg[i]<<endl;channels=channels+1;}
+            if (M3L4avg[i]>(picut/2.)){cout<<"M3L4 "<<i<<" "<<M3L4avg[i]<<endl;channels=channels+1;}
         }
         cout<<"Number of channels above cut: "<<channels<<endl;
 
