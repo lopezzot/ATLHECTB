@@ -33,10 +33,10 @@ ATLHECTBSignalCalculator* ATLHECTBSignalCalculator::Instance(){
 G4double ATLHECTBSignalCalculator::ApplyBirks( const G4double& de, const G4double& steplength ){
 		
 		//--------------------------------------------------
-    //Briks Law for LAr as implemented in ATHENA, from
+		//Briks Law for LAr as implemented in ATHENA, from
 		//HECTB-mysql_server/LArCalorimeter/LArG4TB/
 		//LArG4TBHEC/src/LArG4TBHECCalculator.cc (ln 86-100)
-    //--------------------------------------------------
+		//--------------------------------------------------
 
 		const G4double Emin = 1.51;        //(MeV cm2)/g, minimal energy loss in LAr
     const G4double Ef = 10.0;          //kV/cm, electric field in LAr gaps  
