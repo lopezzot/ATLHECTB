@@ -15,7 +15,7 @@
 //
 #include "globals.hh"
 
-ATLHECTBSignalCalculator *ATLHECTBSignalCalculator::instance = 0;
+ATLHECTBSignalCalculator* ATLHECTBSignalCalculator::instance = 0;
 
 // Define (private) constructor (singleton)
 //
@@ -23,7 +23,7 @@ ATLHECTBSignalCalculator::ATLHECTBSignalCalculator() {}
 
 // Define Instance() method
 //
-ATLHECTBSignalCalculator *ATLHECTBSignalCalculator::Instance() {
+ATLHECTBSignalCalculator* ATLHECTBSignalCalculator::Instance() {
   if (instance == 0) {
     instance = new ATLHECTBSignalCalculator;
   }
@@ -32,8 +32,8 @@ ATLHECTBSignalCalculator *ATLHECTBSignalCalculator::Instance() {
 
 // Define ApplyBirks() method
 //
-G4double ATLHECTBSignalCalculator::ApplyBirks(const G4double &de,
-                                              const G4double &steplength) {
+G4double ATLHECTBSignalCalculator::ApplyBirks(const G4double& de,
+                                              const G4double& steplength) {
 
   //--------------------------------------------------
   // Briks Law for LAr as implemented in ATHENA, from
@@ -69,8 +69,8 @@ G4double ATLHECTBSignalCalculator::ApplyBirks(const G4double &de,
 
 // Define indexL1() method
 //
-G4int ATLHECTBSignalCalculator::IndexL1(const G4double &eta,
-                                        const G4double &relX) {
+G4int ATLHECTBSignalCalculator::IndexL1(const G4double& eta,
+                                        const G4double& relX) {
   G4int index;
 
   if (1.5 < eta && eta < 1.6) {
@@ -148,8 +148,8 @@ G4int ATLHECTBSignalCalculator::IndexL1(const G4double &eta,
   return index;
 }
 
-G4int ATLHECTBSignalCalculator::IndexL2(const G4double &eta,
-                                        const G4double &relX) {
+G4int ATLHECTBSignalCalculator::IndexL2(const G4double& eta,
+                                        const G4double& relX) {
   G4int index;
 
   if (1.5 < eta && eta < 1.55) {
@@ -225,8 +225,8 @@ G4int ATLHECTBSignalCalculator::IndexL2(const G4double &eta,
   return index;
 }
 
-G4int ATLHECTBSignalCalculator::IndexL3(const G4double &eta,
-                                        const G4double &relX) {
+G4int ATLHECTBSignalCalculator::IndexL3(const G4double& eta,
+                                        const G4double& relX) {
   G4int index;
 
   if (1.5 < eta && eta < 1.55) {
@@ -296,8 +296,8 @@ G4int ATLHECTBSignalCalculator::IndexL3(const G4double &eta,
   return index;
 }
 
-G4int ATLHECTBSignalCalculator::IndexL4(const G4double &eta,
-                                        const G4double &relX) {
+G4int ATLHECTBSignalCalculator::IndexL4(const G4double& eta,
+                                        const G4double& relX) {
   G4int index;
 
   if (1.5 < eta && eta < 1.55) {
