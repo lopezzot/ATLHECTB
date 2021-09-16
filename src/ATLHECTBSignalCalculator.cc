@@ -31,19 +31,38 @@ ATLHECTBSignalCalculator* ATLHECTBSignalCalculator::Instance(){
 //Define ApplyBirks() method
 //
 G4double ATLHECTBSignalCalculator::ApplyBirks( const G4double& de, const G4double& steplength ){
+		
+		//--------------------------------------------------
+    //Briks Law for LAr as implemented in ATHENA, from
+		//HECTB-mysql_server/LArCalorimeter/LArG4TB/
+		//LArG4TBHEC/src/LArG4TBHECCalculator.cc (ln 86-100)
+    //--------------------------------------------------
 
-            const G4double Emin = 1.51;        //(MeV cm2)/g, minimal energy loss in LAr
-            const G4double Ef = 10.0;           //kV/cm, electric field in LAr gaps  
-            const G4double k = 0.0486;         //kV/cm g/(MeV cm2), paramter in Birks equation
-            const G4double A = 1.+(k/Ef)*Emin; //Parameter in Birks equation
-            const G4double LArdensity = 1.396; //g/cm3
+		const G4double Emin = 1.51;        //(MeV cm2)/g, minimal energy loss in LAr
+    const G4double Ef = 10.0;          //kV/cm, electric field in LAr gaps  
+    const G4double k = 0.0486;         //kV/cm g/(MeV cm2), paramter in Birks equation
+    const G4double A = 1.+(k/Ef)*Emin; //Parameter in Birks equation
+    const G4double LArdensity = 1.396; //g/cm3
 
-            G4double satde = de*A/( 1.+ (k/Ef)*(1/LArdensity)*(de/steplength) ); 
+		G4double Birks_dE_dx = de/steplength; //MeV/cm
+	  G4double Birks_Corr;
+	  if ( steplength < 1.e-5 ) Birks_Corr = 1.0; //no correction if dx<10^-5 cm  	
+		else Birks_Corr = A/( 1.+ (k/Ef)*(1/LArdensity)*(Birks_dE_dx) ); 
     
-            return satde;
+	  G4double kHIP;
+		//The experimental data is available only until dE/dX ~ 12000 MeV/cm
+		//
+    if (Birks_dE_dx > 12000.0)  Birks_dE_dx = 12000.0;   
+    // No corrections for dE/dX <= 969 MeV/cm
+    //     
+		kHIP = (Birks_dE_dx > 969.) ? 0.000754*Birks_dE_dx+0.2692 : 1.0;
+    Birks_Corr *= kHIP;
+		
+    return de*Birks_Corr;   
+
 }
 
-//Define index L1() method
+//Define indexL1() method
 //
 G4int ATLHECTBSignalCalculator::IndexL1( const G4double& eta, const G4double& relX ){
     G4int index;
