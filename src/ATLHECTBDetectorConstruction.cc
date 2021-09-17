@@ -67,7 +67,52 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //Rohacell material
     auto RohacellMaterial = new G4Material("Rohacell", 
                                              6.18, 12.957*g/mole, 0.112*g/cm3); 
-    //World Construction
+    /*
+	  //Using materials as defined by ATLAS
+		//
+		G4String name,symbol;
+		G4double a,z,density;
+		G4int ncomponents,natoms;
+
+		a = 1.01*g/mole;
+		G4Element *elH = new G4Element(name="Hydrogen", symbol="H", z=1., a);
+
+		a = 12.01*g/mole;
+		G4Element *elC = new G4Element(name="Carbon", symbol="C", z=6., a);
+
+		a = 14.01*g/mole;
+		G4Element* elN = new G4Element(name="Nitrogen", symbol="N", z=7., a);
+
+		a = 16.00*g/mole;
+		G4Element *elO = new G4Element(name="Oxygen", symbol="O", z=8., a);
+
+		a = 39.95*g/mole;
+		G4Element *elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
+
+		a = 39.95*g/mole;
+		density = 1.396*g/cm3;
+		G4Material* lArMaterial = new G4Material(name="LiquidArgon",18.,a, density);
+
+		a = 55.845*g/mole;
+		density = 7.87*g/cm3;
+		G4Material* FeMaterial = new G4Material(name="Iron"   , z=26., a, density);
+
+		a = 63.546*g/mole;
+		density = 8.960*g/cm3;
+		G4Material* CuMaterial = new G4Material(name="Copper"   , z=29., a, density);
+
+		// 11-Jan-2002 ML from accbgeo.age: the Kapton_E density is 1.46g/cm3
+		// one assumes it is the same as for the Kapton_H -> C22 H10 O5 N2
+		density = 1.46*g/cm3;
+		G4Material* KaptonMaterial = new G4Material(name="Kapton", density, ncomponents=4);
+		KaptonMaterial->AddElement(elH,natoms=10); 
+		KaptonMaterial->AddElement(elC,natoms=22);
+		KaptonMaterial->AddElement(elO,natoms=5);
+		KaptonMaterial->AddElement(elN,natoms=2);
+    //end of materials from ATLAS
+		*/
+
+		//World Construction
     //
     G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
     G4double   bryr_y = 200.0*cm;
