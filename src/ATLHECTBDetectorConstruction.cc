@@ -111,7 +111,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 		KaptonMaterial->AddElement(elN,natoms=2);
     //end of materials from ATLAS
 		*/
-
+		
 		//World Construction
     //
     G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
