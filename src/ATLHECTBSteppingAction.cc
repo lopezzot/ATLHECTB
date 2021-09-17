@@ -57,7 +57,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     G4int cpNo = step->GetPreStepPoint()->GetTouchable()->GetCopyNumber();
     G4String matName = step->GetPreStepPoint()->GetMaterial()->GetName();
     G4String volName = step->GetPreStepPoint()->GetTouchable()->GetVolume()->GetName();
-    G4cout<<matName<<" "<<step->GetStepLength()<<G4endl;
+
     if ( cpNo > 0 || ( cpNo == 0 && volName != "World" ) ){
         fEventAction->Addedep( step->GetTotalEnergyDeposit() );
     }
