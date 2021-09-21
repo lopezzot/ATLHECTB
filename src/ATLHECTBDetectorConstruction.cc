@@ -58,18 +58,18 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
     //Getting materials from NIST (note: ATLAS defines materials from scratch)
     //
-    auto nistManager = G4NistManager::Instance();
+    //auto nistManager = G4NistManager::Instance();
 		/*
     auto FeMaterial = nistManager->FindOrBuildMaterial("G4_Fe");           //iron
     auto CuMaterial = nistManager->FindOrBuildMaterial("G4_Cu");           //copper
     auto lArMaterial = nistManager->FindOrBuildMaterial("G4_lAr");         //liquid Argon
     auto KaptonMaterial = nistManager->FindOrBuildMaterial("G4_KAPTON");   //KAPTON
 		*/
-		auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
-    auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
+		//auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
+    //auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
     //Rohacell material
-    auto RohacellMaterial = new G4Material("Rohacell", 
-                                           6.18, 12.957*g/mole, 0.112*g/cm3); 
+    //auto RohacellMaterial = new G4Material("Rohacell", 
+    //                                       6.18, 12.957*g/mole, 0.112*g/cm3); 
 	  //Using materials as defined by ATLAS (HEC+Cryostat)
 		//
 		G4String name,symbol;
@@ -112,7 +112,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 		KaptonMaterial->AddElement(elO,natoms=5);
 		KaptonMaterial->AddElement(elN,natoms=2);
     //end of materials from ATLAS for HEC
-    /*
+    
     density           = universe_mean_density; //from G4PhysicalConstants.hh
     G4double pressure = 3.e-18*pascal;
     G4double temperature       = 2.73*kelvin;
@@ -124,10 +124,10 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     a       = 12.957*g/mole;                                                       
     density = 0.112*g/cm3;                                              
     G4Material* RohacellMaterial = new G4Material(name="Rohacell", z=6.18, a, density);    
-    */
-    //G4Material* AirMaterial = new G4Material(name="G4_AIR", density=1.290*mg/cm3, ncomponents=2);
-    //AirMaterial->AddElement(elN, fractionmass=0.7);
-    //AirMaterial->AddElement(elO, fractionmass=0.3);
+ 
+    G4Material* AirMaterial = new G4Material(name="G4_AIR", density=1.290*mg/cm3, ncomponents=2);
+    AirMaterial->AddElement(elN, fractionmass=0.7);
+    AirMaterial->AddElement(elO, fractionmass=0.3);
 	  //end of materials from ATLAS for cryostat and world
    
 		//World Construction
