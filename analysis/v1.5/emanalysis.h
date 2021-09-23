@@ -1,10 +1,10 @@
 //**************************************************
 // \file emanalysis.h
-// \brief: Analysis #1 of ATLHECTB v1.3 
+// \brief: Analysis #1 of ATLHECTB v1.5 
 //         for e-   
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
 //          @lopezzot
-// \start date: 17 September 2021
+// \start date: 22 September 2021
 //**************************************************
 
 #ifndef emanalysis_H
@@ -141,21 +141,21 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
 						//channels selected with ecalibrate.h
 						//
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( i==2 || i==3 || i==5 ) { 
+                if ( i==2 || i==3 || i==5 ) { //M2L1
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( i== 3 || i== 4 || i==5 ) { 
+                if ( i== 3 || i== 4 || i==5 ) { //M2L2
                     channels += 1;
                     addchannels+= M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
                 }
             }
             for (unsigned int i = 0; i<M3L1BelAr->size(); i++){
-                if ( i== 3 ) { 
+                if ( i== 3 ) { //M3L1
                     channels += 1;
                     addchannels+= M3L1BelAr->at(i);
                     H1Signals->Fill( M3L1BelAr->at(i)); 
@@ -167,8 +167,9 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             // average response 
 						//
             H1Response->Fill( addchannels / (edep/1000.) ); 
-            H1Recenergy->Fill( (addchannels / 44.9195) ) ; 
+            H1Recenergy->Fill( (addchannels / 44.941) ) ; 
         } //end for loop events
+				
 
         energies[RunNo] = emenergies[RunNo];
         responses[RunNo] = H1Response->GetMean();
@@ -177,9 +178,9 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         ersampfraction[RunNo] = H1Sampfraction->GetMeanError();
 
         double xfitmin = H1Recenergy->GetXaxis()->
-            GetBinCenter(H1Recenergy->GetMaximumBin())-2.*H1Recenergy->GetStdDev();
+            GetBinCenter(H1Recenergy->GetMaximumBin())-2.0*H1Recenergy->GetStdDev();
         double xfitmax = H1Recenergy->GetXaxis()->
-            GetBinCenter(H1Recenergy->GetMaximumBin())+2.*H1Recenergy->GetStdDev();
+            GetBinCenter(H1Recenergy->GetMaximumBin())+2.0*H1Recenergy->GetStdDev();
         auto F1Recenergy = new TF1("gaus","gaus(0)",xfitmin,xfitmax);
         H1Recenergy->Fit( F1Recenergy ,"QR");
         recenergies[RunNo] = H1Recenergy->GetFunction("gaus")->GetParameter(1);
@@ -211,7 +212,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             LeakvsEdeplegend->SetLineWidth(0);
             LeakvsEdeplegend->SetHeader("Beam: e- 147.8 GeV", "C");
             LeakvsEdeplegend->AddEntry(H2LeakvsEdep,
-                    "#splitline{ATLHECTB v1.3 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+                    "#splitline{ATLHECTB v1.5 }{Geant4.10.7.p01 FTFP_BERT }","ep");
             LeakvsEdeplegend->Draw("same");
             C1LeakvsEdep->Write();
             delete C1LeakvsEdep;
@@ -266,7 +267,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     Sampfractionlegend->SetLineWidth(0);
     //Sampfractionlegend->SetHeader("Sampling fraction e-", "C");
     Sampfractionlegend->AddEntry(G1Sampfraction,
-            "#splitline{ATLHECTB v1.3 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v1.5 }{Geant4.10.7.p01 FTFP_BERT }","ep");
     Sampfractionlegend->Draw("same");
     C1Sampfraction->Write();
     delete C1Sampfraction;
@@ -336,7 +337,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     legend->AddEntry(G1ATLASenres,
         "#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}", "ep");
     legend->AddEntry(G1energyresolution,
-            "#splitline{ATLHECTB v1.3 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v1.5 }{Geant4.10.7.p01 FTFP_BERT }","ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
     p2->cd();

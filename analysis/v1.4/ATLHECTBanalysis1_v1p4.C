@@ -1,9 +1,9 @@
 //**************************************************
-// \file ATLHECTBanalysis1_v1p3.cc
-// \brief: Analysis #1 of ATLHECTB v1.3 
+// \file ATLHECTBanalysis1_v1p4.cc
+// \brief: Analysis #1 of ATLHECTB v1.4 
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
 //          @lopezzot
-// \start date: 17 September 2021
+// \start date: 21 September 2021
 //**************************************************
 
 //Includers from C++
@@ -18,7 +18,7 @@
 #include "ecalibrate.h"
 #include "picalibrate.h"
 
-void ATLHECTBanalysis1_v1p3(){
+void ATLHECTBanalysis1_v1p4(){
      
     // Analysis of e- data
     // energies 20, 40, 50, 80, 100, 119.1, 147.8 GeV

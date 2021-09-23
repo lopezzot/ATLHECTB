@@ -1,10 +1,10 @@
 //**************************************************
 // \file pianalysis.h
-// \brief: Analysis #1 of ATLHECTB v1.3 
+// \brief: Analysis #1 of ATLHECTB v1.5 
 //         for pi-   
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
 //          @lopezzot
-// \start date: 17 September 2021
+// \start date: 22 September 2021
 //**************************************************
 
 #ifndef pianalysis_H
@@ -229,8 +229,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
             H1F3->Fill( addchannelsF3/addchannels );
             H1F4->Fill( addchannelsF4/addchannels );
             H1Channels->Fill(channels);
-            H1Response->Fill( (addchannels / pienergies[RunNo])/44.9195); //pi/e
-            H1Recenergy->Fill( addchannels /44.9195);
+            H1Response->Fill( (addchannels / pienergies[RunNo])/44.941); //pi/e
+            H1Recenergy->Fill( addchannels /44.941);
         } //end for loop events
 
         energies[RunNo] = pienergies[RunNo];
@@ -241,7 +241,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
         double xfitmin = H1Recenergy->GetMean()-2.*H1Recenergy->GetStdDev();
         double xfitmax = H1Recenergy->GetMean()+2.*H1Recenergy->GetStdDev();
         auto F1Recenergy = new TF1("rgaus","gaus(0)",xfitmin,xfitmax);
-        H1Recenergy->Fit(F1Recenergy,"Q"); //QR if you want fit in range
+        H1Recenergy->Fit(F1Recenergy,"Q"); //QR for setting range in fit
         recenergies[RunNo] = H1Recenergy->
             GetFunction("rgaus")->GetParameter(1)/pienergies[RunNo];
         errecenergies[RunNo] = H1Recenergy->
@@ -356,7 +356,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     Freslegend->AddEntry(G1energyresolution,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     Freslegend->SetLineWidth(0);
     Freslegend->Draw("same");
@@ -421,7 +421,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     legend->AddEntry(G1responses,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
@@ -490,7 +490,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     F1legend->AddEntry(G1F1,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F1legend->SetLineWidth(0);
     F1legend->Draw("same");
@@ -548,7 +548,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     F2legend->AddEntry(G1F2,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F2legend->SetLineWidth(0);
     F2legend->Draw("same");
@@ -607,7 +607,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     F3legend->AddEntry(G1F3,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F3legend->SetLineWidth(0);
     F3legend->Draw("same");
@@ -667,7 +667,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     F4legend->AddEntry(G1F4,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F4legend->SetLineWidth(0);
     F4legend->Draw("same");
@@ -732,7 +732,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     L0legend->AddEntry(G1L0,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     L0legend->SetLineWidth(0);
     L0legend->Draw("same");
@@ -787,7 +787,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-COM-LARG-2021-005}}",
     "ep");
     sigmaL0legend->AddEntry(G1sigmaL0,
-    "#splitline{ATLHECTB v1.3 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v1.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     sigmaL0legend->SetLineWidth(0);
     sigmaL0legend->Draw("same");
