@@ -75,7 +75,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
     if ( matName == "G4_lAr" ){
         G4int modulecpNo = step->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
         G4double stepl = step->GetStepLength()/10.; //cm
-        G4double edep = step->GetTotalEnergyDeposit();
+        G4double edep = step->GetTotalEnergyDeposit(); //MeV
         if ( stepl > 0. && edep > 0. ){
             fEventAction->AddelAr( edep );
             if ( step->GetTrack()->GetGlobalTime()-14. <= 75. ){  // nanoseconds (ns)

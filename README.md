@@ -53,8 +53,8 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 ### Selected presentations
 - CERN EP-SFT Simulation Meeting 13/7/2021, **Results from the Geant4 ATLAS HEC test-beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1058649/contributions/4449544/attachments/2280962/3875541/G4Sim_lopezzot_13_7_2021.pdf)
 - ATLAS Simulation Group Meeting 6/7/2021 (ATLAS restricted), **A Geant4 simulation of
-the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/995938/contributions/4421574/attachments/2277065/3868501/ATLASSim_lopezzot_6_7_2021.pdf)
-- CERN EP-SFT Simulation Meeting 15/6/2021, **First results from the Geant4 ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1049152/contributions/4407943/attachments/2264354/3844295/G4SW_lopezzot_15_6_2021.pdf)
+the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/995938/contributions/4421574/attachments/2277065/3868501/ATLASSim_lopezzot_6_7_2021.pdf) <em>(errata corrige: slide 11, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
+- CERN EP-SFT Simulation Meeting 15/6/2021, **First results from the Geant4 ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1049152/contributions/4407943/attachments/2264354/3844295/G4SW_lopezzot_15_6_2021.pdf) <em>(errata corrige: slide 9, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
 
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
@@ -63,6 +63,9 @@ Ask authors for access to datasets.
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
+| v1.5 <br /> Dataset #1 <br /> tag 1.5_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.5 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_beam2_run.mac -pl FTFP_BERT | root -l <br /> .x v1.5/ATLHECTBanalysis1_v1p5.C  | Analysis reproducable with v1.5 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, G4 HEC+Cryostat+World materials defined as ATLAS code w.r.t v1.3 |
+| v1.4 <br /> Dataset #1 <br /> tag 1.4_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.4 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_beam2_run.mac -pl FTFP_BERT | root -l <br /> .x v1.4/ATLHECTBanalysis1_v1p4.C  | Analysis reproducable with v1.5 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, G4 HEC materials defined as ATLAS code w.r.t v1.3 |
+| v1.3 <br /> Dataset #1 <br /> tag 1.3_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.3 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_beam2_run.mac -pl FTFP_BERT | root -l <br /> .x v1.3/ATLHECTBanalysis1_v1p3.C  | Analysis reproducable with v1.5 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, see v1.3 details for G4 changes w.r.t. v1.2 |
 | v1.2 <br /> Dataset #1 <br /> tag 1.2_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.2 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_beam1_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p2.C  | Analysis reproducable with v1.2 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, Dataset is identical to tag 1.0_1 but with different beam position |
 | v1.0 <br /> Dataset #1 <br /> tag 1.0_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p1.C  | Analysis reproducable with v1.1 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, Dataset is identical to v1.0 |
 | v1.0 <br /> Dataset #1 <br /> tag 1.0_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p0.C  | reproducable with v1.0 <br /> results for e-, assuming Data1/ is alongside root macro |

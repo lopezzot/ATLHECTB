@@ -22,7 +22,8 @@
 #include "G4Tubs.hh"
 #include "G4UserLimits.hh"
 #include "G4GDMLParser.hh"
-        
+#include "G4PhysicalConstants.hh"
+           
 //Define constructor
 //
 ATLHECTBDetectorConstruction::ATLHECTBDetectorConstruction()
@@ -57,17 +58,79 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
 
     //Getting materials from NIST (note: ATLAS defines materials from scratch)
     //
-    auto nistManager = G4NistManager::Instance();
+    //auto nistManager = G4NistManager::Instance();
+		/*
     auto FeMaterial = nistManager->FindOrBuildMaterial("G4_Fe");           //iron
     auto CuMaterial = nistManager->FindOrBuildMaterial("G4_Cu");           //copper
     auto lArMaterial = nistManager->FindOrBuildMaterial("G4_lAr");         //liquid Argon
     auto KaptonMaterial = nistManager->FindOrBuildMaterial("G4_KAPTON");   //KAPTON
-    auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
-    auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
+		*/
+		//auto AirMaterial = nistManager->FindOrBuildMaterial("G4_AIR");         //air
+    //auto VacuumMaterial = nistManager->FindOrBuildMaterial("G4_Galactic"); //vacuum
     //Rohacell material
-    auto RohacellMaterial = new G4Material("Rohacell", 
-                                             6.18, 12.957*g/mole, 0.112*g/cm3); 
-    //World Construction
+    //auto RohacellMaterial = new G4Material("Rohacell", 
+    //                                       6.18, 12.957*g/mole, 0.112*g/cm3); 
+	  //Using materials as defined by ATLAS (HEC+Cryostat)
+		//
+		G4String name,symbol;
+		G4double a,z,density;
+		G4int ncomponents,natoms;
+
+		a = 1.01*g/mole;
+		G4Element *elH = new G4Element(name="Hydrogen", symbol="H", z=1., a);
+
+		a = 12.01*g/mole;
+		G4Element *elC = new G4Element(name="Carbon", symbol="C", z=6., a);
+
+		a = 14.01*g/mole;
+		G4Element* elN = new G4Element(name="Nitrogen", symbol="N", z=7., a);
+
+		a = 16.00*g/mole;
+		G4Element *elO = new G4Element(name="Oxygen", symbol="O", z=8., a);
+
+		//a = 39.95*g/mole;
+		//G4Element *elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
+
+		a = 39.95*g/mole;
+		density = 1.396*g/cm3;
+		G4Material* lArMaterial = new G4Material(name="G4_lAr",18.,a, density);
+
+		a = 55.845*g/mole;
+		density = 7.87*g/cm3;
+		G4Material* FeMaterial = new G4Material(name="G4_Fe"   , z=26., a, density);
+
+		a = 63.546*g/mole;
+		density = 8.960*g/cm3;
+		G4Material* CuMaterial = new G4Material(name="G4_Cu"   , z=29., a, density);
+
+		// 11-Jan-2002 ML from accbgeo.age: the Kapton_E density is 1.46g/cm3
+		// one assumes it is the same as for the Kapton_H -> C22 H10 O5 N2
+		density = 1.46*g/cm3;
+		G4Material* KaptonMaterial = new G4Material(name="G4_KAPTON", density, ncomponents=4);
+		KaptonMaterial->AddElement(elH,natoms=10); 
+		KaptonMaterial->AddElement(elC,natoms=22);
+		KaptonMaterial->AddElement(elO,natoms=5);
+		KaptonMaterial->AddElement(elN,natoms=2);
+    //end of materials from ATLAS for HEC
+    
+    density           = universe_mean_density; //from G4PhysicalConstants.hh
+    G4double pressure = 3.e-18*pascal;
+    G4double temperature       = 2.73*kelvin;
+		G4double fractionmass;
+    G4Material* VacuumMaterial = 
+            new G4Material(name="G4_Galactic", z=1., a=1.01*g/mole, density,
+                           kStateGas,temperature,pressure);
+
+    a       = 12.957*g/mole;                                                       
+    density = 0.112*g/cm3;                                              
+    G4Material* RohacellMaterial = new G4Material(name="Rohacell", z=6.18, a, density);    
+ 
+    G4Material* AirMaterial = new G4Material(name="G4_AIR", density=1.290*mg/cm3, ncomponents=2);
+    AirMaterial->AddElement(elN, fractionmass=0.7);
+    AirMaterial->AddElement(elO, fractionmass=0.3);
+	  //end of materials from ATLAS for cryostat and world
+   
+		//World Construction
     //
     G4double   bryr_x = 200.0*cm; //dimension of room with cryostat
     G4double   bryr_y = 200.0*cm;
@@ -370,8 +433,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     solidModule = new G4Polycone("ATLHECModule", modulePhistart, moduleDeltaPhi, 
                                  numberZplane, zCoordinate, innerRadius, outerRadius);
 
-    logicModule = new G4LogicalVolume(solidModule, AirMaterial, "ATLHECModule"); 
-    //Caveat: in ATLAS Module material is lAr
+    logicModule = new G4LogicalVolume(solidModule, lArMaterial, "ATLHECModule"); 
+    //Caveat: in ATLAS Module material is lAr but I could put it to AirMaterial
 
     //auto ModuleVisAttributes = new G4VisAttributes();      //for image display
     //ModuleVisAttributes->SetForceWireframe( true );        //for image display
@@ -498,8 +561,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                              depthSize[indexDepth]/2., modulePhistart,
                                              moduleDeltaPhi );
         logicDepth[indexDepth] = new G4LogicalVolume( solidDepths[indexDepth], 
-                                                      AirMaterial,             //Caveat: in ATLAS Depth material is lAr
-                                                      depthName);
+                                                      lArMaterial,             //Caveat: in ATLAS Depth material is lAr
+                                                      depthName);              //but I could put it to AirMaterial
         //logicDepth[indexDepth]->SetVisAttributes( DepthVisAttributes );//image dispaly
         logicDepth[indexDepth]->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
