@@ -78,45 +78,38 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
         G4double edep = step->GetTotalEnergyDeposit(); //MeV
         if ( stepl > 0. && edep > 0. ){
             fEventAction->AddelAr( edep );
-            if ( step->GetTrack()->GetGlobalTime()-14. <= 75. ){  // nanoseconds (ns)
-                fEventAction->AddBirkelAr( 
-                    fSCalculator->ApplyBirks( edep, stepl ) );
+            fEventAction->AddBirkelAr( fSCalculator->ApplyBirks( edep, stepl ) );
                
-                //Fill by Layer
-                //
-                G4ThreeVector origin(0.,0.,0.);
-                G4ThreeVector sliceorigin = step->GetPreStepPoint()->GetTouchable()->
-                GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
-                G4ThreeVector hitpos = step->GetPreStepPoint()->GetPosition();
-                G4ThreeVector relhitpos = hitpos-sliceorigin;
-                if ( cpNo < 8 ){ //layer 1
-                    G4int index = 
-                        fSCalculator->IndexL1( hitpos.getEta(), relhitpos.getX() );
-                    fEventAction->AddL1BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks( edep, stepl ));
-                }
-                else if ( 8<=cpNo && cpNo<24 ){ //layer 2
-                    G4int index = 
-                        fSCalculator->IndexL2( hitpos.getEta(), relhitpos.getX() );
-                    fEventAction->AddL2BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks( edep, stepl ));
-                }
-                else if ( 24<=cpNo && cpNo<32 ){ //layer 3
-                    G4int index = 
-                        fSCalculator->IndexL3( hitpos.getEta(), relhitpos.getX() );
-                    fEventAction->AddL3BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks( edep, stepl ));
-                }
-                else if ( 32<=cpNo && cpNo<40 ){ //layer 4
-                    G4int index = 
-                        fSCalculator->IndexL4( hitpos.getEta(), relhitpos.getX() );
-                    fEventAction->AddL4BirkeLayer( modulecpNo, index, 
-                        fSCalculator->ApplyBirks( edep ,stepl ));
-                }
+            //Fill by Layer
+            //
+            G4ThreeVector origin(0.,0.,0.);
+            G4ThreeVector sliceorigin = step->GetPreStepPoint()->GetTouchable()->
+            GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
+            G4ThreeVector hitpos = step->GetPreStepPoint()->GetPosition();
+            G4ThreeVector relhitpos = hitpos-sliceorigin;
+            if ( cpNo < 8 && step->GetTrack()->GetGlobalTime()-14. <= 75.){ //layer 1
+								G4int index = fSCalculator->IndexL1( hitpos.getEta(), relhitpos.getX() );
+                fEventAction->AddL1BirkeLayer( modulecpNo, index, 
+                              fSCalculator->ApplyBirks( edep, stepl ));
+            }
+            else if ( 8<=cpNo && cpNo<24 && step->GetTrack()->GetGlobalTime()-15. <= 75.){ //layer 2
+                G4int index = fSCalculator->IndexL2( hitpos.getEta(), relhitpos.getX() );
+                fEventAction->AddL2BirkeLayer( modulecpNo, index, 
+                              fSCalculator->ApplyBirks( edep, stepl ));
+            }
+            else if ( 24<=cpNo && cpNo<32 && step->GetTrack()->GetGlobalTime()-17. <= 75.){ //layer 3
+                G4int index = fSCalculator->IndexL3( hitpos.getEta(), relhitpos.getX() );
+                fEventAction->AddL3BirkeLayer( modulecpNo, index, 
+                              fSCalculator->ApplyBirks( edep, stepl ));
+            }
+            else if ( 32<=cpNo && cpNo<40 && step->GetTrack()->GetGlobalTime()-18. <= 75.){ //layer 4
+								G4int index = fSCalculator->IndexL4( hitpos.getEta(), relhitpos.getX() );
+                fEventAction->AddL4BirkeLayer( modulecpNo, index, 
+                              fSCalculator->ApplyBirks( edep ,stepl ));
+            }
 
-            } //if global time
         } //if stepl and edep
-    } //if G4_lAr
+		} //if G4_lAr
 
 }
 
