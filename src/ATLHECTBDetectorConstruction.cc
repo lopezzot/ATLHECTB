@@ -728,7 +728,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         logicTieRod[indexWheel]->SetVisAttributes( G4VisAttributes::GetInvisible() );
 
         if ( TieRodZone ) {//true: HECversion == "standard_np_zone" 
-	    solidTieRodZone[indexWheel] = new G4Tubs(tieRodZoneName,
+            solidTieRodZone[indexWheel] = new G4Tubs(tieRodZoneName,
 	                                             spacerDiameter[indexWheel]/2., 
 					             (spacerDiameter[indexWheel]/2.)
                                                      + 2.*mm,

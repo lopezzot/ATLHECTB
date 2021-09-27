@@ -1,0 +1,99 @@
+# Initialize kernel
+/run/initialize
+#
+# Run 0
+#
+/run/printProgress 100
+/gun/particle pi-
+/run/setCut 1.0 mm
+/gun/energy 20 GeV
+/gun/position -9 172 0 cm
+/gun/direction 0 0 1
+/run/beamOn 50000
+#
+# Run 1
+#
+/gun/energy 30 GeV
+/run/beamOn 50000
+#
+#Run 2
+#
+/gun/energy 40 GeV
+/run/beamOn 50000
+#
+# Run 3
+#
+/gun/energy 50 GeV
+/run/beamOn 50000
+#
+# Run 4
+#
+/gun/energy 60 GeV
+/run/beamOn 50000
+#
+# Run 5
+#
+/gun/energy 80 GeV
+/run/beamOn 50000
+#
+# Run 6
+#
+/gun/energy 100 GeV
+/run/beamOn 50000
+#
+# Run 7
+#
+/gun/energy 120 GeV
+/run/beamOn 50000
+#
+# Run 8
+#
+/gun/energy 150 GeV
+/run/beamOn 50000
+#
+# Run 9
+#
+/gun/energy 180 GeV
+/run/beamOn 50000
+#
+# Run 10
+#
+/gun/energy 200 GeV
+/run/beamOn 50000
+#
+# Run 11
+#
+/gun/particle e-
+/gun/energy 20 GeV
+/run/beamOn 50000
+#
+# Run 12
+#
+/gun/energy 40 GeV
+/run/beamOn 50000
+#
+#Run 13
+#
+/gun/energy 50 GeV
+/run/beamOn 50000
+#
+# Run 14
+#
+/gun/energy 80 GeV
+/run/beamOn 50000
+#
+# Run 15
+#
+/gun/energy 100 GeV
+/run/beamOn 50000
+#
+# Run 16
+#
+/gun/energy 119.1 GeV
+/run/beamOn 50000
+#
+# Run 17
+#
+/gun/energy 147.8 GeV
+/run/beamOn 50000
+#
