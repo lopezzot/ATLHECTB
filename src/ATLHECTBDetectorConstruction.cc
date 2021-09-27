@@ -72,64 +72,64 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //                                       6.18, 12.957*g/mole, 0.112*g/cm3); 
 
     //Using materials as defined by ATLAS (HEC+Cryostat)
-		//
-		G4String name,symbol;
-		G4double a,z,density;
-		G4int ncomponents,natoms;
+    //
+    G4String name,symbol;
+    G4double a,z,density;
+    G4int ncomponents,natoms;
 
-		a = 1.01*g/mole;
-		G4Element *elH = new G4Element(name="Hydrogen", symbol="H", z=1., a);
+    a = 1.01*g/mole;
+    G4Element *elH = new G4Element(name="Hydrogen", symbol="H", z=1., a);
 
-		a = 12.01*g/mole;
-		G4Element *elC = new G4Element(name="Carbon", symbol="C", z=6., a);
+    a = 12.01*g/mole;
+    G4Element *elC = new G4Element(name="Carbon", symbol="C", z=6., a);
 
-		a = 14.01*g/mole;
-		G4Element* elN = new G4Element(name="Nitrogen", symbol="N", z=7., a);
+    a = 14.01*g/mole;
+    G4Element* elN = new G4Element(name="Nitrogen", symbol="N", z=7., a);
 
-		a = 16.00*g/mole;
-		G4Element *elO = new G4Element(name="Oxygen", symbol="O", z=8., a);
+    a = 16.00*g/mole;
+    G4Element *elO = new G4Element(name="Oxygen", symbol="O", z=8., a);
 
-		//a = 39.95*g/mole;
-		//G4Element *elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
+    //a = 39.95*g/mole;
+    //G4Element *elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
 
-		a = 39.95*g/mole;
-		density = 1.396*g/cm3;
-		G4Material* lArMaterial = new G4Material(name="G4_lAr",18.,a, density);
+    a = 39.95*g/mole;
+    density = 1.396*g/cm3;
+    G4Material* lArMaterial = new G4Material(name="G4_lAr",18.,a, density);
 
-		a = 55.845*g/mole;
-		density = 7.87*g/cm3;
-		G4Material* FeMaterial = new G4Material(name="G4_Fe"   , z=26., a, density);
+    a = 55.845*g/mole;
+    density = 7.87*g/cm3;
+    G4Material* FeMaterial = new G4Material(name="G4_Fe"   , z=26., a, density);
 
-		a = 63.546*g/mole;
-		density = 8.960*g/cm3;
-		G4Material* CuMaterial = new G4Material(name="G4_Cu"   , z=29., a, density);
+    a = 63.546*g/mole;
+    density = 8.960*g/cm3;
+    G4Material* CuMaterial = new G4Material(name="G4_Cu"   , z=29., a, density);
 
-		// 11-Jan-2002 ML from accbgeo.age: the Kapton_E density is 1.46g/cm3
-		// one assumes it is the same as for the Kapton_H -> C22 H10 O5 N2
-		density = 1.46*g/cm3;
-		G4Material* KaptonMaterial = new G4Material(name="G4_KAPTON", density, ncomponents=4);
-		KaptonMaterial->AddElement(elH,natoms=10); 
-		KaptonMaterial->AddElement(elC,natoms=22);
-		KaptonMaterial->AddElement(elO,natoms=5);
-		KaptonMaterial->AddElement(elN,natoms=2);
-		//end of materials from ATLAS for HEC
+    // 11-Jan-2002 ML from accbgeo.age: the Kapton_E density is 1.46g/cm3
+    // one assumes it is the same as for the Kapton_H -> C22 H10 O5 N2
+    density = 1.46*g/cm3;
+    G4Material* KaptonMaterial = new G4Material(name="G4_KAPTON", density, ncomponents=4);
+    KaptonMaterial->AddElement(elH,natoms=10); 
+    KaptonMaterial->AddElement(elC,natoms=22);
+    KaptonMaterial->AddElement(elO,natoms=5);
+    KaptonMaterial->AddElement(elN,natoms=2);
+    //end of materials from ATLAS for HEC
     
-		density           = universe_mean_density; //from G4PhysicalConstants.hh
-		G4double pressure = 3.e-18*pascal;
-		G4double temperature       = 2.73*kelvin;
-		G4double fractionmass;
-		G4Material* VacuumMaterial = 
-		        new G4Material(name="G4_Galactic", z=1., a=1.01*g/mole, density,
-		                       kStateGas,temperature,pressure);
+    density           = universe_mean_density; //from G4PhysicalConstants.hh
+    G4double pressure = 3.e-18*pascal;
+    G4double temperature       = 2.73*kelvin;
+    G4double fractionmass;
+    G4Material* VacuumMaterial = 
+            new G4Material(name="G4_Galactic", z=1., a=1.01*g/mole, density,
+                           kStateGas,temperature,pressure);
 
-		a       = 12.957*g/mole;                                                       
-		density = 0.112*g/cm3;                                              
-		G4Material* RohacellMaterial = new G4Material(name="Rohacell", z=6.18, a, density);    
+    a       = 12.957*g/mole;                                                       
+    density = 0.112*g/cm3;                                              
+    G4Material* RohacellMaterial = new G4Material(name="Rohacell", z=6.18, a, density);    
  
-		G4Material* AirMaterial = new G4Material(name="G4_AIR", density=1.290*mg/cm3, ncomponents=2);
-		AirMaterial->AddElement(elN, fractionmass=0.7);
-		AirMaterial->AddElement(elO, fractionmass=0.3);
-		//end of materials from ATLAS for cryostat and world
+    G4Material* AirMaterial = new G4Material(name="G4_AIR", density=1.290*mg/cm3, ncomponents=2);
+    AirMaterial->AddElement(elN, fractionmass=0.7);
+    AirMaterial->AddElement(elO, fractionmass=0.3);
+    //end of materials from ATLAS for cryostat and world
    
     //World Construction
     //
