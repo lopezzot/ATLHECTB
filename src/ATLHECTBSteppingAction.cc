@@ -102,8 +102,8 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
                 fEventAction->AddL3BirkeLayer( modulecpNo, index, 
                               fSCalculator->ApplyBirks( edep, stepl ));
             }
-            else if ( 32<=cpNo && cpNo<40 && step->GetTrack()->GetGlobalTime()-18. <= 75.){ //layer 4
-								G4int index = fSCalculator->IndexL4( hitpos.getEta(), relhitpos.getX() );
+            else if ( 32<=cpNo && cpNo<40 && step->GetTrack()->GetGlobalTime()-18. <= 75.){ //layer 4 
+                G4int index = fSCalculator->IndexL4( hitpos.getEta(), relhitpos.getX() );
                 fEventAction->AddL4BirkeLayer( modulecpNo, index, 
                               fSCalculator->ApplyBirks( edep ,stepl ));
             }

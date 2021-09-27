@@ -70,7 +70,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     //Rohacell material
     //auto RohacellMaterial = new G4Material("Rohacell", 
     //                                       6.18, 12.957*g/mole, 0.112*g/cm3); 
-		//Using materials as defined by ATLAS (HEC+Cryostat)
+
+    //Using materials as defined by ATLAS (HEC+Cryostat)
 		//
 		G4String name,symbol;
 		G4double a,z,density;
