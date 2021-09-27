@@ -88,7 +88,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
             G4ThreeVector hitpos = step->GetPreStepPoint()->GetPosition();
             G4ThreeVector relhitpos = hitpos-sliceorigin;
             if ( cpNo < 8 && step->GetTrack()->GetGlobalTime()-14. <= 75.){ //layer 1
-								G4int index = fSCalculator->IndexL1( hitpos.getEta(), relhitpos.getX() );
+                G4int index = fSCalculator->IndexL1( hitpos.getEta(), relhitpos.getX() );
                 fEventAction->AddL1BirkeLayer( modulecpNo, index, 
                               fSCalculator->ApplyBirks( edep, stepl ));
             }
@@ -109,7 +109,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
             }
 
         } //if stepl and edep
-		} //if G4_lAr
+    } //if G4_lAr
 
 }
 
