@@ -4,4 +4,4 @@
 export PHYSLIST="%PHYSLIST%"
 
 # Execute
-ATLHECTB -m ATLHECTB.mac
+ATLHECTB -m ATLHECTB.mac -pl %PHYSLIST%
