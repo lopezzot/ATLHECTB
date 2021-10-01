@@ -30,30 +30,6 @@ from gts.BaseParser import BaseParser, mergeROOT, mktempdir
 gROOT.SetBatch(True)
 gROOT.ProcessLine("gErrorIgnoreLevel = 5000;")
 
-NAMES = {
-    "obs": {
-        'energy resolution': 'energy resolution'
-    },
-    "xaxis": {
-        'energy resolution': 'E (GeV)'
-    },
-    "yaxis": {
-        'energy resolution': '#sqrt{E_{0}/GeV}#sigma_{E}/E (%)'
-    }
-}
-
-OBSERVABLE_MAP = {
-    "e-energyres": "e-energyres"
-}
-
-XAXIS_MAP = {
-    "e-energyres": 'E (GeV)'
-}
-
-YAXIS_MAP = {
-    "e-energyres": 'sigmaE'
-}
-
 class Test(BaseParser):
     TEST = "ATLHECTB"
     IGNOREKEYS = ["PARTICLE","ENERGY"] #jobs will contain files for particles (e-,pi-) and energies (GeV)
@@ -117,138 +93,148 @@ class Test(BaseParser):
 	    recenergy.Fit( F1recenergy ,"QR");
 	    res =(recenergy.GetFunction("gaus").GetParameter(2)/energy)*(energy**(0.5))*100. #percent
 	    resolutions.append(res)
-	resolutions2 = [2.*x for x in resolutions]
-	print "-->e- avg sampling term in resolution: " + str(np.mean(resolutions))
-	print jobs[0]["PHYSLIST"]
-	rjson = getJSON(jobs[0], "chart",
+	print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions))
+
+        #Create JSON output files for e- energy resolution (graph)
+        #
+	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="e-energyresolution",
-                              beamParticle=jobs[0]["PARTICLE"],
+                              beamParticle=job["PARTICLE"],
                               beamEnergies=eenergies,
-                              title="e-energyresolution",
-                              xAxisName="energy",
-                              yAxisName="sigma",
+                              title="energyresolution(e-)",
+                              xAxisName="<E_{Beam}> [GeV]",
+                              yAxisName="#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]",
                               xValues=eenergies,
                               yValues=resolutions
                               )
-	yield rjson
-	rjson = getJSON(jobs[0], "chart",
+
+        #Create JSON output files for e- sampling fraction (graph)
+        #
+	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
-                              observableName="e-energyresolution",
-                              beamParticle=jobs[0]["PARTICLE"],
+                              observableName="e-samplingfraction",
+                              beamParticle=job["PARTICLE"],
                               beamEnergies=eenergies,
-                              title="e-energyresolution",
-                              xAxisName="energy",
-                              yAxisName="sigma",
+                              title="samplingfraction(e-)",
+                              xAxisName="<E_{Beam}> [GeV]",
+                              yAxisName="%",
                               xValues=eenergies,
-                              yValues=resolutions2
+                              yValues=sampfractions
                               )
-	yield rjson
-	'''
-	for energy in energies:
-	    print "MERGE ENERGY", energy
-	    # loop by energies
-	    energy_jobs = [x for x in jobs if x["ENERGY"] == energy]
-	    if not energy_jobs:
-		print """
-		===========================
-		Cannot find data for energy {0} and combination {1}. Skipping this energy.
-		===========================
-		""".format(energy, jobs)
-		raise RuntimeError("ERROR")
-	    else:
-		meshroot = []
-		ntupleroot = []
-		for job in energy_jobs:
-		    meshroot.append(os.path.join(job["path"], "mesh.root"))
-		    ntupleroot.append(os.path.join(job["path"], "ntuple.root"))
-		tmpdir = mktempdir()
-		mesh = os.path.join(tmpdir, "mesh.root")
-		ntuple = os.path.join(tmpdir, "ntuple.root")
-		mergeROOT(meshroot, mesh)
-		mergeROOT(ntupleroot, ntuple)
-		observables = {}
-		observables.update(
-		    get_observables_from_mesh(
-			os.path.join(mesh), float(energy)
-		    )
-		)
-		observables.update(
-		    get_observables_from_ntuples(
-			os.path.join(ntuple), float(energy), energy_jobs[0]
-		    )
-		)
-		shutil.rmtree(tmpdir)
-		if float(energy) == 500:
-		    print "Exporting histograms from ntuple.root"
-		    for hhist in [x for x in get_histograms_from_ntuples(ntuple)]:
-			rj = getJSON(energy_jobs[0], "histogram",
-				       mctool_name="GEANT4",
-				       mctool_model=energy_jobs[0]['PHYSLIST'],
-				       observableName=hhist['title'],
-				       targetName=energy_jobs[0]['DETECTOR'],
-				       beamParticle=energy_jobs[0]['PARTICLE'],
-				       beamEnergies=[float(energy)],
-				       plotType="TH1"
-				       )
-			rj['histogram'] = hhist
-			print "TITLE:", hhist['title']
-			common_json.append(rj)
-		copycomb = deepcopy(energy_jobs[0])
-		copycomb["ENERGY"] = energy
-		print "APPEND", [copycomb, observables]
-		common_data.append((copycomb, observables))
-	print "LEN DATA  =", len(common_data)
-	for data in common_data:
-	    comb = data[0]
-	    if comb["ENERGY"] != sorted(energies)[0]:
-		continue
-	    for observable in XAXIS_MAP:
-		print observable
-		xvalues = sorted(map(float, energies))
-		yvalues = []
-		yerrors = []
-		xdata = []
-		cdata_multienergy = []
-		for xx in common_data:
-		    if xx[0]["DETECTOR"] == comb["DETECTOR"] and \
-			    xx[0]["PHYSLIST"] == comb["PHYSLIST"] and \
-			    xx[0]["VERSION"] == comb["VERSION"] and \
-			    xx[0]["PARTICLE"] == comb["PARTICLE"]:
-			cdata_multienergy.append(xx)
 
-		for x in xvalues:
-		    # find correspondinf Y data
-		    ydata = [xx for xx in cdata_multienergy if float(xx[0]["ENERGY"]) == x]
-		    if not ydata:
-			print "no data found for x:{0}, observable:{1}, comb:{2}".format(x, observable, comb)
-			continue
-		    ydata = ydata[0]
-		    yvalues.append(ydata[1][observable][0])
-		    xdata.append(x)
-		    yerrors.append(ydata[1][observable][1])
-		rjson = getJSON(comb, "chart",
-				  mctool_name="GEANT4",
-				  mctool_model=comb["PHYSLIST"],
-				  testName="simplified calorimeter",
-				  plotType="SCATTER2D",
-				  observableName=OBSERVABLE_MAP[
-				      observable],
-				  targetName=comb["DETECTOR"],
-				  beamParticle=comb["PARTICLE"],
-				  beamEnergies=map(float, xdata),
-				  title=OBSERVABLE_MAP[observable],
-				  xAxisName=XAXIS_MAP[observable],
-				  yAxisName=YAXIS_MAP[observable],
-				  xValues=map(float, xdata),
-				  yValues=map(float, yvalues),
-				  yStatErrorsPlus=map(float, yerrors),
-				  yStatErrorsMinus=map(float, yerrors)
-				  )
-		common_json.append(rjson)
-	return common_json
-	'''
+	#pi- analysis
+	#
+	print "Running pi- analysis"
+	responses = []
+	resolutions = []
+	for energy in pienergies:
+	    #Find pi- job with corresponding energy
+	    job = [x for x in pijobs if float(x["ENERGY"])==energy][0]
+	    infile = TFile.Open(os.path.join(job["path"],"ATLHECTBout_Run0.root"))
+	    tree = infile.Get("ATLHECTBout")
+	    recenergy = TH1F("pi-", "e-", 2000, 0., 200.)
+	    response = TH1F("pi-", "pi-", 2*120, 0., 1.)
+	    for evt in tree:
+		addchannel = 0
+		addchannel += evt.M2L1BirkeLayer[0] #M2L1
+		addchannel += evt.M2L1BirkeLayer[1]
+		addchannel += evt.M2L1BirkeLayer[2]
+		addchannel += evt.M2L1BirkeLayer[3]
+		addchannel += evt.M2L1BirkeLayer[4]
+		addchannel += evt.M2L1BirkeLayer[5]
+
+		addchannel += evt.M3L1BirkeLayer[1] #M3L1
+		addchannel += evt.M3L1BirkeLayer[3]
+		addchannel += evt.M3L1BirkeLayer[5]
+
+		addchannel += evt.M2L2BirkeLayer[2] #M2L2
+		addchannel += evt.M2L2BirkeLayer[3] 
+		addchannel += evt.M2L2BirkeLayer[4]
+		addchannel += evt.M2L2BirkeLayer[5]
+		addchannel += evt.M2L2BirkeLayer[6]
+		addchannel += evt.M2L2BirkeLayer[7]
+		addchannel += evt.M2L2BirkeLayer[8]
+		addchannel += evt.M2L2BirkeLayer[9]
+
+		addchannel += evt.M1L2BirkeLayer[2] #M1L2
+		addchannel += evt.M1L2BirkeLayer[4]
+		addchannel += evt.M1L2BirkeLayer[6]
+		addchannel += evt.M1L2BirkeLayer[8]
+
+		addchannel += evt.M3L2BirkeLayer[3] #M3L2
+		addchannel += evt.M3L2BirkeLayer[5]
+		addchannel += evt.M3L2BirkeLayer[7]
+		addchannel += evt.M3L2BirkeLayer[9]
+
+		addchannel += evt.M2L3BirkeLayer[4] #M2L3 
+		addchannel += evt.M2L3BirkeLayer[5] 
+		addchannel += evt.M2L3BirkeLayer[6] 
+		addchannel += evt.M2L3BirkeLayer[7] 
+		addchannel += evt.M2L3BirkeLayer[8] 
+		addchannel += evt.M2L3BirkeLayer[9] 
+		addchannel += evt.M2L3BirkeLayer[10] 
+		addchannel += evt.M2L3BirkeLayer[11] 
+
+		addchannel += evt.M1L3BirkeLayer[4] #M1L3 
+		addchannel += evt.M1L3BirkeLayer[6] 
+		addchannel += evt.M1L3BirkeLayer[8] 
+		addchannel += evt.M1L3BirkeLayer[10] 
+
+		addchannel += evt.M3L3BirkeLayer[5] #M3L3
+		addchannel += evt.M3L3BirkeLayer[7] 
+		addchannel += evt.M3L3BirkeLayer[9] 
+		addchannel += evt.M3L3BirkeLayer[11] 
+
+		addchannel += evt.M2L4BirkeLayer[6] #M2L4 
+		addchannel += evt.M2L4BirkeLayer[7] 
+		addchannel += evt.M2L4BirkeLayer[8] 
+		addchannel += evt.M2L4BirkeLayer[9] 
+		addchannel += evt.M2L4BirkeLayer[10] 
+		addchannel += evt.M2L4BirkeLayer[11] 
+
+		addchannel += evt.M3L4BirkeLayer[7] #M3L4 
+		addchannel += evt.M3L4BirkeLayer[9] 
+		addchannel += evt.M3L4BirkeLayer[11] 
+
+		response.Fill((addchannel/energy)/(10.*np.mean(sampfractions)))
+		recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
+	
+	    responses.append(response.GetMean())
+	    recenergy.Fit("gaus","Q")
+	    resolutions.append(100.*recenergy.GetFunction("gaus").GetParameter(2)/recenergy.GetFunction("gaus").GetParameter(1))
+
+
+        #Create JSON output files for pi- energy resolution (graph)
+        #
+	yield getJSON(jobs[0], "chart",
+                              mctool_name="GEANT4",
+                              mctool_model=jobs[0]["PHYSLIST"],
+                              observableName="pi-energyresolution",
+                              beamParticle=job["PARTICLE"],
+                              beamEnergies=pienergies,
+                              title="energyresolution(pi-)",
+                              xAxisName="<E_{Beam}> [GeV]",
+                              yAxisName="#sigma_{0}/E_{0} [%]",
+                              xValues=pienergies,
+                              yValues=resolutions
+                              )
+
+        #Create JSON output files for pi/e response ratio (graph)
+        #
+	yield getJSON(jobs[0], "chart",
+                              mctool_name="GEANT4",
+                              mctool_model=jobs[0]["PHYSLIST"],
+                              observableName="#pi/e",
+                              beamParticle=job["PARTICLE"],
+                              beamEnergies=pienergies,
+                              title="#pi/e",
+                              xAxisName="<E_{Beam}> [GeV]",
+                              yAxisName="#pi/E",
+                              xValues=pienergies,
+                              yValues=responses
+                              )
 
 ##**************************************************
