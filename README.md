@@ -20,6 +20,7 @@
         <li><a href="#selected-presentations">Selected presentations</a></li>
       </ul>
     </li>
+    <li><a href="#geant-val-integration">Geant Val integration</a></li>
     <li><a href="#available-datasets-and-analyses">Available datasets and analyses</a></li>
     <li>
       <a href="#how-to">How to</a>
@@ -55,6 +56,49 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 - ATLAS Simulation Group Meeting 6/7/2021 (ATLAS restricted), **A Geant4 simulation of
 the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/995938/contributions/4421574/attachments/2277065/3868501/ATLASSim_lopezzot_6_7_2021.pdf) <em>(errata corrige: slide 11, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
 - CERN EP-SFT Simulation Meeting 15/6/2021, **First results from the Geant4 ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1049152/contributions/4407943/attachments/2264354/3844295/G4SW_lopezzot_15_6_2021.pdf) <em>(errata corrige: slide 9, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
+
+<!--Geant Val integration-->
+## Geant Val integration
+Geant Val [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://geant-val.cern.ch/) is the Geant4 testing and validation suite. It is a project hosted on GitLab [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://gitlab.cern.ch/GeantValidation) used to facilitate the maintenance and validation of Geant4 applications, referred to as <em> tests</em>.\
+The following are instructions to use ATLHECTB within Geant Val, from batch submission to website deployment.
+1. On lxplus git clone ATLHECTB and the Geant Val/geant-config-generator
+   ```sh
+   git clone git@github.com:lopezzot/ATLHECTB.git
+   git clone ssh://git@gitlab.cern.ch:7999/GeantValidation/geant-config-generator.git
+   ```
+2. Copy the ATLHECTB geant val scripts into tests/geant4/; cd geant-config-generator
+   ```sh
+   cp -r ATLHECTB/geantval_scripts/ATLHECTB/ geant-config-generator/tests/geant4/
+   cd geant-config-generator
+   ```
+3. We will execute ATLHECTB via Geant Val using Geant4.10.7.p01, therefore we must make sure file ```10.7.p01.sh``` exists into ```configs/geant/```. In file ```10.7.p01.sh``` we also export the path to the ATLHECTB 10.7.p01 executable file (for instruction on how to compile ATLHECTB see [How to: Build, compile and execute on lxplus"](#build-compile-and-execute-on-lxplus)).\
+Hence ```10.7.p01.sh``` looks like this:
+   ```sh
+   #!/bin/bash
+   VERSION="10.7.p01"
+   PLATFORM="x86_64-centos7-gcc8-optdeb"
+   # Geant4 libraries
+   source /cvmfs/geant4.cern.ch/geant4/$VERSION/${PLATFORM}/bin/geant4.sh
+   [ -e /cvmfs/geant4.cern.ch/geant4/$VERSION/setup_g4datasets.sh ] && source /cvmfs/geant4.cern.ch/geant4/$VERSION/setup_g4datasets.sh
+   # Test path
+   export PATH="/cvmfs/geant4.cern.ch/opt-geant-val/$VERSION/$PLATFORM/bin:/cvmfs/geant4.cern.ch/opt/$VERSION/$PLATFORM/bin:$PATH:/afs/cern.ch/work/l/lopezzot/path-to-executable/"
+   # Compiler
+   source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8/x86_64-centos7/setup.sh
+   ```
+4. Create macros and metadata for Geant Val execution
+   ```sh
+   python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r
+   ```
+   this command creates the Geant Val files for batch submission using HTCondor under the ```OUTPUT``` folder, using ATLHECTB, Geant4.10.7.p01 and the ```testmatch``` job flavour.
+5. When the job execution ends, the root output files are stored in the corresponding job folder. Each job folder will look like this:
+   ```sh
+   ATLHECTB-env.log  ATLHECTB.json  ATLHECTB.mac  ATLHECTBout_Run0.root  ATLHECTB.sh  bsub.sh  config.sh  test_stderr.txt  test_stdout.txt
+   ```
+6. Execute the analysis on the root files in the ```OUTPUT``` folder to create Geant Val JSON output files
+    ```sh
+    python mc-config-generator.py parse -t ATLHECTB -d OUTPUT 
+    ```
+    the analysis is coded in ```tests/geant4/ATLHECTB/parser.py```. The ```OUTPUTJSON``` folder is created with the corresponding JSON files.
 
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
