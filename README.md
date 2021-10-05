@@ -90,7 +90,11 @@ Hence ```10.7.p01.sh``` looks like this:
    python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r
    ```
    this command creates the Geant Val files for batch submission using HTCondor under the ```OUTPUT``` folder, using ATLHECTB, Geant4.10.7.p01 and the ```testmatch``` job flavour.
-5. When the job execution ends, the root output files are stored in the corresponding job folder. Each job folder will look like this:
+5. To monitor the jobs use
+   ```sh
+   python mc-config-generator.py status -t ATLHECTB -d OUTPUT
+   ```
+   When the job execution ends, the root output files are stored in the corresponding job folder. Each job folder will look like this:
    ```sh
    ATLHECTB-env.log  ATLHECTB.json  ATLHECTB.mac  ATLHECTBout_Run0.root  ATLHECTB.sh  bsub.sh  config.sh  test_stderr.txt  test_stdout.txt
    ```
