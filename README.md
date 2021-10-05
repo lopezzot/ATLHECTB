@@ -71,7 +71,7 @@ The following are instructions to use ATLHECTB within Geant Val, from batch subm
    cp -r ATLHECTB/geantval_scripts/ATLHECTB/ geant-config-generator/tests/geant4/
    cd geant-config-generator
    ```
-3. We will execute ATLHECTB via Geant Val using Geant4.10.7.p01, therefore we must make sure file ```10.7.p01.sh``` exists into ```configs/geant/```. In file ```10.7.p01.sh``` we also export the path to the ATLHECTB 10.7.p01 executable file (for instruction on how to compile ATLHECTB see [How to: Build, compile and execute on lxplus](#build-compile-and-execute-on-lxplus)).\
+3. We will execute ATLHECTB via Geant Val using Geant4.10.7.p01, therefore we must make sure file ```10.7.p01.sh``` exists into ```configs/geant/```. In file ```10.7.p01.sh``` we also export the path to the ATLHECTB 10.7.p01 executable file (for instruction on how to compile ATLHECTB see [How to: Build, compile and execute on lxplus](#build-compile-and-execute-on-lxplus).\
 Hence ```10.7.p01.sh``` looks like this:
    ```sh
    #!/bin/bash
