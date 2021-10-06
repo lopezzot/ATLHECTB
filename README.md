@@ -60,7 +60,7 @@ the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website
 
 <!--Geant Val integration-->
 ## Geant Val integration
-Geant Val [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://geant-val.cern.ch/) is the Geant4 testing and validation suite. It is a project hosted on GitLab [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://gitlab.cern.ch/GeantValidation) used to facilitate the maintenance and validation of Geant4 applications, referred to as <em> tests</em>.\
+Geant Val [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://geant-val.cern.ch/) is the Geant4 testing and validation suite. It is a project hosted on gitlab.cern.ch [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://gitlab.cern.ch/GeantValidation) used to facilitate the maintenance and validation of Geant4 applications, referred to as <em> tests</em>.\
 The following are instructions to use ATLHECTB within Geant Val, from batch submission to website deployment.
 1. On lxplus git clone ATLHECTB and the Geant Val/geant-config-generator
    ```sh
