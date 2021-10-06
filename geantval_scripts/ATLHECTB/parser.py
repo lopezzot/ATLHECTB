@@ -13,18 +13,12 @@
 import os
 import sys
 import json
-import shutil
-import time
 import numpy as np
-
 
 from ROOT import gROOT, TFile, TTree, TCanvas, gStyle
 from ROOT import TH1F, TF1
 from gts.utils import getJSON
 from gts.BaseParser import BaseParser, mergeROOT, mktempdir
-
-gROOT.SetBatch(True)
-gROOT.ProcessLine("gErrorIgnoreLevel = 5000;")
 
 class Test(BaseParser):
     TEST = "ATLHECTB"
@@ -48,9 +42,9 @@ class Test(BaseParser):
 	pifiles = [os.path.join(x["path"],"ATLHECTBout_Run0.root") for x in pijobs]
 	print "Found "+str(len(jobs))+" runs in jobs with:"
 	print "--->"+ str(len(ectrjobs)) + " jobs with e-, energies (GeV): ", ectrenergies
-	print "------> files: ", ectrfiles
+	#print "------> files: ", ectrfiles
 	print "--->"+ str(len(pijobs)) + " jobs with pi-, energies (GeV): ", pienergies
-	print "------> files: ", pifiles
+	#print "------> files: ", pifiles
 
 	#e- analysis
 	#
@@ -69,6 +63,7 @@ class Test(BaseParser):
 		H1sampfraction.Fill(evt.elAr/(energy*1000)*100) #percent value
 	    sampfractions.append(H1sampfraction.GetMean())
 	    ersampfractions.append(H1sampfraction.GetRMS())
+	print "--->e- sampling fraction: " + str(sampfractions)
 	print "--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%"
 	for energy in eenergies:
 	    #Find e- job with corresponding energy
@@ -88,13 +83,14 @@ class Test(BaseParser):
 		recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
 	    xfitmin = recenergy.GetXaxis().GetBinCenter(recenergy.GetMaximumBin())-1.2*recenergy.GetStdDev();
 	    xfitmax = recenergy.GetXaxis().GetBinCenter(recenergy.GetMaximumBin())+1.2*recenergy.GetStdDev();
-	    F1recenergy = TF1("gaus","gaus(0)",xfitmin,xfitmax);
-	    recenergy.Fit( F1recenergy ,"QR");
+	    F1recenergy = TF1("gaus","gaus(0)",xfitmin,xfitmax)
+	    recenergy.Fit( F1recenergy ,"QR")
 	    res =(recenergy.GetFunction("gaus").GetParameter(2)/energy)*(energy**(0.5))*100. #percent
 	    resolutions.append(res)
 	    erres = (recenergy.GetFunction("gaus").GetParError(2)/
 		     recenergy.GetFunction("gaus").GetParameter(2))*res
 	    erresolutions.append(erres)
+	print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}"
 	print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" 
 
         #Create JSON output files for e- energy resolution (graph)
@@ -102,8 +98,10 @@ class Test(BaseParser):
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
-                              observableName="e-energyresolution",
+                              observableName="energy resolution",
+			      secondaryParticle="e-",
                               beamParticle=job["PARTICLE"],
+			      targetName="ATLASHEC",
                               beamEnergies=eenergies,
                               title="energyresolution(e-)",
                               xAxisName="<E_{Beam}> [GeV]",
@@ -119,8 +117,10 @@ class Test(BaseParser):
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
-                              observableName="e-samplingfraction",
+                              observableName="sampling fraction",
+			      secondaryParticle="e-",
                               beamParticle=job["PARTICLE"],
+			      targetName="ATLASHEC",
                               beamEnergies=eenergies,
                               title="samplingfraction(e-)",
                               xAxisName="<E_{Beam}> [GeV]",
@@ -144,13 +144,17 @@ class Test(BaseParser):
 	F4 = []
 	L0 = []
 	sigmaL0 = []
-	for energy in pienergies:
+	for energy in penergies:
 	    #Find pi- job with corresponding energy
 	    job = [x for x in pijobs if float(x["ENERGY"])==energy][0]
 	    infile = TFile.Open(os.path.join(job["path"],"ATLHECTBout_Run0.root"))
 	    tree = infile.Get("ATLHECTBout")
-	    recenergy = TH1F("pi-", "e-", 2000, 0., 200.)
-	    response = TH1F("pi-", "pi-", 2*120, 0., 1.)
+	    recenergy = TH1F("pi-recenergy", "pi-", 2000, 0., 200.)
+	    response = TH1F("pi-response", "pi-", 2*120, 0., 1.)
+	    H1F1 = TH1F("pi-F1", "pi-F1", 100, 0., 1.2)
+	    H1F2 = TH1F("pi-F2", "pi-F2", 100, 0., 1.2)
+	    H1F3 = TH1F("pi-F3", "pi-F3", 100, 0., 1.2)
+	    H1F4 = TH1F("pi-F4", "pi-F4", 100, 0., 1.2)
 	    for evt in tree:
 		addchannel = 0
 		addchannelF1 = 0
@@ -270,6 +274,10 @@ class Test(BaseParser):
 
 		response.Fill((addchannel/energy)/(10.*np.mean(sampfractions)))
 		recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
+		H1F1.Fill(addchannelF1/addchannel)
+		H1F2.Fill(addchannelF2/addchannel)
+		H1F3.Fill(addchannelF3/addchannel)
+		H1F4.Fill(addchannelF4/addchannel)
 	
 	    responses.append(response.GetMean())
 	    erresponses.append(response.GetRMS())
@@ -279,32 +287,44 @@ class Test(BaseParser):
             erres = (recenergy.GetFunction("gaus").GetParError(2)/recenergy.GetFunction("gaus").GetParameter(2)+
 	            recenergy.GetFunction("gaus").GetParError(1)/recenergy.GetFunction("gaus").GetParameter(1))*res
 	    erresolutions.append(erres)
-	    F1.append(addchannelF1/addchannel)
-	    F2.append(addchannelF2/addchannel)
-	    F3.append(addchannelF3/addchannel)
-	    F4.append(addchannelF4/addchannel)
-	    F1.append(addchannelF1/addchannel)
-	    L0.append((28.05/2.)*addchannelF1/addchannel+
-		      (28.05+53.6/2.)*addchannelF2/addchannel+
-	              (28.05+53.6+53.35/2.)*addchannelF3/addchannel+
-		      (28.05+53.6+53.35+46.8/2)*addchannelF4/addchannel)
+	    F1.append(H1F1.GetMean())
+	    F2.append(H1F2.GetMean())
+	    F3.append(H1F3.GetMean())
+	    F4.append(H1F4.GetMean())
+	    L0.append((28.05/2.)*H1F1.GetMean()+
+		      (28.05+53.6/2.)*H1F2.GetMean()+
+	              (28.05+53.6+53.35/2.)*H1F3.GetMean()+
+		      (28.05+53.6+53.35+46.8/2)*H1F4.GetMean())
 
 	    depths = [28.05/2.,28.05+53.6/2.,28.05+53.6+53.35/2.,28.05+53.6+53.35+46.8/2]
-	    residual = (depths[0]*addchannelF1/addchannel)**2+(depths[1]*addchannelF2/addchannel)**2+(depths[2]*addchannelF3/addchannel)**2+(depths[3]*addchannelF4/addchannel)**2
+	    residual = (depths[0]*H1F1.GetMean())**2+(depths[1]*H1F2.GetMean())**2+(depths[2]*H1F3.GetMean())**2+(depths[3]*H1F4.GetMean())**2
 	    sigmaL0.append(2.*(residual/4.)**0.5) 
         
+	print "--->pi- pi/e: "+ str(responses) 
+	print "--->pi- avg pi/e: "+ str(np.mean(responses))
+	print "--->pi- resolutions: " + str(resolutions) + " %"
+	print "--->pi- avg resolution: " + str(np.mean(resolutions)) + " %" 
+	print "--->pi- F1: " + str(F1)
+	print "--->pi- F2: " + str(F2)
+	print "--->pi- F3: " + str(F3)
+	print "--->pi- F4: " + str(F4)
+	print "--->pi- L0 [cm]: " + str(L0)
+	print "--->pi- sigmaL0 [cm]: " + str(sigmaL0)
+
 	#Create JSON output files for pi- energy resolution (graph)
         #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
-                              observableName="pi-energyresolution",
+                              observableName="energy resolution",
+			      secondaryParticle="pi-",
                               beamParticle=job["PARTICLE"],
-                              beamEnergies=pienergies,
+			      targetName="ATLASHEC",
+                              beamEnergies=penergies,
                               title="energyresolution(pi-)",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="#sigma_{0}/E_{0} [%]",
-                              xValues=pienergies,
+                              xValues=penergies,
                               yValues=resolutions,
 	                      yStatErrorsMinus=erresolutions,
 			      yStatErrorsPlus=erresolutions
@@ -315,13 +335,14 @@ class Test(BaseParser):
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
-                              observableName="#pi/e",
+                              observableName="energy response",
                               beamParticle=job["PARTICLE"],
-                              beamEnergies=pienergies,
+			      targetName="ATLASHEC",
+                              beamEnergies=penergies,
                               title="#pi/e",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="#pi/E",
-                              xValues=pienergies,
+                              xValues=penergies,
                               yValues=responses,
 	                      yStatErrorsMinus=erresponses,
 			      yStatErrorsPlus=erresponses
@@ -332,13 +353,14 @@ class Test(BaseParser):
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
-                              observableName="L_{0}",
+                              observableName="longitudinal shower barycenter",
                               beamParticle=job["PARTICLE"],
-                              beamEnergies=pienergies,
+			      targetName="ATLASHEC",
+                              beamEnergies=penergies,
                               title="L_{0}",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="L_{0} [cm]",
-                              xValues=pienergies,
+                              xValues=penergies,
                               yValues=L0
 	                      #yStatErrorsMinus=,
 			      #yStatErrorsPlus=
@@ -349,13 +371,14 @@ class Test(BaseParser):
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
-                              observableName="#sigma_{L}",
+                              observableName="shower length",
+			      targetName="ATLASHEC",
                               beamParticle=job["PARTICLE"],
-                              beamEnergies=pienergies,
+                              beamEnergies=penergies,
                               title="#sigma_{L}",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="#sigma_{L} [cm]",
-                              xValues=pienergies,
+                              xValues=penergies,
                               yValues=sigmaL0
 	                      #yStatErrorsMinus=,
 			      #yStatErrorsPlus=
