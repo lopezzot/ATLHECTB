@@ -341,7 +341,7 @@ class Test(BaseParser):
                               beamEnergies=penergies,
                               title="#pi/e",
                               xAxisName="<E_{Beam}> [GeV]",
-                              yAxisName="#pi/E",
+                              yAxisName="#pi/e",
                               xValues=penergies,
                               yValues=responses,
 			      yStatErrorsPlus=erresponses,
