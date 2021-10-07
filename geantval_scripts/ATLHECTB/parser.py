@@ -99,7 +99,7 @@ class Test(BaseParser):
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="energy resolution",
-			      secondaryParticle="e-",
+			      #secondaryParticle="e-",
                               beamParticle=job["PARTICLE"],
 			      targetName="ATLASHEC",
                               beamEnergies=eenergies,
@@ -118,7 +118,7 @@ class Test(BaseParser):
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="sampling fraction",
-			      secondaryParticle="e-",
+			      #secondaryParticle="e-",
                               beamParticle=job["PARTICLE"],
 			      targetName="ATLASHEC",
                               beamEnergies=eenergies,
@@ -130,7 +130,7 @@ class Test(BaseParser):
 	                      yStatErrorsMinus=ersampfractions,
 			      yStatErrorsPlus=ersampfractions
                               )
-        '''
+
 	#pi- analysis
 	#
 	print "Running pi- analysis"
@@ -280,7 +280,7 @@ class Test(BaseParser):
 		H1F4.Fill(addchannelF4/addchannel)
 	
 	    responses.append(response.GetMean())
-	    erresponses.append(response.GetRMS())
+	    erresponses.append(response.GetMeanError())
 	    recenergy.Fit("gaus","Q")
 	    res = 100.*recenergy.GetFunction("gaus").GetParameter(2)/recenergy.GetFunction("gaus").GetParameter(1)
 	    resolutions.append(res)
@@ -317,7 +317,7 @@ class Test(BaseParser):
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="energy resolution",
-			      secondaryParticle="pi-",
+			      #secondaryParticle="pi-",
                               beamParticle=job["PARTICLE"],
 			      targetName="ATLASHEC",
                               beamEnergies=penergies,
@@ -383,5 +383,5 @@ class Test(BaseParser):
 	                      #yStatErrorsMinus=,
 			      #yStatErrorsPlus=
                               )
-        '''
+
 ##**************************************************
