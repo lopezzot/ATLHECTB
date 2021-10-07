@@ -62,7 +62,7 @@ class Test(BaseParser):
 	    for evt in tree:
 		H1sampfraction.Fill(evt.elAr/(energy*1000)*100) #percent value
 	    sampfractions.append(H1sampfraction.GetMean())
-	    ersampfractions.append(H1sampfraction.GetRMS())
+	    ersampfractions.append(H1sampfraction.GetMeanError())
 	print "--->e- sampling fraction: " + str(sampfractions)
 	print "--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%"
 	for energy in eenergies:
@@ -109,7 +109,7 @@ class Test(BaseParser):
                               xValues=eenergies,
                               yValues=resolutions,
 	                      yStatErrorsMinus=erresolutions,
-			      yStatErrorPlus=erresolutions
+			      yStatErrorsPlus=erresolutions
                               )
 
         #Create JSON output files for e- sampling fraction (graph)
@@ -128,9 +128,9 @@ class Test(BaseParser):
                               xValues=eenergies,
                               yValues=sampfractions,
 	                      yStatErrorsMinus=ersampfractions,
-			      yStatErrorPlus=ersampfractions
+			      yStatErrorsPlus=ersampfractions
                               )
-
+        '''
 	#pi- analysis
 	#
 	print "Running pi- analysis"
@@ -326,8 +326,8 @@ class Test(BaseParser):
                               yAxisName="#sigma_{0}/E_{0} [%]",
                               xValues=penergies,
                               yValues=resolutions,
-	                      yStatErrorsMinus=erresolutions,
-			      yStatErrorsPlus=erresolutions
+			      yStatErrorsPlus=erresolutions,
+	                      yStatErrorsMinus=erresolutions
                               )
 
         #Create JSON output files for pi/e response ratio (graph)
@@ -344,8 +344,8 @@ class Test(BaseParser):
                               yAxisName="#pi/E",
                               xValues=penergies,
                               yValues=responses,
-	                      yStatErrorsMinus=erresponses,
-			      yStatErrorsPlus=erresponses
+			      yStatErrorsPlus=erresponses,
+	                      yStatErrorsMinus=erresponses
                               )
 
         #Create JSON output files for L0 (graph)
@@ -383,5 +383,5 @@ class Test(BaseParser):
 	                      #yStatErrorsMinus=,
 			      #yStatErrorsPlus=
                               )
-
+        '''
 ##**************************************************
