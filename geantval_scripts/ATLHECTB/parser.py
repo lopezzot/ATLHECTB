@@ -388,7 +388,7 @@ class Test(BaseParser):
 	#Create JSON files for experimental data
         #uncomment this part only if you want to recreate these files
         #------------------------------------------------------------
-
+        '''
 	#Create JSON output files for experimental e- energy resolution (graph)
         #
 	yield getJSON(jobs[0], "chart",
@@ -490,5 +490,5 @@ class Test(BaseParser):
 	                      #yStatErrorsMinus=,
 			      #yStatErrorsPlus=
                               )
-
+        '''
 ##**************************************************
