@@ -9,6 +9,11 @@
 
 <br/><br/>
 
+https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-bd6c-34166515a7f7.mp4
+<figcaption align="center"><b>Fig. - Video example of how to use ATLHECTB in geant-val.</b></figcaption>
+
+<br/><br/>
+
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
