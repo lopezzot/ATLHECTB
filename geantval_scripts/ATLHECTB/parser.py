@@ -65,12 +65,13 @@ class Test(BaseParser):
 	    ersampfractions.append(H1sampfraction.GetMeanError())
 	print "--->e- sampling fraction: " + str(sampfractions)
 	print "--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%"
+	#outfile = TFile.Open("OUTe-.root","RECREATE")
 	for energy in eenergies:
 	    #Find e- job with corresponding energy
 	    job = [x for x in ectrjobs if float(x["ENERGY"])==energy][0]
 	    infile = TFile.Open(os.path.join(job["path"],"ATLHECTBout_Run0.root"))
 	    tree = infile.Get("ATLHECTBout")
-	    recenergy = TH1F("e-", "e-", 2000, 0., 200.)
+	    recenergy = TH1F("e-"+str(energy), "e-"+str(energy), 2000, 0., 200.)
 	    for evt in tree:
 		addchannel = 0
 		addchannel += evt.M2L1BirkeLayer[2]
@@ -81,8 +82,8 @@ class Test(BaseParser):
 		addchannel += evt.M3L1BirkeLayer[3]
 		addchannel += evt.M3L2BirkeLayer[5]
 		recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
-	    xfitmin = recenergy.GetXaxis().GetBinCenter(recenergy.GetMaximumBin())-1.2*recenergy.GetStdDev();
-	    xfitmax = recenergy.GetXaxis().GetBinCenter(recenergy.GetMaximumBin())+1.2*recenergy.GetStdDev();
+	    xfitmin = recenergy.GetXaxis().GetBinCenter(recenergy.GetMaximumBin())-1.0*recenergy.GetStdDev();
+	    xfitmax = recenergy.GetXaxis().GetBinCenter(recenergy.GetMaximumBin())+1.0*recenergy.GetStdDev();
 	    F1recenergy = TF1("gaus","gaus(0)",xfitmin,xfitmax)
 	    recenergy.Fit( F1recenergy ,"QR")
 	    res =(recenergy.GetFunction("gaus").GetParameter(2)/energy)*(energy**(0.5))*100. #percent
@@ -90,6 +91,8 @@ class Test(BaseParser):
 	    erres = (recenergy.GetFunction("gaus").GetParError(2)/
 		     recenergy.GetFunction("gaus").GetParameter(2))*res
 	    erresolutions.append(erres)
+	    #outfile.cd()
+	    #recenergy.Write()
 	print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}"
 	print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" 
 
@@ -130,7 +133,7 @@ class Test(BaseParser):
 	                      yStatErrorsMinus=ersampfractions,
 			      yStatErrorsPlus=ersampfractions
                               )
-
+        
 	#pi- analysis
 	#
 	print "Running pi- analysis"
@@ -383,12 +386,12 @@ class Test(BaseParser):
 	                      #yStatErrorsMinus=,
 			      #yStatErrorsPlus=
                               )
-
+        
         #------------------------------------------------------------
 	#Create JSON files for experimental data
         #uncomment this part only if you want to recreate these files
         #------------------------------------------------------------
-        '''
+         
 	#Create JSON output files for experimental e- energy resolution (graph)
         #
 	yield getJSON(jobs[0], "chart",
@@ -490,5 +493,5 @@ class Test(BaseParser):
 	                      #yStatErrorsMinus=,
 			      #yStatErrorsPlus=
                               )
-        '''
+
 ##**************************************************
