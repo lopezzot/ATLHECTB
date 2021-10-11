@@ -9,7 +9,7 @@
 
 <br/><br/>
 
-<video src="https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-bd6c-34166515a7f7.mp4" controls="controls" style="max-width: 730px;">
+<video src="https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-bd6c-34166515a7f7.mp4" controls="controls" style="width:100%">
 </video>
 <figcaption align="center"><b>Vid. - Video example of how to use ATLHECTB in geant-val.</b></figcaption>
 
