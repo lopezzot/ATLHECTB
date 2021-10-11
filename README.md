@@ -1,10 +1,16 @@
 # ATLHECTB
-**A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.**
+**A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.** 
+[![Website](https://img.shields.io/website?down_message=cannot%20read%20the%20docs&label=ATLHECTB%20docs&logo=GitHub&up_message=always%20read%20the%20docs&url=https%3A%2F%2Flopezzot.github.io%2FATLHECTB%2F)](https://lopezzot.github.io/ATLHECTB/)
 
 <figure>
 <img src="./images/ATLHECTB_movie.gif" alt="Trulli" style="width:100%">
 <figcaption align="center"><b>Fig. - 10 GeV muon passing through the ATLAS HEC.</b></figcaption>
 </figure>
+
+<br/><br/>
+
+https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-bd6c-34166515a7f7.mp4
+<figcaption align="center"><b>Fig. - Video example of how to use ATLHECTB in geant-val.</b></figcaption>
 
 <br/><br/>
 
@@ -20,7 +26,12 @@
         <li><a href="#selected-presentations">Selected presentations</a></li>
       </ul>
     </li>
-    <li><a href="#geant-val-integration">Geant Val integration</a></li>
+    <li>
+      <a href="#geant-val-integration">Geant Val integration</a>
+      <ul>
+        <li><a href="#list-of-results-on-geant-val">List of results on Geant Val</a></li>
+      </ul>
+    </li> 
     <li><a href="#available-datasets-and-analyses">Available datasets and analyses</a></li>
     <li>
       <a href="#how-to">How to</a>
@@ -41,7 +52,7 @@
 ## Project description
 The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. 
 - Start date: 11 May 2021 
-- Status: from v1.0 on ATLHECTB is available for data production
+- Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on geant-val
 
 <!--Authors and contacts-->
 ## Authors and contacts
@@ -59,7 +70,7 @@ the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website
 
 <!--Geant Val integration-->
 ## Geant Val integration
-Geant Val [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://geant-val.cern.ch/) is the Geant4 testing and validation suite. It is a project hosted on GitLab [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://gitlab.cern.ch/GeantValidation) used to facilitate the maintenance and validation of Geant4 applications, referred to as <em> tests</em>.\
+Geant Val [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://geant-val.cern.ch/) is the Geant4 testing and validation suite. It is a project hosted on gitlab.cern.ch [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://gitlab.cern.ch/GeantValidation) used to facilitate the maintenance and validation of Geant4 applications, referred to as <em> tests</em>.\
 The following are instructions to use ATLHECTB within Geant Val, from batch submission to website deployment.
 1. On lxplus git clone ATLHECTB and the Geant Val/geant-config-generator
    ```sh
@@ -90,7 +101,11 @@ Hence ```10.7.p01.sh``` looks like this:
    python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r
    ```
    this command creates the Geant Val files for batch submission using HTCondor under the ```OUTPUT``` folder, using ATLHECTB, Geant4.10.7.p01 and the ```testmatch``` job flavour.
-5. When the job execution ends, the root output files are stored in the corresponding job folder. Each job folder will look like this:
+5. To monitor the jobs use
+   ```sh
+   python mc-config-generator.py status -t ATLHECTB -d OUTPUT
+   ```
+   When the job execution ends, the root output files are stored in the corresponding job folder. Each job folder will look like this:
    ```sh
    ATLHECTB-env.log  ATLHECTB.json  ATLHECTB.mac  ATLHECTBout_Run0.root  ATLHECTB.sh  bsub.sh  config.sh  test_stderr.txt  test_stdout.txt
    ```
@@ -99,6 +114,17 @@ Hence ```10.7.p01.sh``` looks like this:
     python mc-config-generator.py parse -t ATLHECTB -d OUTPUT 
     ```
     the analysis is coded in ```tests/geant4/ATLHECTB/parser.py```. The ```OUTPUTJSON``` folder is created with the corresponding JSON files.
+7. The last part is to deploy the results on Geant Val. The ATLHECTB layout on the Geant Val website is defined in the ```ATLHECTB.xml``` file on ```gitlab.com/thegriglat/geant-val-layouts``` (additional info are in the ```tags.json``` file).\
+   Deploy JSON files on the Geant Val database
+   ```sh
+    find . -name '*.json' | while read i; do curl -H "Content-Type: application/json" -H "token: askauthor" --data @$i https://geant-val.cern.ch/upload; echo; done
+   ```
+### List of results on Geant Val
+The following are results deployed on Geant Val so far.
+| ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
+| -------------    | ----------     | -----------        | -----------  |
+| v2.0 <br /> Dataset #1 <br /> tag 2.0_1 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT)| python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | First results on Geant Val, using Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT. Analysis coded in parser.py. JSON files for test-beam data are created with parser.py (end of file). |
+ 
 
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
