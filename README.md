@@ -9,8 +9,9 @@
 
 <br/><br/>
 
-https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-bd6c-34166515a7f7.mp4
-<figcaption align="center"><b>Fig. - Video example of how to use ATLHECTB in geant-val.</b></figcaption>
+<video src="https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-bd6c-34166515a7f7.mp4" controls="controls" style="max-width: 730px;">
+</video>
+<figcaption align="center"><b>Vid. - Video example of how to use ATLHECTB in geant-val.</b></figcaption>
 
 <br/><br/>
 
@@ -124,7 +125,7 @@ The following are results deployed on Geant Val so far.
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
-| v2.0 <br /> Dataset #1 <br /> tag 2.0_1 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT)| python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | First results on Geant Val, using Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT. Analysis coded in parser.py. JSON files for test-beam data are created with parser.py (end of file). |
+| v2.0 <br /> Dataset #1 <br /> tag 2.0_1 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT) <br /> Added on 11/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | First results on Geant Val, using Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT. Analysis coded in parser.py. JSON files for test-beam data are created with parser.py (end of file). |
 
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
