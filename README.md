@@ -26,7 +26,12 @@ https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-
         <li><a href="#selected-presentations">Selected presentations</a></li>
       </ul>
     </li>
-    <li><a href="#geant-val-integration">Geant Val integration</a></li>
+    <li>
+      <a href="#geant-val-integration">Geant Val integration</a>
+      <ul>
+        <li><a href="#list-of-results-on-geant-val">List of results on Geant Val</a></li>
+      </ul>
+    </li> 
     <li><a href="#available-datasets-and-analyses">Available datasets and analyses</a></li>
     <li>
       <a href="#how-to">How to</a>
@@ -47,7 +52,7 @@ https://user-images.githubusercontent.com/34685792/136785193-1741c29f-3666-4859-
 ## Project description
 The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. 
 - Start date: 11 May 2021 
-- Status: from v1.0 on ATLHECTB is available for data production
+- Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on geant-val
 
 <!--Authors and contacts-->
 ## Authors and contacts
@@ -109,6 +114,17 @@ Hence ```10.7.p01.sh``` looks like this:
     python mc-config-generator.py parse -t ATLHECTB -d OUTPUT 
     ```
     the analysis is coded in ```tests/geant4/ATLHECTB/parser.py```. The ```OUTPUTJSON``` folder is created with the corresponding JSON files.
+7. The last part is to deploy the results on Geant Val. The ATLHECTB layout on the Geant Val website is defined in the ```ATLHECTB.xml``` file on ```gitlab.com/thegriglat/geant-val-layouts``` (additional info are in the ```tags.json``` file).\
+   Deploy JSON files on the Geant Val database
+   ```sh
+    find . -name '*.json' | while read i; do curl -H "Content-Type: application/json" -H "token: askauthor" --data @$i https://geant-val.cern.ch/upload; echo; done
+   ```
+### List of results on Geant Val
+The following are results deployed on Geant Val so far.
+| ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
+| -------------    | ----------     | -----------        | -----------  |
+| v2.0 <br /> Dataset #1 <br /> tag 2.0_1 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT)| python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | First results on Geant Val, using Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT. Analysis coded in parser.py. JSON files for test-beam data are created with parser.py (end of file). |
+ 
 
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
