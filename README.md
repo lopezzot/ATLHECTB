@@ -127,6 +127,7 @@ The following are results deployed on Geant Val so far.
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
+| v2.0 <br /> Dataset #2 <br /> tag 2.0_2 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT_ATL, QGSP_BERT, FTFP_BERT_INCLXX) <br /> Added on 18/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | Everything identical to 2.0_1 but changed physics lists in params.conf (change it yourself to reproduce data).|
 | v2.0 <br /> Dataset #1 <br /> tag 2.0_1 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT) <br /> Added on 11/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | First results on Geant Val, using Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT. Analysis coded in parser.py. JSON files for test-beam data are created with parser.py (end of file). |
 
 **[⬆ back to top](#atlhectb)**
