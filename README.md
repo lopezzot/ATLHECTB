@@ -64,7 +64,8 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 ## Documentation and results
 
 ### Selected presentations
-- CERN EP-SFT Simulation Meeting 19/10/2021, **Geant Val integration of the ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1088251/contributions/4575977/attachments/2330415/3971152/G4_lopezzot_19_10_2021.pdf)
+- CERN EP-SFT Simulation Meeting 19/10/2021, **Geant Val integration of the ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)]
+(https://indico.cern.ch/event/1088251/contributions/4575977/attachments/2330415/3971619/G4_lopezzot_19_10_2021.pdf)
 - CERN EP-SFT Simulation Meeting 13/7/2021, **Results from the Geant4 ATLAS HEC test-beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1058649/contributions/4449544/attachments/2280962/3875541/G4Sim_lopezzot_13_7_2021.pdf)
 - ATLAS Simulation Group Meeting 6/7/2021 (ATLAS restricted), **A Geant4 simulation of
 the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/995938/contributions/4421574/attachments/2277065/3868501/ATLASSim_lopezzot_6_7_2021.pdf) <em>(errata corrige: slide 11, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
