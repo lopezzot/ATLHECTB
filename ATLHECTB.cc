@@ -86,16 +86,16 @@ int main( int argc, char** argv ) {
     #ifdef G4MULTITHREADED
     if ( nthreads > 0 ) runManager->SetNumberOfThreads(nthreads);
     #endif
-		*/
-		//Construct run manager (works also for versions before 10.7)
-		#ifdef G4MULTITHREADED
-		auto runManager = new G4MTRunManager;
-		if ( nthreads > 0 ) { 
-				runManager->SetNumberOfThreads(nthreads);
-		}  
-		#else
-		auto runManager = new G4RunManager;
-		#endif
+    */
+    //Construct run manager (works also for versions before 10.7)
+    //#ifdef G4MULTITHREADED
+    auto runManager = new G4MTRunManager;
+    if ( nthreads > 0 ) { 
+    		runManager->SetNumberOfThreads(nthreads);
+    }  
+    #else
+    auto runManager = new G4RunManager;
+    #endif
 
     //Set mandatory classes (DetConstruction, PhysicsList, ActionInitialization)
     //
