@@ -88,7 +88,7 @@ int main( int argc, char** argv ) {
     #endif
     */
     //Construct run manager (works also for versions before 10.7)
-    //#ifdef G4MULTITHREADED
+    #ifdef G4MULTITHREADED
     auto runManager = new G4MTRunManager;
     if ( nthreads > 0 ) { 
     		runManager->SetNumberOfThreads(nthreads);
