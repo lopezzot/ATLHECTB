@@ -1,7 +1,8 @@
 //**************************************************
 // \file ATLHECTB.cc
 // \brief: main() of ATLHECTB project
-// \author: Lorenzo Pezzotti (CERN EP-SFT-sim) @lopezzot
+// \author: Lorenzo Pezzotti (CERN EP-SFT-sim) 
+//          @lopezzot
 // \start date: 11 May 2021
 //**************************************************
 
@@ -12,7 +13,12 @@
 
 //Includers from Geant4
 //
-#include "G4RunManagerFactory.hh"
+//#include "G4RunManagerFactory.hh" //G4RunManagerFactory is only available from 10.7
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "Randomize.hh"
@@ -74,10 +80,21 @@ int main( int argc, char** argv ) {
         ui = new G4UIExecutive(argc, argv, session);
     }
 
-    //Construct run manager (default of multithreaded)
-    auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+    //Construct run manager (default type)
+    /*uncomment this part for G4RunManagerFactory usage (10.7 on)
+		auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
     #ifdef G4MULTITHREADED
     if ( nthreads > 0 ) runManager->SetNumberOfThreads(nthreads);
+    #endif
+    */
+    //Construct run manager (works also for versions before 10.7)
+    #ifdef G4MULTITHREADED
+    auto runManager = new G4MTRunManager;
+    if ( nthreads > 0 ) { 
+    		runManager->SetNumberOfThreads(nthreads);
+    }  
+    #else
+    auto runManager = new G4RunManager;
     #endif
 
     //Set mandatory classes (DetConstruction, PhysicsList, ActionInitialization)
@@ -127,7 +144,3 @@ int main( int argc, char** argv ) {
 }
 
 //**************************************************
-
-
-
-

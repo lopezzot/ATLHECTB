@@ -40,10 +40,10 @@ class Test(BaseParser):
 	pijobs = [x for x in jobs if x["PARTICLE"]=="pi-"]
 	pienergies = [float(x["ENERGY"]) for x in pijobs]
 	pifiles = [os.path.join(x["path"],"ATLHECTBout_Run0.root") for x in pijobs]
-	print "Found "+str(len(jobs))+" runs in jobs with:"
-	print "--->"+ str(len(ectrjobs)) + " jobs with e-, energies (GeV): ", ectrenergies
+	print "Found "+str(len(jobs))+" runs in jobs:"
+	print "--->"+ str(len(ectrjobs)) + " jobs with e-, energies (GeV): " + str(ectrenergies) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
 	#print "------> files: ", ectrfiles
-	print "--->"+ str(len(pijobs)) + " jobs with pi-, energies (GeV): ", pienergies
+	print "--->"+ str(len(pijobs)) + " jobs with pi-, energies (GeV): " + str(pienergies) + " ,physlist: " + str(set([x["PHYSLIST"] for x in pijobs]))
 	#print "------> files: ", pifiles
 
 	#e- analysis
@@ -63,9 +63,9 @@ class Test(BaseParser):
 		H1sampfraction.Fill(evt.elAr/(energy*1000)*100) #percent value
 	    sampfractions.append(H1sampfraction.GetMean())
 	    ersampfractions.append(H1sampfraction.GetMeanError())
-	print "--->e- sampling fraction: " + str(sampfractions)
-	print "--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%"
-	#outfile = TFile.Open("OUTe-.root","RECREATE")
+	print "--->e- sampling fraction: " + str(sampfractions) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+	print "--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+	outfile = TFile.Open("OUTe-.root","RECREATE")
 	for energy in eenergies:
 	    #Find e- job with corresponding energy
 	    job = [x for x in ectrjobs if float(x["ENERGY"])==energy][0]
@@ -91,10 +91,10 @@ class Test(BaseParser):
 	    erres = (recenergy.GetFunction("gaus").GetParError(2)/
 		     recenergy.GetFunction("gaus").GetParameter(2))*res
 	    erresolutions.append(erres)
-	    #outfile.cd()
-	    #recenergy.Write()
-	print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}"
-	print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" 
+	    outfile.cd()
+	    recenergy.Write()
+	print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+	print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
 
         #Create JSON output files for e- energy resolution (graph)
         #
@@ -274,13 +274,14 @@ class Test(BaseParser):
 		addchannelF4 += 2.*evt.M3L4BirkeLayer[7] #M3L4 
 		addchannelF4 += 2.*evt.M3L4BirkeLayer[9] 
 		addchannelF4 += 2.*evt.M3L4BirkeLayer[11] 
-
-		response.Fill((addchannel/energy)/(10.*np.mean(sampfractions)))
-		recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
-		H1F1.Fill(addchannelF1/addchannel)
-		H1F2.Fill(addchannelF2/addchannel)
-		H1F3.Fill(addchannelF3/addchannel)
-		H1F4.Fill(addchannelF4/addchannel)
+		
+		if addchannel>0.:
+		    response.Fill((addchannel/energy)/(10.*np.mean(sampfractions)))
+		    recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
+		    H1F1.Fill(addchannelF1/addchannel)
+		    H1F2.Fill(addchannelF2/addchannel)
+		    H1F3.Fill(addchannelF3/addchannel)
+		    H1F4.Fill(addchannelF4/addchannel)
 	
 	    responses.append(response.GetMean())
 	    erresponses.append(response.GetMeanError())
@@ -303,7 +304,7 @@ class Test(BaseParser):
 	    residual = (depths[0]*H1F1.GetMean())**2+(depths[1]*H1F2.GetMean())**2+(depths[2]*H1F3.GetMean())**2+(depths[3]*H1F4.GetMean())**2
 	    sigmaL0.append(2.*(residual/4.)**0.5) 
         
-	print "--->pi- pi/e: "+ str(responses) 
+	print "--->pi- pi/e: "+ str(responses) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
 	print "--->pi- avg pi/e: "+ str(np.mean(responses))
 	print "--->pi- resolutions: " + str(resolutions) + " %"
 	print "--->pi- avg resolution: " + str(np.mean(resolutions)) + " %" 
