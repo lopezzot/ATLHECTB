@@ -58,8 +58,8 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 
 <!--Authors and contacts-->
 ## Authors and contacts
-- Lorenzo Pezzotti (CERN EP-SFT) - lorenzo.pezzotti@cern.ch 
-- Supervisor: Alberto Ribon (CERN EP-SFT)
+- :man: Lorenzo Pezzotti (CERN EP-SFT) - lorenzo.pezzotti@cern.ch 
+- :man: Supervisor: Alberto Ribon (CERN EP-SFT)
 
 <!--Documentation and results-->
 ## Documentation and results
