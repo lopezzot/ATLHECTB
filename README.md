@@ -44,7 +44,7 @@
         <li><a href="#dump-atlhectb-gdml-geometry-description-file">Dump ATLHECTB GDML geometry description file</a></li>
       </ul>
     </li>
-    </li><li><a href="#bugs-report">Bugs report</a></li>
+    </li><li><a href="#bugs-report-">Bugs report</a></li>
     </li><li><a href="#my-quick-geant4-installation">My quick Geant4 installation</a></li>
     <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a>
   </ol>                                           
@@ -311,8 +311,8 @@ At the first execution, it will create the ATLHECTBgeo.gdml file with the up to 
 **[⬆ back to top](#atlhectb)**
 
 <!--Bugs report-->
-## Bugs report
-🐛 List of bugs found.
+## Bugs report 🐛
+List of bugs found.
 1. Using ATLHECTB v2.1 and Geant4.10.4(.p01, .p03) executing in multi-threaded mode on lxplus via Geant Val, the M2L2BirkeLayer branch in root output file is out-of-sync with rest of file. Using single-thread mode the output file is correct. Reported by Lorenzo Pezzotti on 25/10/2021.
 
 <!--My quick Geant4 installation-->
