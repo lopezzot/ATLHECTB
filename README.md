@@ -53,8 +53,8 @@
 <!--Project desription-->
 ## Project description
 The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. 
-- Start date: 11 May 2021 
-- Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on Geant Val
+- ⏰ Start date: 11 May 2021 
+- 📌 Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on Geant Val
 
 <!--Authors and contacts-->
 ## Authors and contacts
