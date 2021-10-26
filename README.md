@@ -27,6 +27,7 @@
         <li><a href="#selected-presentations">Selected presentations</a></li>
       </ul>
     </li>
+     </li><li><a href="#directory-structure">Directory structure</a></li>
     <li>
       <a href="#geant-val-integration">Geant Val integration</a>
       <ul>
@@ -72,6 +73,28 @@ the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website
 - 🗣️ CERN EP-SFT Simulation Meeting 15/6/2021, **First results from the Geant4 ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1049152/contributions/4407943/attachments/2264354/3844295/G4SW_lopezzot_15_6_2021.pdf) <em>(errata corrige: slide 9, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
 
 **[⬆ back to top](#atlhectb)**
+
+<!--Directory structure-->
+## Directory structure
+```
+.
+├── ATLHECTB.cc               # main()
+├── ATLHECTB_gui.mac          # GUI settings
+├── ATLHECTB_init_vis.mac     # Initialization and visualization settings
+├── ATLHECTB_run.mac          # macro card example
+├── CMakeLists.txt            # CMake instructions     
+├── GNUmakefile               # GNUmake instructions
+├── LICENSE                   # The LICENSE
+├── README.md                 # Markdown documentation
+├── _config.yml               # github pages settings
+├── analysis                  # ROOT macros for data analysis
+├── geantval_scripts          # Scripts for Geant Val usage
+├── images                    # Images for documentation
+├── include                   # Includers (.hh)
+├── runcards                  # Macro cards for production
+├── scripts                   # Scripts for lxplus and HTCondor usage
+├── src                       # Sources (.cc)
+```
 
 <!--Geant Val integration-->
 ## Geant Val integration
