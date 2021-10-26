@@ -125,7 +125,7 @@ Hence ```10.7.p01.sh``` looks like this:
     find . -name '*.json' | while read i; do curl -H "Content-Type: application/json" -H "token: askauthor" --data @$i https://geant-val.cern.ch/upload; echo; done
    ```
 ### List of results on Geant Val
-The following are results deployed on Geant Val so far.
+The following are results deployed on Geant Val so far. A copy of the used config files is stored in ```geantval_scripts/configs/```.
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
