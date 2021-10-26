@@ -138,7 +138,7 @@ The following are results deployed on Geant Val so far. A copy of the used confi
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
 We provide datasets and ROOT analyses, as well as instructions for their reproducibility.
-Ask authors for access to datasets.
+Ask authors for access to datasets. From v2.0 on results are deployed on Geant Val, refer to the [List of results on Geant Val](#list-of-results-on-geant-val).
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
