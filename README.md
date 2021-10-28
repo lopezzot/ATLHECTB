@@ -27,6 +27,7 @@
         <li><a href="#selected-presentations">Selected presentations</a></li>
       </ul>
     </li>
+     </li><li><a href="#directory-structure">Directory structure</a></li>
     <li>
       <a href="#geant-val-integration">Geant Val integration</a>
       <ul>
@@ -44,6 +45,7 @@
         <li><a href="#dump-atlhectb-gdml-geometry-description-file">Dump ATLHECTB GDML geometry description file</a></li>
       </ul>
     </li>
+    </li><li><a href="#bugs-report">Bugs report</a></li>
     </li><li><a href="#my-quick-geant4-installation">My quick Geant4 installation</a></li>
     <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a>
   </ol>                                           
@@ -52,25 +54,47 @@
 <!--Project desription-->
 ## Project description
 The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. 
-- Start date: 11 May 2021 
-- Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on Geant Val
+- ⏰ Start date: 11 May 2021 
+- 📌 Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on Geant Val
 
 <!--Authors and contacts-->
 ## Authors and contacts
-- Lorenzo Pezzotti (CERN EP-SFT) - lorenzo.pezzotti@cern.ch 
-- Supervisor: Alberto Ribon (CERN EP-SFT)
+- :man: Lorenzo Pezzotti (CERN EP-SFT) - lorenzo.pezzotti@cern.ch 
+- :man: Supervisor: Alberto Ribon (CERN EP-SFT)
 
 <!--Documentation and results-->
 ## Documentation and results
 
 ### Selected presentations
-- CERN EP-SFT Simulation Meeting 19/10/2021, **Geant Val integration of the ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1088251/contributions/4575977/attachments/2330415/3971619/G4_lopezzot_19_10_2021.pdf)
-- CERN EP-SFT Simulation Meeting 13/7/2021, **Results from the Geant4 ATLAS HEC test-beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1058649/contributions/4449544/attachments/2280962/3875541/G4Sim_lopezzot_13_7_2021.pdf)
-- ATLAS Simulation Group Meeting 6/7/2021 (ATLAS restricted), **A Geant4 simulation of
+- 🗣️ CERN EP-SFT Simulation Meeting 19/10/2021, **Geant Val integration of the ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1088251/contributions/4575977/attachments/2330415/3971619/G4_lopezzot_19_10_2021.pdf)
+- 🗣️ CERN EP-SFT Simulation Meeting 13/7/2021, **Results from the Geant4 ATLAS HEC test-beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1058649/contributions/4449544/attachments/2280962/3875541/G4Sim_lopezzot_13_7_2021.pdf)
+- 🗣️ ATLAS Simulation Group Meeting 6/7/2021 (ATLAS restricted), **A Geant4 simulation of
 the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/995938/contributions/4421574/attachments/2277065/3868501/ATLASSim_lopezzot_6_7_2021.pdf) <em>(errata corrige: slide 11, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
-- CERN EP-SFT Simulation Meeting 15/6/2021, **First results from the Geant4 ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1049152/contributions/4407943/attachments/2264354/3844295/G4SW_lopezzot_15_6_2021.pdf) <em>(errata corrige: slide 9, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
+- 🗣️ CERN EP-SFT Simulation Meeting 15/6/2021, **First results from the Geant4 ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1049152/contributions/4407943/attachments/2264354/3844295/G4SW_lopezzot_15_6_2021.pdf) <em>(errata corrige: slide 9, EstBoard 0.8 mm Kapton -> 0.61 mm Kapton)</em>
 
 **[⬆ back to top](#atlhectb)**
+
+<!--Directory structure-->
+## Directory structure
+```
+.
+├── ATLHECTB.cc               # main()
+├── ATLHECTB_gui.mac          # GUI settings
+├── ATLHECTB_init_vis.mac     # Initialization and visualization settings
+├── ATLHECTB_run.mac          # macro card example
+├── CMakeLists.txt            # CMake instructions     
+├── GNUmakefile               # GNUmake instructions
+├── LICENSE                   # The LICENSE
+├── README.md                 # Markdown documentation
+├── _config.yml               # github pages settings
+├── analysis                  # ROOT macros for data analysis
+├── geantval_scripts          # Scripts for Geant Val usage
+├── images                    # Images for documentation
+├── include                   # Includers (.hh)
+├── runcards                  # Macro cards for production
+├── scripts                   # Scripts for lxplus and HTCondor usage
+├── src                       # Sources (.cc)
+```
 
 <!--Geant Val integration-->
 ## Geant Val integration
@@ -124,10 +148,11 @@ Hence ```10.7.p01.sh``` looks like this:
     find . -name '*.json' | while read i; do curl -H "Content-Type: application/json" -H "token: askauthor" --data @$i https://geant-val.cern.ch/upload; echo; done
    ```
 ### List of results on Geant Val
-The following are results deployed on Geant Val so far.
+The following are results deployed on Geant Val so far. A copy of the used config files is stored in ```geantval_scripts/configs/```.
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
+| v2.1 <br /> Dataset #2 <br /> tag 2.1_2 (Geant4.10.05.p01, ATLHECTB v2.1, FTFP_BERT, FTFP_BERT_ATL, QGSP_BERT, FTFP_BERT_INCLXX) (Geant4.10.4, Geant4.10.4.p01, ATLHECTB v2.1, FTFP_BERT, FTFP_BERT_ATL, QGSP_BERT) <br /> Added on 28/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.5.p01 (10.4, 10.4.p01) -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT |  Results for three Geant4 versions, can be compared to tag 2.1_1, 2.0_1, and 2.0_2. Results for 10.4 and 10.4.p01 obtained in single thread mode, see [Bugs report](#bugs-report).|
 | v2.1 <br /> Dataset #1 <br /> tag 2.1_1 (Geant4.10.06.p01 and Geant4.11.0.beta, ATLHECTB v2.1, FTFP_BERT, FTFP_BERT_ATL, QGSP_BERT, FTFP_BERT_INCLXX) <br /> Added on 21/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.6.p01 (11.0.beta) -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT |  Results for two Geant4 versions, can be compared to tag 2.0_1 and 2.0_2.|
 | v2.0 <br /> Dataset #2 <br /> tag 2.0_2 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT_ATL, QGSP_BERT, FTFP_BERT_INCLXX) <br /> Added on 18/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | Everything identical to 2.0_1 but changed physics lists in params.conf (change it yourself to reproduce data).|
 | v2.0 <br /> Dataset #1 <br /> tag 2.0_1 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT) <br /> Added on 11/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | First results on Geant Val, using Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT. Analysis coded in parser.py. JSON files for test-beam data are created with parser.py (end of file). |
@@ -137,7 +162,7 @@ The following are results deployed on Geant Val so far.
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
 We provide datasets and ROOT analyses, as well as instructions for their reproducibility.
-Ask authors for access to datasets.
+Ask authors for access to datasets. From v2.0 on results are deployed on Geant Val, refer to the [List of results on Geant Val](#list-of-results-on-geant-val).
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
@@ -309,6 +334,11 @@ At the first execution, it will create the ATLHECTBgeo.gdml file with the up to 
 
 **[⬆ back to top](#atlhectb)**
 
+<!--Bugs report-->
+## Bugs report
+List of bugs found.
+1. 🐛 Using ATLHECTB v2.1 and Geant4.10.4(.p01, .p03) executing in multi-threaded mode on lxplus via Geant Val, the M2L2BirkeLayer branch in root output file is out-of-sync with rest of file. Using single-thread mode the output file is correct. Reported by Lorenzo Pezzotti on 25/10/2021.
+
 <!--My quick Geant4 installation-->
 ## My quick Geant4 installation
 Here is my standard Geant4 installation (example with Geant4.10.7.p01) starting from the unpacked geant4.10.07.tar.gz file under the example path "path/to".
@@ -333,7 +363,7 @@ Here is my standard Geant4 installation (example with Geant4.10.7.p01) starting 
    
 <!--Selected ATLAS HEC references-->
 ## Selected ATLAS HEC references
-- <em>GEANT4 physics evaluation with testbeam data of the ATLAS hadronic end-cap calorimeter</em>, NIM A560 (2006): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
-- <em>Performance of the ATLAS hadronic end-cap calorimeter in beam tests</em>, NIM A482 (2002): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
+- 📄 <em>GEANT4 physics evaluation with testbeam data of the ATLAS hadronic end-cap calorimeter</em>, NIM A560 (2006): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900205026835)
+- 📄 <em>Performance of the ATLAS hadronic end-cap calorimeter in beam tests</em>, NIM A482 (2002): [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://www.sciencedirect.com/science/article/pii/S0168900201013389)
 
 **[⬆ back to top](#atlhectb)**
