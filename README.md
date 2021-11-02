@@ -66,6 +66,7 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 ## Documentation and results
 
 ### Selected presentations
+- 🗣️ CERN EP-SFT Simulation Meeting 2/11/2021, **Regression testing and physics list comparison with ATLHECTB** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1093045/contributions/4597043/attachments/2337968/3985256/G4_lopezzot_2_11_2021.pdf)
 - 🗣️ CERN EP-SFT Simulation Meeting 19/10/2021, **Geant Val integration of the ATLAS HEC test beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1088251/contributions/4575977/attachments/2330415/3971619/G4_lopezzot_19_10_2021.pdf)
 - 🗣️ CERN EP-SFT Simulation Meeting 13/7/2021, **Results from the Geant4 ATLAS HEC test-beam simulation** [![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://indico.cern.ch/event/1058649/contributions/4449544/attachments/2280962/3875541/G4Sim_lopezzot_13_7_2021.pdf)
 - 🗣️ ATLAS Simulation Group Meeting 6/7/2021 (ATLAS restricted), **A Geant4 simulation of
