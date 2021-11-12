@@ -91,7 +91,7 @@ int main( int argc, char** argv ) {
     #ifdef G4MULTITHREADED
     auto runManager = new G4MTRunManager;
     if ( nthreads > 0 ) { 
-    		runManager->SetNumberOfThreads(nthreads);
+        runManager->SetNumberOfThreads(nthreads);
     }  
     #else
     auto runManager = new G4RunManager;
