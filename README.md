@@ -94,7 +94,7 @@ the ATLAS HEC beam tests** [![Website shields.io](https://img.shields.io/website
 ├── images                    # Images for documentation
 ├── include                   # Includers (.hh)
 ├── runcards                  # Macro cards for production
-├── scripts                   # Scripts for lxplus and lxplus+HTCondor usage
+├── scripts                   # Scripts for lxplus and lxplus with HTCondor usage
 ├── src                       # Sources (.cc)
 ```
 
