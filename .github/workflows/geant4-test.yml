@@ -1,4 +1,4 @@
-name: Geant4 test
+name: Geant4 Test
 on: [push]
 jobs:
   Geant4-Test:
