@@ -2,7 +2,7 @@ name: Geant4 Test
 on: [push]
 jobs:
   
-  geant4_10_7_p03-test:
+  geant4_11_0-test:
     runs-on: ubuntu-latest
     steps:
       - name: Check trigger 
@@ -18,7 +18,7 @@ jobs:
           wget https://github.com/hahnjo/geant4-actions-binaries/releases/download/$GEANT4_VERSION/$GEANT4_VERSION-binaries.tar.gz
           tar xf $GEANT4_VERSION-binaries.tar.gz -C $HOME
         env:
-          GEANT4_VERSION: "geant4.10.07.p03"
+          GEANT4_VERSION: "geant4-v11.0.0"
       - name: Check out repository code
         uses: actions/checkout@v2
       - name: Build application and run single thread with FTFP_BERT
