@@ -341,7 +341,7 @@ At the first execution, it will create the ATLHECTBgeo.gdml file with the up to 
 ## Geant4 and Github Actions
 ⚠️ ATLHECTB is automatically tested on every ``push`` against Geant4.11.0 and the latest Geant4 release via GitHub Actions on ``ubuntu-latest``.
 
-Geant4 binaries are available [here](https://github.com/hahnjo/geant4-actions-binaries). If you want your Geant4 application to be tested automatically, feel free to used this [workflow](https://github.com/lopezzot/ATLHECTB/blob/main/.github/workflows/geant4-test.yml).
+Geant4 binaries are available [here](https://github.com/hahnjo/geant4-actions-binaries). If you want your Geant4 application to be tested automatically, feel free to use this [workflow](https://github.com/lopezzot/ATLHECTB/blob/main/.github/workflows/geant4-test.yml).
 
 <!--Bugs report-->
 ## Bugs report
