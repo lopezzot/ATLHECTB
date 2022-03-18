@@ -12,7 +12,7 @@
 
 //Includers from Geant4
 //
-#include "g4root.hh"
+//#include "g4root.hh" //not avaibale from Geant4 11.0 on
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
