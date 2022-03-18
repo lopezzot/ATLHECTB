@@ -12,7 +12,7 @@
 
 //Includers from Geant4
 //
-#include "g4root.hh"
+//#include "g4root.hh" //not avaibale from Geant4 11.0 on
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
@@ -49,7 +49,7 @@ ATLHECTBRunAction::ATLHECTBRunAction( ATLHECTBEventAction* eventAction )
     analysisManager->CreateNtupleDColumn("M1L3BirkeLayer", fEventAction->GetM1L3BirkeLayer() );
     analysisManager->CreateNtupleDColumn("M2L3BirkeLayer", fEventAction->GetM2L3BirkeLayer() );
     analysisManager->CreateNtupleDColumn("M3L3BirkeLayer", fEventAction->GetM3L3BirkeLayer() ); 
-     analysisManager->CreateNtupleDColumn("M1L4BirkeLayer", fEventAction->GetM1L4BirkeLayer() );
+    analysisManager->CreateNtupleDColumn("M1L4BirkeLayer", fEventAction->GetM1L4BirkeLayer() );
     analysisManager->CreateNtupleDColumn("M2L4BirkeLayer", fEventAction->GetM2L4BirkeLayer() );
     analysisManager->CreateNtupleDColumn("M3L4BirkeLayer", fEventAction->GetM3L4BirkeLayer() ); 
     analysisManager->FinishNtuple();
@@ -75,7 +75,7 @@ void ATLHECTBRunAction::BeginOfRunAction( const G4Run* Run){
     auto analysisManager = G4AnalysisManager::Instance();
 
     std::string runnumber = std::to_string( Run->GetRunID() );
-    G4String outputfile = "ATLHECTBout_Run"+runnumber;
+    G4String outputfile = "ATLHECTBout_Run"+runnumber+".root";
     analysisManager->OpenFile( outputfile );
 }
 

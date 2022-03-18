@@ -42,7 +42,7 @@ namespace PrintUsageError {
 //main function
 //
 int main( int argc, char** argv ) {
-    
+   
     //Error in argument numbers
     //
     if ( argc > 9 ){
