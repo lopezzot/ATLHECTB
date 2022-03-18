@@ -21,4 +21,7 @@ jobs:
           mkdir build
           cd build
           cmake -DGeant4_DIR=~/Geant4/lib/Geant4-10.7.3/ ../
+      - name: Run application (single thread, FTFP_BERT)
+          ./ATLHECTB -m ATLHECTB_run.mac -t 1
+          ls -ltr
 
