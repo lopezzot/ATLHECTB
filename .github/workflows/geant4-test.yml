@@ -20,4 +20,5 @@ jobs:
           source ~/Geant4/bin/geant4.sh
           ls
           pwd
+          ls ..
 
