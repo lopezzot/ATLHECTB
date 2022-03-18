@@ -49,5 +49,16 @@ jobs:
           version=$(curl -s https://api.github.com/repos/hahnjo/geant4-actions-binaries/releases/latest | jq -r '.name')
           wget https://github.com/hahnjo/geant4-actions-binaries/releases/download/$version/$version-binaries.tar.gz
           tar xf $version-binaries.tar.gz -C $HOME
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Build application and run single thread with FTFP_BERT
+        run: |
+          source ~/Geant4/bin/geant4.sh
+          mkdir build
+          cd build
+          cmake -DGeant4_DIR=~/Geant4/lib/$version/ ../
+          make
+          ./ATLHECTB -m ATLHECTB_run.mac -t 1
+          ls -ltr
       - name: Check job status
         run: echo "Job is ${{ job.status }}."
