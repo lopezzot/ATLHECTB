@@ -45,6 +45,7 @@
         <li><a href="#dump-atlhectb-gdml-geometry-description-file">Dump ATLHECTB GDML geometry description file</a></li>
       </ul>
     </li>
+    </li><li><a href="#geant4-and-github-actions">Geant4 and Github Actions</a></li>  
     </li><li><a href="#bugs-report">Bugs report</a></li>
     </li><li><a href="#my-quick-geant4-installation">My quick Geant4 installation</a></li>
     <li><a href="#selected-atlas-hec-references">Selected ATLAS HEC references</a>
@@ -53,7 +54,7 @@
 
 <!--Project desription-->
 ## Project description
-The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. 
+The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. It is also an example of how to use a Geant4 application with Geant Val and how to automatically test it using Github Actions. 
 - ⏰ Start date: 11 May 2021 
 - 📌 Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on Geant Val
 
@@ -335,6 +336,12 @@ We support GDML geometry description. By default it is not active, to activate i
 At the first execution, it will create the ATLHECTBgeo.gdml file with the up to date GDML geometry description.
 
 **[⬆ back to top](#atlhectb)**
+
+<!--Geant4 and Github Actions-->
+## Geant4 and Github Actions
+⚠️ ATLHECTB is automatically tested on every ``push`` against Geant4.11.0 and the latest Geant4 release via GitHub Actions on ``ubuntu-latest``.
+
+Geant4 binaries are available [here](https://github.com/hahnjo/geant4-actions-binaries). If you want your Geant4 application to be tested automatically, feel free to used this [workflow](https://github.com/lopezzot/ATLHECTB/blob/main/.github/workflows/geant4-test.yml).
 
 <!--Bugs report-->
 ## Bugs report
