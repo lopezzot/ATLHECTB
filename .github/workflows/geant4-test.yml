@@ -1,4 +1,4 @@
-name: Geant4 Test
+name: Geant4.10.7.p03 Test
 on: [push]
 jobs:
   geant4-test:
@@ -6,6 +6,10 @@ jobs:
     steps:
       - name: Check trigger 
         run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Check runner
+        run: echo "This job is running on ${{ runner.os }}."
+      - name: Check repo and branch
+        run: echo "Branch is ${{ github.ref }} and repository is ${{ github.repository }}."
       - name: Install dependencies
         run: sudo apt-get install libxerces-c-dev
       - name: Install Geant4
@@ -14,8 +18,9 @@ jobs:
           tar xf $GEANT4_VERSION-binaries.tar.gz -C $HOME
         env:
           GEANT4_VERSION: "geant4.10.07.p03"
-      - uses: actions/checkout@v2
-      - name: Build application
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Build application and run single thread with FTFP_BERT
         run: |
           source ~/Geant4/bin/geant4.sh
           mkdir build
@@ -24,4 +29,5 @@ jobs:
           make
           ./ATLHECTB -m ATLHECTB_run.mac -t 1
           ls -ltr
-
+      - name: Check job status
+        run: echo "Job is ${{ job.status }}."
