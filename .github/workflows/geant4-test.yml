@@ -14,8 +14,8 @@ jobs:
           tar xf $GEANT4_VERSION-binaries.tar.gz -C $HOME
         env:
           GEANT4_VERSION: "geant4.10.07.p03"
+      - uses: actions/checkout@v2
       - name: Build application
-        uses: actions/checkout@v2
         run: |
           source ~/Geant4/bin/geant4.sh
           ls
