@@ -26,7 +26,7 @@ jobs:
           source ~/Geant4/bin/geant4.sh
           mkdir build
           cd build
-          cmake -DGeant4_DIR=~/Geant4/lib/Geant4-10.7.3/ ../
+          cmake ../
           make
           ./ATLHECTB -m ATLHECTB_run.mac -t 1
           ls -ltr
