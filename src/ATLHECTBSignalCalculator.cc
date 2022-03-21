@@ -15,7 +15,7 @@
 //
 #include "globals.hh"
 
-ATLHECTBSignalCalculator* ATLHECTBSignalCalculator::instance = 0;
+G4ThreadLocal ATLHECTBSignalCalculator* ATLHECTBSignalCalculator::instance = 0;
 
 // Define (private) constructor (singleton)
 //
