@@ -18,7 +18,7 @@ class ATLHECTBSignalCalculator {
 
     private:
 
-        static ATLHECTBSignalCalculator* instance;
+        static G4ThreadLocal ATLHECTBSignalCalculator* instance;
  
         // Private constructor (singleton)
         ATLHECTBSignalCalculator(); 
