@@ -3,6 +3,8 @@
 
 [![Website](https://img.shields.io/website?down_message=cannot%20read%20the%20docs&label=ATLHECTB%20docs&logo=GitHub&up_message=always%20read%20the%20docs&url=https%3A%2F%2Flopezzot.github.io%2FATLHECTB%2F)](https://lopezzot.github.io/ATLHECTB/)
 ![example workflow](https://github.com/lopezzot/ATLHECTB/actions/workflows/geant4-test.yml/badge.svg)
+![GitHub commits since latest release (by date) for a branch](https://img.shields.io/github/commits-since/lopezzot/ATLHECTB/latest/main?logo=github)
+
 
 <figure>
 <img src="./images/ATLHECTB_movie.gif" alt="Trulli" style="width:100%">
