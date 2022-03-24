@@ -126,6 +126,8 @@ int main( int argc, char** argv ) {
     //
     if ( macro.size() ) { //macro card mode
         G4String command = "/control/execute ";
+        UImanager->ApplyCommand("/process/em/verbose 0"); //avoid printing em processes
+        UImanager->ApplyCommand("/process/had/verbose 0");//avoid printing had processes
         UImanager->ApplyCommand(command+macro);
     }
     else {                //start UI session

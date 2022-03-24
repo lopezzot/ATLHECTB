@@ -26,8 +26,6 @@ ATLHECTBSteppingAction::ATLHECTBSteppingAction(
       fEventAction( eventAction ) {
         
     fSCalculator = ATLHECTBSignalCalculator::Instance();
-    G4cout<<"memory adress instance: "<<ATLHECTBSignalCalculator::Instance()<<G4endl;
-    G4cout<<"new memory adress instance: "<<fSCalculator<<G4endl;
 }
 
 //Definition of deconstructor
@@ -113,7 +111,6 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
         } //if stepl and edep
     } //if G4_lAr
 
-    G4cout<<"new memory adress instance: "<<fSCalculator<<G4endl;
 }
 
 //**************************************************
