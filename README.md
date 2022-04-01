@@ -154,8 +154,11 @@ Hence ```10.7.p01.sh``` looks like this:
    ```sh
     find . -name '*.json' | while read i; do curl -H "Content-Type: application/json" -H "token: askauthor" --data @$i https://geant-val.cern.ch/upload; echo; done
    ```
+
 ### List of results on Geant Val
 The following are results deployed on Geant Val so far. A copy of the used config files is stored in ```geantval_scripts/configs/```.
+<details><summary>Geant-Val-Table</summary>
+<p>
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
@@ -164,12 +167,15 @@ The following are results deployed on Geant Val so far. A copy of the used confi
 | v2.0 <br /> Dataset #2 <br /> tag 2.0_2 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT_ATL, QGSP_BERT, FTFP_BERT_INCLXX) <br /> Added on 18/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | Everything identical to 2.0_1 but changed physics lists in params.conf (change it yourself to reproduce data).|
 | v2.0 <br /> Dataset #1 <br /> tag 2.0_1 (Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT) <br /> Added on 11/10/2021 <br /> | python mc-config-generator.py submit -t ATLHECTB -d OUTPUT -v 10.7.p01 -q "testmatch" -r | python mc-config-generator.py parse -t ATLHECTB -d OUTPUT | First results on Geant Val, using Geant4.10.07.p01, ATLHECTB v2.0, FTFP_BERT. Analysis coded in parser.py. JSON files for test-beam data are created with parser.py (end of file). |
 
-**[⬆ back to top](#atlhectb)**
+</p>
+</details>
 
 <!--Available datasets and analyses-->
 ## Available datasets and analyses
 We provide datasets and ROOT analyses, as well as instructions for their reproducibility.
 Ask authors for access to datasets. From v2.0 on results are deployed on Geant Val, refer to the [List of results on Geant Val](#list-of-results-on-geant-val).
+<details><summary>Results-Table</summary>
+<p>
 
 | ATLHECTB         | Reproduce data | Reproduce analysis | Comments     |
 | -------------    | ----------     | -----------        | -----------  |
@@ -182,7 +188,8 @@ Ask authors for access to datasets. From v2.0 on results are deployed on Geant V
 | v1.0 <br /> Dataset #1 <br /> tag 1.0_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p1.C  | Analysis reproducable with v1.1 <br /> results for e- and pi-, assuming Data1/ is alongside root macro, Dataset is identical to v1.0 |
 | v1.0 <br /> Dataset #1 <br /> tag 1.0_1 | Geant4.10.07.p01 <br /> ATLHECTB v1.0 <br /> ./ATLHECTB -m runcards/ATLHECTBescan_run.mac -pl FTFP_BERT | root -l <br /> .x ATLHECTBanalysis1_v1p0.C  | reproducable with v1.0 <br /> results for e-, assuming Data1/ is alongside root macro |
 
-**[⬆ back to top](#atlhectb)**
+</p>
+</details>
 
 <!--How to:-->
 ## How to
