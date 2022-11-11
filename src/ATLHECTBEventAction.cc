@@ -12,11 +12,15 @@
 
 //Includers from Geant4
 //
-//#include "g4root.hh" //not avaibale from Geant4 11.0 on
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
+#include "G4Version.hh"
+#if G4VERSION_NUMBER < 1100
+#include "g4root.hh"
+#else
 #include "G4AnalysisManager.hh"
+#endif
 
 //Define constructor
 //

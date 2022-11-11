@@ -17,7 +17,12 @@
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Version.hh"
+#if G4VERSION_NUMBER < 1100
+#include "g4root.hh"
+#else
 #include "G4AnalysisManager.hh"
+#endif
 #include <string>
 
 //Define constructor
