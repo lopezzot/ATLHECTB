@@ -882,6 +882,52 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
         //}//for indexKapton
     }//for indexBoard
 
+    //As reported by Andrey Kiryunin on December 2022,
+    //it is better to include two scintillator from the beam line
+    //in the simulation.
+    //
+    //C9H10 as described in atlas original code:
+    //HECTB/LArCalorimeter/LArG4TB/LArG4TBEmecHecLArG4TBEmecHec/LArTBEmecHecFrontBeamConstruction.cc
+    //
+    G4int ncomponents_scint;
+    G4double z_scint, a_scint;
+    G4String name_scint, symbol_scint;
+    G4Material* Scintillator = new G4Material("Scintillator", 1.032*g/cm3,ncomponents_scint=2);
+    G4Element* elH_scint = new G4Element(name_scint="Hydrogen", symbol_scint="H", z_scint=1., a_scint=1.01*g/mole);
+    G4Element* elC_scint = new G4Element(name_scint="Carbon", symbol_scint="C", z_scint=6., a_scint = 12.01*g/mole);
+    Scintillator->AddElement(elC_scint,natoms=9);
+    Scintillator->AddElement(elH_scint,natoms=10);
+
+    //Create scintilators and position them
+    //
+    G4double bfas_rmin = 0.0*cm; //from atlas original code
+    G4double bfas_rmax = 5.0*cm; //from atlas original code
+    G4double bfas_dz = 0.375*cm; //from atlas original code
+    G4Tubs *shapeScint = new G4Tubs("LArG4TB::FrontBeam::Scint", bfas_rmin, bfas_rmax, bfas_dz, 0.*deg, 360.*deg); 
+    G4LogicalVolume *logScint = new G4LogicalVolume(shapeScint, Scintillator, "LArG4TB::FrontBeam::Scint",0,0,0);
+    const G4double Scint_X = -9.0*cm;
+    const G4double Scint_Y = 172.0*cm;
+    const G4double Scint_Z[2] = {207.5*cm, 220.0*cm};
+    for(std::size_t i = 0; i < 2; i++) {
+        //original atlas code has 3 scintillators but Andrey suggested to use only 2 here
+        /*G4VPhysicalVolume *bfsa_phys =*/ new G4PVPlacement(0,
+                                                         G4ThreeVector(Scint_X, Scint_Y, Scint_Z[i]),
+                                                         logScint,
+                                                         "LArG4TB::FrontBeam::Scint",
+                                                         logicWorld,
+                                                         false,
+                                                         i+2);
+    
+    }
+    
+    //Scintillator vis attributes
+    //
+    auto ScintillatorVisAttr = new G4VisAttributes();
+    ScintillatorVisAttr->SetVisibility( true );
+    ScintillatorVisAttr->SetForceSolid( true );
+    ScintillatorVisAttr->SetColor( G4Color::Yellow() );
+    logScint->SetVisAttributes( ScintillatorVisAttr );
+
     //Return physical world
     //
     G4cout<<"----------> ATLHECTB geometry built <----------"<<G4endl;
