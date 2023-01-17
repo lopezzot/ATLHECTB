@@ -123,10 +123,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
 
         //F1 fraction of energy first layer, same for F2, F3 and F4
         //
-        auto H1F1 = new TH1F("pi-F1","pi-F1",nBins,0.,1.2);
-        auto H1F2 = new TH1F("pi-F2","pi-F2",nBins,0.,1.2);
-        auto H1F3 = new TH1F("pi-F3","pi-F3",nBins,0.,1.2);
-        auto H1F4 = new TH1F("pi-F4","pi-F4",nBins,0.,1.2);
+        auto H1F1 = new TH1F("pi-F1","pi-F1",nBins*80,0.,8000.);
+        auto H1F2 = new TH1F("pi-F2","pi-F2",nBins*80,0.,8000.);
+        auto H1F3 = new TH1F("pi-F3","pi-F3",nBins*80,0.,8000.);
+        auto H1F4 = new TH1F("pi-F4","pi-F4",nBins*80,0.,8000.);
 
         //For loop over events
         //
@@ -224,10 +224,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
             }
             
             H1TotCutSignal->Fill( addchannels );
-            H1F1->Fill( addchannelsF1/addchannels );
-            H1F2->Fill( addchannelsF2/addchannels );
-            H1F3->Fill( addchannelsF3/addchannels );
-            H1F4->Fill( addchannelsF4/addchannels );
+            H1F1->Fill( addchannelsF1 ); 
+            H1F2->Fill( addchannelsF2 );
+            H1F3->Fill( addchannelsF3 );
+            H1F4->Fill( addchannelsF4 );
             H1Channels->Fill(channels);
             H1Response->Fill( (addchannels / pienergies[RunNo])/44.6979); //pi/e
             H1Recenergy->Fill( addchannels /44.6979);
@@ -254,14 +254,15 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
                 H1Recenergy->GetFunction("rgaus")->GetParameter(1))
                                                     *energyresolution[RunNo];
 
-        F1[RunNo] = H1F1->GetMean();
-        erF1[RunNo] = H1F1->GetMeanError();
-        F2[RunNo] = H1F2->GetMean();
-        erF2[RunNo] = H1F2->GetMeanError();
-        F3[RunNo] = H1F3->GetMean();
-        erF3[RunNo] = H1F3->GetMeanError();
-        F4[RunNo] = H1F4->GetMean();
-        erF4[RunNo] = H1F4->GetMeanError();
+        double Fmean = H1F1->GetMean()+H1F2->GetMean()+H1F3->GetMean()+H1F4->GetMean();
+        F1[RunNo] = H1F1->GetMean()/Fmean;
+        erF1[RunNo] = H1F1->GetMeanError()/Fmean;
+        F2[RunNo] = H1F2->GetMean()/Fmean;
+        erF2[RunNo] = H1F2->GetMeanError()/Fmean;
+        F3[RunNo] = H1F3->GetMean()/Fmean;
+        erF3[RunNo] = H1F3->GetMeanError()/Fmean;
+        F4[RunNo] = H1F4->GetMean()/Fmean;
+        erF4[RunNo] = H1F4->GetMeanError()/Fmean;
         L0[RunNo] = (28.05/2.)*F1[RunNo]+(28.05+53.6/2.)*F2[RunNo]+
                     (28.05+53.6+53.35/2.)*F3[RunNo]+
                     (28.05+53.6+53.35+46.8/2)*F4[RunNo];
