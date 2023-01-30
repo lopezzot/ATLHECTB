@@ -224,6 +224,7 @@ Parser options
    * -m macro.mac: pass a Geant4 macro card (example -m ATLHECTB_run.mac available in source directory and automatically copied in build directory) 
    * -t integer: pass number of threads for multi-thread execution (example -t 3, default t=2)
    * -pl Physics_List: select Geant4 physics list (example -pl FTFP_BERT)
+   * -tune FTF Alternative Tune: select FTF parameters [OPTIONAL] (example -tune baryon-tune2022-v0)
 
 ### Build, compile and execute on lxplus
 1. git clone the repo

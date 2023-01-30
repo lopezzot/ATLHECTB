@@ -28,14 +28,28 @@
 #include "G4StepLimiterPhysics.hh"
 //#include "G4NeutronTrackingCut.hh" //for neutron time limit cut
 //#include "G4SystemOfUnits.hh"      //for neutron time limit cut
+#include "G4Version.hh"
+#if G4VERSION_NUMBER >= 1110          // >= Geant4-11.1.0
+#include "G4FTFTunings.hh"
+#endif
 
 //G4err output for usage error
 //
 namespace PrintUsageError {
     void UsageError() {
     G4cerr << "->ATLHECTB usage: " << G4endl;
-    G4cerr << "ATLHECTB [-m macro] [-u UIsession] [-t nThreads] [-pl PhysicsList]" 
+    G4cerr << "ATLHECTB [-m macro] [-u UIsession] [-t nThreads] [-pl PhysicsList] [-tune FTFTuneName (optional)]" 
         << G4endl;
+    }
+}
+
+//G4err output for FTFTune usage error
+//
+namespace PrintFTFTuneUsageError {
+    void FTFTuneUsageError() {
+    G4cerr << "Wrong FTF Alternative Tune Name selected. " << G4endl;
+    G4cerr << "Geant4-11.1.0 valid names are: " << G4endl;
+    G4cerr << "default\nbaryon-tune2022-v0\npion-tune2022-v0\ncombined-tune2022-v0" << G4endl;
     }
 }
 
@@ -45,7 +59,7 @@ int main( int argc, char** argv ) {
    
     //Error in argument numbers
     //
-    if ( argc > 9 ){
+    if ( argc > 11 ){
         PrintUsageError::UsageError();
         return 1;
     }
@@ -58,6 +72,8 @@ int main( int argc, char** argv ) {
     #ifdef G4MULTITHREADED
     G4int nthreads = 0;
     #endif
+    G4bool UseFTFTune = false; //default not using FTF alternative tunes
+    G4String FTFTuneName;
 
     for ( G4int i=1; i<argc; i=i+2 ) {
         if ( G4String( argv[i] ) == "-m" ) macro = argv[i+1];
@@ -66,7 +82,9 @@ int main( int argc, char** argv ) {
         #ifdef G4MULTITHREADED
         else if ( G4String( argv[i] ) == "-t" ) {
             nthreads = G4UIcommand::ConvertToInt(argv[i+1]);} 
-        #endif  
+        #endif 
+        else if ( G4String( argv[i] ) == "-tune" ) {
+            UseFTFTune = true; FTFTuneName = argv[i+1];}
         else {
         PrintUsageError::UsageError();
             return 1;
@@ -82,7 +100,7 @@ int main( int argc, char** argv ) {
 
     //Construct run manager (default type)
     /*uncomment this part for G4RunManagerFactory usage (10.7 on)
-		auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+    auto* runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
     #ifdef G4MULTITHREADED
     if ( nthreads > 0 ) runManager->SetNumberOfThreads(nthreads);
     #endif
@@ -110,6 +128,25 @@ int main( int argc, char** argv ) {
     //physList->RegisterPhysics(nCut);
     runManager ->SetUserInitialization(physList);
 
+    //Set FTF tunings (only => Geant4-11.1.0)
+    //
+    #if G4VERSION_NUMBER >= 1110          // => Geant4-11.1.0
+    auto FTFTunings = G4FTFTunings::Instance();
+    if (UseFTFTune){
+        G4cout << "----------> Using FTF alternative tune: "<<FTFTuneName<< " <----------" << G4endl;
+        if(FTFTuneName == "default")                   FTFTunings->SetTuneApplicabilityState(0,1); 
+        else if(FTFTuneName == "baryon-tune2022-v0")   FTFTunings->SetTuneApplicabilityState(1,1); 
+        else if(FTFTuneName == "pion-tune2022-v0")     FTFTunings->SetTuneApplicabilityState(2,1); 
+        else if(FTFTuneName == "combined-tune2022-v0") FTFTunings->SetTuneApplicabilityState(3,1); 
+        else {
+            PrintFTFTuneUsageError::FTFTuneUsageError();
+            return 1;
+        }
+    }    
+    #endif
+
+    //ActionInitialization part
+    //
     auto ActInitialization = new ATLHECTBActionInitialization( /*DetConstruction*/ );
     runManager->SetUserInitialization( ActInitialization );
 
