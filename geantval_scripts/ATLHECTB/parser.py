@@ -102,36 +102,36 @@ class Test(BaseParser):
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="energy resolution",
-			      #secondaryParticle="e-",
+			                  #secondaryParticle="e-",
                               beamParticle=job["PARTICLE"],
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamEnergies=eenergies,
                               title="energyresolution(e-)",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]",
                               xValues=eenergies,
                               yValues=resolutions,
-	                      yStatErrorsMinus=erresolutions,
-			      yStatErrorsPlus=erresolutions
+	                          yStatErrorsMinus=erresolutions,
+			                  yStatErrorsPlus=erresolutions
                               )
 
-        #Create JSON output files for e- sampling fraction (graph)
-        #
+    #Create JSON output files for e- sampling fraction (graph)
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="sampling fraction",
 			      #secondaryParticle="e-",
                               beamParticle=job["PARTICLE"],
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamEnergies=eenergies,
                               title="samplingfraction(e-)",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="[%]",
                               xValues=eenergies,
                               yValues=sampfractions,
-	                      yStatErrorsMinus=ersampfractions,
-			      yStatErrorsPlus=ersampfractions
+	                          yStatErrorsMinus=ersampfractions,
+			                  yStatErrorsPlus=ersampfractions
                               )
         
 	#pi- analysis
@@ -162,7 +162,7 @@ class Test(BaseParser):
 		addchannel = 0
 		addchannelF1 = 0
 		addchannelF2 = 0
-                addchannelF3 = 0
+        addchannelF3 = 0
 		addchannelF4 = 0
 
 		addchannel += evt.M2L1BirkeLayer[0] #M2L1
@@ -288,7 +288,7 @@ class Test(BaseParser):
 	    recenergy.Fit("gaus","Q")
 	    res = 100.*recenergy.GetFunction("gaus").GetParameter(2)/recenergy.GetFunction("gaus").GetParameter(1)
 	    resolutions.append(res)
-            erres = (recenergy.GetFunction("gaus").GetParError(2)/recenergy.GetFunction("gaus").GetParameter(2)+
+        erres = (recenergy.GetFunction("gaus").GetParError(2)/recenergy.GetFunction("gaus").GetParameter(2)+
 	            recenergy.GetFunction("gaus").GetParError(1)/recenergy.GetFunction("gaus").GetParameter(1))*res
 	    erresolutions.append(erres)
 	    F1.append(H1F1.GetMean())
@@ -296,9 +296,9 @@ class Test(BaseParser):
 	    F3.append(H1F3.GetMean())
 	    F4.append(H1F4.GetMean())
 	    L0.append((28.05/2.)*H1F1.GetMean()+
-		      (28.05+53.6/2.)*H1F2.GetMean()+
-	              (28.05+53.6+53.35/2.)*H1F3.GetMean()+
-		      (28.05+53.6+53.35+46.8/2)*H1F4.GetMean())
+		         (28.05+53.6/2.)*H1F2.GetMean()+
+	             (28.05+53.6+53.35/2.)*H1F3.GetMean()+
+		         (28.05+53.6+53.35+46.8/2)*H1F4.GetMean())
 
 	    depths = [28.05/2.,28.05+53.6/2.,28.05+53.6+53.35/2.,28.05+53.6+53.35+46.8/2]
 	    residual = (depths[0]*H1F1.GetMean())**2+(depths[1]*H1F2.GetMean())**2+(depths[2]*H1F3.GetMean())**2+(depths[3]*H1F4.GetMean())**2
@@ -316,67 +316,67 @@ class Test(BaseParser):
 	print "--->pi- sigmaL0 [cm]: " + str(sigmaL0)
 
 	#Create JSON output files for pi- energy resolution (graph)
-        #
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="energy resolution",
-			      #secondaryParticle="pi-",
+			                  #secondaryParticle="pi-",
                               beamParticle=job["PARTICLE"],
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamEnergies=penergies,
                               title="energyresolution(pi-)",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="#sigma_{0}/E_{0} [%]",
                               xValues=penergies,
                               yValues=resolutions,
-			      yStatErrorsPlus=erresolutions,
-	                      yStatErrorsMinus=erresolutions
+			                  yStatErrorsPlus=erresolutions,
+	                          yStatErrorsMinus=erresolutions
                               )
 
-        #Create JSON output files for pi/e response ratio (graph)
-        #
+    #Create JSON output files for pi/e response ratio (graph)
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="energy response",
                               beamParticle=job["PARTICLE"],
-			      targetName="ATLAS-HEC",
+	             		      targetName="ATLAS-HEC",
                               beamEnergies=penergies,
                               title="#pi/e",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="#pi/e",
                               xValues=penergies,
                               yValues=responses,
-			      yStatErrorsPlus=erresponses,
-	                      yStatErrorsMinus=erresponses
+			                  yStatErrorsPlus=erresponses,
+	                          yStatErrorsMinus=erresponses
                               )
 
-        #Create JSON output files for L0 (graph)
-        #
+    #Create JSON output files for L0 (graph)
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="longitudinal shower barycenter",
                               beamParticle=job["PARTICLE"],
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamEnergies=penergies,
                               title="L_{0}",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="L_{0} [cm]",
                               xValues=penergies,
                               yValues=L0
-	                      #yStatErrorsMinus=,
-			      #yStatErrorsPlus=
+	                          #yStatErrorsMinus=,
+			                  #yStatErrorsPlus=
                               )
 
-        #Create JSON output files for sigmaL0 (graph)
-        #
-	yield getJSON(jobs[0], "chart",
+    #Create JSON output files for sigmaL0 (graph)
+    #
+    yield getJSON(jobs[0], "chart",
                               mctool_name="GEANT4",
                               mctool_model=jobs[0]["PHYSLIST"],
                               observableName="shower length",
-			      targetName="ATLAS-HEC",
+            			      targetName="ATLAS-HEC",
                               beamParticle=job["PARTICLE"],
                               beamEnergies=penergies,
                               title="#sigma_{L}",
@@ -384,47 +384,47 @@ class Test(BaseParser):
                               yAxisName="#sigma_{L} [cm]",
                               xValues=penergies,
                               yValues=sigmaL0
-	                      #yStatErrorsMinus=,
-			      #yStatErrorsPlus=
+	                          #yStatErrorsMinus=,
+			                  #yStatErrorsPlus=
                               )
         
-        #------------------------------------------------------------
+    #------------------------------------------------------------
 	#Create JSON files for experimental data
-        #uncomment this part only if you want to recreate these files
-        #------------------------------------------------------------
-        ''' 
+    #uncomment this part only if you want to recreate these files
+    #------------------------------------------------------------
+    ''' 
 	#Create JSON output files for experimental e- energy resolution (graph)
-        #
+    #
 	yield getJSON(jobs[0], "chart",
-                              mctool_name="experiment",
-			      mctool_version="experiment",
-                              mctool_model="experiment",
-			      testName="experiment",
-                              observableName="energy resolution",
-			      #secondaryParticle="e-",
-                              beamParticle="e-",
-			      targetName="ATLAS-HEC",
-                              beamEnergies=eenergies,
-                              title="energyresolution(e-)",
-                              xAxisName="<E_{Beam}> [GeV]",
-                              yAxisName="#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]",
-                              xValues=eenergies,
-                              yValues=[22.2, 21.6, 21.5, 22.30, 22.0, 21.2, 21.3],
-	                      yStatErrorsMinus=[x/2. for x in [22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30, 22.32-22.0, 21.46-21.2, 21.57-21.3]],
-			      yStatErrorsPlus=[x/2. for x in [22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30, 22.32-22.0, 21.46-21.2, 21.57-21.3]]
-			      )
+                            mctool_name="experiment",
+            			    mctool_version="experiment",
+                            mctool_model="experiment",
+			                testName="experiment",
+                            observableName="energy resolution",
+			                #secondaryParticle="e-",
+                            beamParticle="e-",
+			                targetName="ATLAS-HEC",
+                            beamEnergies=eenergies,
+                            title="energyresolution(e-)",
+                            xAxisName="<E_{Beam}> [GeV]",
+                            yAxisName="#sigma_{0}/E_{0} #sqrt{E_{Beam}} [% #sqrt{GeV}]",
+                            xValues=eenergies,
+                            yValues=[22.2, 21.6, 21.5, 22.30, 22.0, 21.2, 21.3],
+	                        yStatErrorsMinus=[x/2. for x in [22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30, 22.32-22.0, 21.46-21.2, 21.57-21.3]],
+			                yStatErrorsPlus=[x/2. for x in [22.57-22.2, 21.89-21.6, 21.78-21.5, 22.6-22.30, 22.32-22.0, 21.46-21.2, 21.57-21.3]]
+			    )
 
-        #Create JSON output files for experimental pi- energy resolution (graph)
-        #
+    #Create JSON output files for experimental pi- energy resolution (graph)
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="experiment",
                               mctool_model="experiment",
-			      mctool_version="experiment",
-			      testName="experiment",
+	            	          mctool_version="experiment",
+			                  testName="experiment",
                               observableName="energy resolution",
-			      #secondaryParticle="pi-",
+			                  #secondaryParticle="pi-",
                               beamParticle="pi-",
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamEnergies=penergies,
                               title="energyresolution(pi-)",
                               xAxisName="<E_{Beam}> [GeV]",
@@ -435,16 +435,16 @@ class Test(BaseParser):
 	                      yStatErrorsMinus=[x/2. for x in [14.47-13.47,13.89-13.47, 11.85-11.55, 11.52-11.28,11.27-11.06, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001]]
                               )
 
-        #Create JSON output files for experimental pi/e response ratio (graph)
-        #
+    #Create JSON output files for experimental pi/e response ratio (graph)
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="experiment",
                               mctool_model="experiment",
-			      mctool_version="experiment",
-			      testName="experiment",
+            			      mctool_version="experiment",
+			                  testName="experiment",
                               observableName="energy response",
                               beamParticle="pi-",
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamEnergies=[20.,40.,50.,80.,100.,120.,150.],
                               title="#pi/e",
                               xAxisName="<E_{Beam}> [GeV]",
@@ -455,35 +455,35 @@ class Test(BaseParser):
 	                      yStatErrorsMinus=[x/2. for x in [0.79-0.777, 0.8095-0.796, 0.816-0.8026,0.833-0.819, 0.84-0.825, 0.844-0.829, 0.854-0.840]]
                               )
 
-        #Create JSON output files for experimental L0 (graph)
-        #
+    #Create JSON output files for experimental L0 (graph)
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="experiment",
                               mctool_model="experiment",
-			      mctool_version="experiment",
-			      testName="experiment",
+             			      mctool_version="experiment",
+			                  testName="experiment",
                               observableName="longitudinal shower barycenter",
                               beamParticle="pi-",
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamEnergies=penergies,
                               title="L_{0}",
                               xAxisName="<E_{Beam}> [GeV]",
                               yAxisName="L_{0} [cm]",
                               xValues=penergies,
                               yValues=[47.20989874689059,50.415242855641324,51.444637789482286,52.951825942751704,54.405759865463,55.72198021652049,57.223749518259424,58.30097983112803,58.86865124318264,60.04659745173835,60.27474978686629]
-	                      #yStatErrorsMinus=,
-			      #yStatErrorsPlus=
+	                         #yStatErrorsMinus=,
+			                 #yStatErrorsPlus=
                               )
 
-        #Create JSON output files for experimental sigmaL0 (graph)
-        #
+    #Create JSON output files for experimental sigmaL0 (graph)
+    #
 	yield getJSON(jobs[0], "chart",
                               mctool_name="experiment",
                               mctool_model="experiment",
-			      mctool_version="experiment",
-			      testName="experiment",
+             			      mctool_version="experiment",
+			                  testName="experiment",
                               observableName="shower length",
-			      targetName="ATLAS-HEC",
+			                  targetName="ATLAS-HEC",
                               beamParticle="pi-",
                               beamEnergies=penergies,
                               title="#sigma_{L}",
@@ -491,8 +491,8 @@ class Test(BaseParser):
                               yAxisName="#sigma_{L} [cm]",
                               xValues=penergies,
                               yValues=[31.561680356622446,32.623646745172536,33.04349844031647,33.923354237050305,34.50614698802983,34.94316059883212,35.591168629313415,35.798147808347814,36.09916133280085,36.380940559327335,36.45373298649713]
-	                      #yStatErrorsMinus=,
-			      #yStatErrorsPlus=
-                              )
-        '''
+	                         #yStatErrorsMinus=,
+			                 #yStatErrorsPlus=
+                             )
+    '''
 ##**************************************************
