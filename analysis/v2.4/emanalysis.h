@@ -4,7 +4,7 @@
 //         for e-   
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
 //          @lopezzot
-// \start date: 17 January 2022
+// \start date: 17 January 2023
 //**************************************************
 
 #ifndef emanalysis_H
@@ -174,7 +174,8 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             // average response 
 	    //
             H1Response->Fill( addchannels / (edep/1000.) ); 
-            H1Recenergy->Fill( (addchannels / 44.6979) ); //updated for v2.4 including Scintillators 
+            //H1Recenergy->Fill( (addchannels / 44.6822) ); //updated for v2.4 including Scintillators (response) 
+            H1Recenergy->Fill( (addchannels / 44.9513) ); //updated for v2.4 G410.7G410.7.4 using SampFraction 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
@@ -219,7 +220,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             LeakvsEdeplegend->SetLineWidth(0);
             LeakvsEdeplegend->SetHeader("Beam: e- 147.8 GeV", "C");
             LeakvsEdeplegend->AddEntry(H2LeakvsEdep,
-                    "#splitline{ATLHECTB v2.4 }{Geant4.11.0.p01 FTFP_BERT }","ep");
+                    "#splitline{ATLHECTB v2.4 }{Geant4.10.7.p03 FTFP_BERT }","ep");
             LeakvsEdeplegend->Draw("same");
             C1LeakvsEdep->Write();
             delete C1LeakvsEdep;
@@ -273,7 +274,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     Sampfractionlegend->SetLineWidth(0);
     //Sampfractionlegend->SetHeader("Sampling fraction e-", "C");
     Sampfractionlegend->AddEntry(G1Sampfraction,
-            "#splitline{ATLHECTB v2.4 }{Geant4.11.0.p01 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v2.4 }{Geant4.10.7.p03 FTFP_BERT }","ep");
     Sampfractionlegend->Draw("same");
     C1Sampfraction->Write();
     delete C1Sampfraction;
@@ -343,7 +344,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     legend->AddEntry(G1ATLASenres,
         "#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}", "ep");
     legend->AddEntry(G1energyresolution,
-            "#splitline{ATLHECTB v2.4 }{Geant4.11.0.p01 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v2.4 }{Geant4.10.7.p03 FTFP_BERT }","ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
     p2->cd();
@@ -385,8 +386,16 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
 		
     cout<<"->Average sampling fraction to e-: "<<r/double(emenergies.size())<<"%"<<endl;
     cout<<"->Average response to e-: "<<k/double(emenergies.size())<<" a.u./GeV"<<endl;
+    cout<<"->Reconstructed energies for 20,40,50,80,100,119.1,147.8 GeV e-: "<<endl;
+    for (auto& i : recenergies){
+        cout<<i<<" ";
+    }
+    cout<<endl;
     cout<<"ATLHECTB end of analysis of e- runs"<<endl;
 
+    //Close ROOT
+    //
+    //gApplication->Terminate();
 };
 
 #endif
