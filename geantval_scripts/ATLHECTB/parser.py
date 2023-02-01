@@ -58,6 +58,7 @@ class Test(BaseParser):
         ersampfractions = []
         resolutions = []
         erresolutions = []
+        recenergies = []
         for energy in eenergies:
             # Find e- job with corresponding energy
             job = [x for x in ectrjobs if float(x["ENERGY"]) == energy][0]
@@ -92,9 +93,9 @@ class Test(BaseParser):
                 addchannel += evt.M3L2BirkeLayer[5]
                 recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
             xfitmin = recenergy.GetXaxis().GetBinCenter(
-                recenergy.GetMaximumBin())-1.0*recenergy.GetStdDev()
+                recenergy.GetMaximumBin())-1.2*recenergy.GetStdDev()
             xfitmax = recenergy.GetXaxis().GetBinCenter(
-                recenergy.GetMaximumBin())+1.0*recenergy.GetStdDev()
+                recenergy.GetMaximumBin())+1.2*recenergy.GetStdDev()
             F1recenergy = TF1("gaus", "gaus(0)", xfitmin, xfitmax)
             recenergy.Fit(F1recenergy, "QR")
             res = (recenergy.GetFunction("gaus").GetParameter(
@@ -103,10 +104,12 @@ class Test(BaseParser):
             erres = (recenergy.GetFunction("gaus").GetParError(2) /
                      recenergy.GetFunction("gaus").GetParameter(2))*res
             erresolutions.append(erres)
+            recenergies.append(recenergy.GetFunction("gaus").GetParameter(1))
             outfile.cd()
             recenergy.Write()
         print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
         print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+        print "-->e- reconstructed energies: " + str(recenergies) + ",physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
 
         # Create JSON output files for e- energy resolution (graph)
         #
