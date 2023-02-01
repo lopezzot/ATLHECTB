@@ -58,7 +58,7 @@ class Test(BaseParser):
         ersampfractions = []
         resolutions = []
         erresolutions = []
-        recenergies = []
+        erecenergies = []
         for energy in eenergies:
             # Find e- job with corresponding energy
             job = [x for x in ectrjobs if float(x["ENERGY"]) == energy][0]
@@ -104,12 +104,20 @@ class Test(BaseParser):
             erres = (recenergy.GetFunction("gaus").GetParError(2) /
                      recenergy.GetFunction("gaus").GetParameter(2))*res
             erresolutions.append(erres)
-            recenergies.append(recenergy.GetFunction("gaus").GetParameter(1))
+            erecenergies.append(recenergy.GetFunction("gaus").GetParameter(1))
             outfile.cd()
             recenergy.Write()
         print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
         print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
         print "-->e- reconstructed energies: " + str(recenergies) + ",physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+
+        # This contains e- reconstructed energies or 99% of beam energy
+        # if no data are available
+        #
+        fullerecenergies = [erecenergies[0], 0.99*30., erecenergies[1],
+                            erecenergies[2], 0.99*60., erecenergies[3],
+                            erecenergies[4], erecenergies[5], erecenergies[6],
+                            0.99*180., 0.99*200]
 
         # Create JSON output files for e- energy resolution (graph)
         #
@@ -162,7 +170,7 @@ class Test(BaseParser):
         F4 = []
         L0 = []
         sigmaL0 = []
-        for energy in penergies:
+        for index, energy in enumerate(penergies):
             # Find pi- job with corresponding energy
             job = [x for x in pijobs if float(x["ENERGY"]) == energy][0]
             infile = TFile.Open(os.path.join(
@@ -170,10 +178,10 @@ class Test(BaseParser):
             tree = infile.Get("ATLHECTBout")
             recenergy = TH1F("pi-recenergy", "pi-", 2000, 0., 200.)
             response = TH1F("pi-response", "pi-", 2*120, 0., 1.)
-            H1F1 = TH1F("pi-F1", "pi-F1", 100, 0., 1.2)
-            H1F2 = TH1F("pi-F2", "pi-F2", 100, 0., 1.2)
-            H1F3 = TH1F("pi-F3", "pi-F3", 100, 0., 1.2)
-            H1F4 = TH1F("pi-F4", "pi-F4", 100, 0., 1.2)
+            H1F1 = TH1F("pi-F1", "pi-F1", 100*80, 0., 8000)
+            H1F2 = TH1F("pi-F2", "pi-F2", 100*80, 0., 8000)
+            H1F3 = TH1F("pi-F3", "pi-F3", 100*80, 0., 8000)
+            H1F4 = TH1F("pi-F4", "pi-F4", 100*80, 0., 8000)
             for evt in tree:
                 addchannel = 0
                 addchannelF1 = 0
@@ -292,16 +300,27 @@ class Test(BaseParser):
                 addchannelF4 += 2.*evt.M3L4BirkeLayer[11]
 
                 if addchannel > 0.:
-                    response.Fill((addchannel/energy) /
+                    # response.Fill((addchannel/energy) /
+                    #              (10.*np.mean(sampfractions)))
+                    response.Fill((addchannel/fullerecenergies[index]) /
                                   (10.*np.mean(sampfractions)))
                     recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
-                    H1F1.Fill(addchannelF1/addchannel)
-                    H1F2.Fill(addchannelF2/addchannel)
-                    H1F3.Fill(addchannelF3/addchannel)
-                    H1F4.Fill(addchannelF4/addchannel)
+                    H1F1.Fill(addchannelF1)
+                    H1F2.Fill(addchannelF2)
+                    H1F3.Fill(addchannelF3)
+                    H1F4.Fill(addchannelF4)
 
-            responses.append(response.GetMean())
-            erresponses.append(response.GetMeanError())
+            # Response
+            #
+            respxfitmin = response.GetMean()-1.5*response.GetStdDev()
+            respxfitmax = response.GetMean()+0.5*response.GetStdDev()
+            F1Response = TF1("rgaus", "gaus(0", respxfitmin, respxfitmax)
+            response.Fit(F1Response, "QR")
+            responses.append(response.GetFunction("rgaus").GetParameter(1))
+            erresponses.append(3.*response.GetFunction("rgaus").GetParError(1))
+
+            # Resolution
+            #
             recenergy.Fit("gaus", "Q")
             res = 100.*recenergy.GetFunction("gaus").GetParameter(
                 2)/recenergy.GetFunction("gaus").GetParameter(1)
@@ -309,10 +328,12 @@ class Test(BaseParser):
             erres = (recenergy.GetFunction("gaus").GetParError(2)/recenergy.GetFunction("gaus").GetParameter(2) +
                      recenergy.GetFunction("gaus").GetParError(1)/recenergy.GetFunction("gaus").GetParameter(1))*res
             erresolutions.append(erres)
-            F1.append(H1F1.GetMean())
-            F2.append(H1F2.GetMean())
-            F3.append(H1F3.GetMean())
-            F4.append(H1F4.GetMean())
+
+            Fmean = H1F1.GetMean()+H1F2.GetMean()+H1F3.GetMean()+H1F4.GetMean()
+            F1.append(H1F1.GetMean()/Fmean)
+            F2.append(H1F2.GetMean()/Fmean)
+            F3.append(H1F3.GetMean()/Fmean)
+            F4.append(H1F4.GetMean()/Fmean)
             L0.append((28.05/2.)*H1F1.GetMean() +
                       (28.05+53.6/2.)*H1F2.GetMean() +
                       (28.05+53.6+53.35/2.)*H1F3.GetMean() +
