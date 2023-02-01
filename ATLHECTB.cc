@@ -29,16 +29,20 @@
 //#include "G4NeutronTrackingCut.hh" //for neutron time limit cut
 //#include "G4SystemOfUnits.hh"      //for neutron time limit cut
 #include "G4Version.hh"
-#if G4VERSION_NUMBER >= 1110          // >= Geant4-11.1.0
+#if G4VERSION_NUMBER >= 1110         // >= Geant4-11.1.0
 #include "G4FTFTunings.hh"
 #endif
+
+//Includers from C++ STL
+//
+#include <string>
 
 //G4err output for usage error
 //
 namespace PrintUsageError {
     void UsageError() {
     G4cerr << "->ATLHECTB usage: " << G4endl;
-    G4cerr << "ATLHECTB [-m macro] [-u UIsession] [-t nThreads] [-pl PhysicsList] [-tune FTFTuneName (optional)]" 
+    G4cerr << "ATLHECTB [-m macro] [-u UIsession] [-t nThreads] [-pl PhysicsList]" 
         << G4endl;
     }
 }
@@ -48,10 +52,19 @@ namespace PrintUsageError {
 namespace PrintFTFTuneUsageError {
     void FTFTuneUsageError() {
     G4cerr << "Wrong FTF Alternative Tune Name selected. " << G4endl;
-    G4cerr << "Geant4-11.1.0 valid names are: " << G4endl;
-    G4cerr << "default\nbaryon-tune2022-v0\npion-tune2022-v0\ncombined-tune2022-v0" << G4endl;
+    G4cerr << "Geant4-11.1.0 valid indeces/names are: " << G4endl;
+    G4cerr << "0(default)\n1(baryon-tune2022-v0)\n2(pion-tune2022-v0)\n3(combined-tune2022-v0)" << G4endl;
     }
 }
+
+//G4err output for PhysListFactory usage error
+//
+namespace PrintPLFactoryUsageError {
+    void PLFactoryUsageError() {
+    G4cerr << "Wrong PLFactory usage: no name for selected PL. " << G4endl;
+    }
+}
+
 
 //main function
 //
@@ -59,7 +72,7 @@ int main( int argc, char** argv ) {
    
     //Error in argument numbers
     //
-    if ( argc > 11 ){
+    if ( argc > 9 ){
         PrintUsageError::UsageError();
         return 1;
     }
@@ -72,8 +85,6 @@ int main( int argc, char** argv ) {
     #ifdef G4MULTITHREADED
     G4int nthreads = 0;
     #endif
-    G4bool UseFTFTune = false; //default not using FTF alternative tunes
-    G4String FTFTuneName;
 
     for ( G4int i=1; i<argc; i=i+2 ) {
         if ( G4String( argv[i] ) == "-m" ) macro = argv[i+1];
@@ -83,14 +94,26 @@ int main( int argc, char** argv ) {
         else if ( G4String( argv[i] ) == "-t" ) {
             nthreads = G4UIcommand::ConvertToInt(argv[i+1]);} 
         #endif 
-        else if ( G4String( argv[i] ) == "-tune" ) {
-            UseFTFTune = true; FTFTuneName = argv[i+1];}
         else {
         PrintUsageError::UsageError();
             return 1;
         }
     } //end of converting arguments
-    
+
+    #if G4VERSION_NUMBER >= 1110 // >= Geant4-11.1.0
+    G4bool UseFTFTune = false;
+    G4int FTFTuneIndex = 99;
+    if (custom_pl.find("tune") != std::string::npos){
+        UseFTFTune = true;
+        std::string pltune = custom_pl;
+        char tuneidx = pltune.back();
+        FTFTuneIndex = tuneidx - '0'; // convert char to int
+        custom_pl = custom_pl.substr(0, custom_pl.size()-6);
+        G4cout<<"----------> Using FTF alternative tune index: "<<FTFTuneIndex
+              <<" and PL: "<<custom_pl<<" <----------"<<G4endl;
+    }
+    #endif
+ 
     //Activate interaction mode if no macro card is provided and define UI session
     //
     G4UIExecutive* ui = nullptr;
@@ -121,6 +144,10 @@ int main( int argc, char** argv ) {
     runManager->SetUserInitialization( DetConstruction );
 
     auto physListFactory = new G4PhysListFactory;
+    if(!physListFactory->IsReferencePhysList( custom_pl )){ // if custom_pl is not a PLname exit
+        PrintPLFactoryUsageError::PLFactoryUsageError();
+        return 1;
+    }
     auto physList = physListFactory->GetReferencePhysList( custom_pl );
     physList->RegisterPhysics( new G4StepLimiterPhysics() );
     //auto nCut = new G4NeutronTrackingCut("neutronTrackingCut", 1);
@@ -131,18 +158,17 @@ int main( int argc, char** argv ) {
     //Set FTF tunings (only => Geant4-11.1.0)
     //
     #if G4VERSION_NUMBER >= 1110          // => Geant4-11.1.0
-    auto FTFTunings = G4FTFTunings::Instance();
     if (UseFTFTune){
-        G4cout << "----------> Using FTF alternative tune: "<<FTFTuneName<< " <----------" << G4endl;
-        if(FTFTuneName == "default")                   FTFTunings->SetTuneApplicabilityState(0,1); 
-        else if(FTFTuneName == "baryon-tune2022-v0")   FTFTunings->SetTuneApplicabilityState(1,1); 
-        else if(FTFTuneName == "pion-tune2022-v0")     FTFTunings->SetTuneApplicabilityState(2,1); 
-        else if(FTFTuneName == "combined-tune2022-v0") FTFTunings->SetTuneApplicabilityState(3,1); 
+        auto FTFTunings = G4FTFTunings::Instance();
+        if(FTFTuneIndex == 0)      FTFTunings->SetTuneApplicabilityState(0,1); 
+        else if(FTFTuneIndex == 1) FTFTunings->SetTuneApplicabilityState(1,1); 
+        else if(FTFTuneIndex == 2) FTFTunings->SetTuneApplicabilityState(2,1); 
+        else if(FTFTuneIndex == 3) FTFTunings->SetTuneApplicabilityState(3,1); 
         else {
             PrintFTFTuneUsageError::FTFTuneUsageError();
             return 1;
         }
-    }    
+    } 
     #endif
 
     //ActionInitialization part
