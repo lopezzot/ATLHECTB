@@ -73,7 +73,7 @@ class Test(BaseParser):
             ersampfractions.append(H1sampfraction.GetMeanError())
         print "--->e- sampling fraction: " + str(sampfractions) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
         print "--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
-        outfile = TFile.Open("OUTe-.root", "RECREATE")
+        outfile = TFile.Open("OUTe-"+str(ectrjobs[0]["PHYSLIST"])+".root", "RECREATE")
         for energy in eenergies:
             # Find e- job with corresponding energy
             job = [x for x in ectrjobs if float(x["ENERGY"]) == energy][0]
