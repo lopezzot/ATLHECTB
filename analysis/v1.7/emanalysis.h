@@ -138,8 +138,8 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             double addchannels=0;
             int channels = 0;
 
-						//channels selected with ecalibrate.h
-						//
+            //channels selected with ecalibrate.h
+            //
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
                 if ( i==2 || i==3 || i==5 ) { //M2L1
                     channels += 1;
