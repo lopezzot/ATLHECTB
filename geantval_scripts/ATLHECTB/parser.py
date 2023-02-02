@@ -109,7 +109,7 @@ class Test(BaseParser):
             recenergy.Write()
         print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
         print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
-        print "-->e- reconstructed energies: " + str(recenergies) + ",physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+        print "-->e- reconstructed energies: " + str(erecenergies) + ",physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
 
         # This contains e- reconstructed energies or 99% of beam energy
         # if no data are available
@@ -314,7 +314,7 @@ class Test(BaseParser):
             #
             respxfitmin = response.GetMean()-1.5*response.GetStdDev()
             respxfitmax = response.GetMean()+0.5*response.GetStdDev()
-            F1Response = TF1("rgaus", "gaus(0", respxfitmin, respxfitmax)
+            F1Response = TF1("rgaus", "gaus(0)", respxfitmin, respxfitmax)
             response.Fit(F1Response, "QR")
             responses.append(response.GetFunction("rgaus").GetParameter(1))
             erresponses.append(3.*response.GetFunction("rgaus").GetParError(1))
