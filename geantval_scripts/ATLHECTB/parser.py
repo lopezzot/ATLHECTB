@@ -170,6 +170,7 @@ class Test(BaseParser):
         F4 = []
         L0 = []
         sigmaL0 = []
+        pioutfile = TFile.Open("OUTpi-"+str(pijobs[0]["PHYSLIST"])+".root", "RECREATE")
         for index, energy in enumerate(penergies):
             # Find pi- job with corresponding energy
             job = [x for x in pijobs if float(x["ENERGY"]) == energy][0]
@@ -177,7 +178,7 @@ class Test(BaseParser):
                 job["path"], "ATLHECTBout_Run0.root"))
             tree = infile.Get("ATLHECTBout")
             recenergy = TH1F("pi-recenergy", "pi-", 2000, 0., 200.)
-            response = TH1F("pi-response", "pi-", 2*120, 0., 1.)
+            response = TH1F("pi-response"+str(energy), "pi-"+str(energy), 2*150, 0., 1.5)
             H1F1 = TH1F("pi-F1", "pi-F1", 100*80, 0., 8000)
             H1F2 = TH1F("pi-F2", "pi-F2", 100*80, 0., 8000)
             H1F3 = TH1F("pi-F3", "pi-F3", 100*80, 0., 8000)
@@ -318,6 +319,8 @@ class Test(BaseParser):
             response.Fit(F1Response, "QR")
             responses.append(response.GetFunction("rgaus").GetParameter(1))
             erresponses.append(3.*response.GetFunction("rgaus").GetParError(1))
+            pioutfile.cd()
+            response.Write()
 
             # Resolution
             #
