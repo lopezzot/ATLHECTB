@@ -334,15 +334,16 @@ class Test(BaseParser):
             F2.append(H1F2.GetMean()/Fmean)
             F3.append(H1F3.GetMean()/Fmean)
             F4.append(H1F4.GetMean()/Fmean)
-            L0.append((28.05/2.)*H1F1.GetMean() +
-                      (28.05+53.6/2.)*H1F2.GetMean() +
-                      (28.05+53.6+53.35/2.)*H1F3.GetMean() +
-                      (28.05+53.6+53.35+46.8/2)*H1F4.GetMean())
+            L0.append((28.05/2.)*H1F1.GetMean()/Fmean +
+                      (28.05+53.6/2.)*H1F2.GetMean()/Fmean +
+                      (28.05+53.6+53.35/2.)*H1F3.GetMean()/Fmean +
+                      (28.05+53.6+53.35+46.8/2)*H1F4.GetMean()/Fmean)
 
             depths = [28.05/2., 28.05+53.6/2., 28.05 +
                       53.6+53.35/2., 28.05+53.6+53.35+46.8/2]
-            residual = (depths[0]*H1F1.GetMean())**2+(depths[1]*H1F2.GetMean()
-                                                      )**2+(depths[2]*H1F3.GetMean())**2+(depths[3]*H1F4.GetMean())**2
+            residual = (depths[0]*H1F1.GetMean()/Fmean)**2+(depths[1]*H1F2.GetMean()/Fmean
+                                                      )**2+(depths[2]*H1F3.GetMean()/Fmean
+                                                      )**2+(depths[3]*H1F4.GetMean()/Fmean)**2
             sigmaL0.append(2.*(residual/4.)**0.5)
 
         print "--->pi- pi/e: " + str(responses) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
