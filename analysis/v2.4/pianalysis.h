@@ -234,10 +234,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
             //Using SF from emanalysis for calibration
             //
             //H1Response->Fill( (addchannels / pienergies[RunNo])/44.9513); //pi/e
-            H1Response->Fill( (addchannels / (1.006*recemenergies[RunNo]))/44.9513); //pi/e
-            //1.06 correction because the response is pi/e is obtained as ratio
+            H1Response->Fill( (addchannels / (1.008*recemenergies[RunNo]))/44.9513); //pi/e
+            //1.08 correction because the response is pi/e is obtained as ratio
             //of peak for pi and e reconstructed energies, and Andrey Kiriyunin
-            //has 0.6% higher e- peak values
+            //has 0.6%-1.0% higher e- peak values due to recursive fitting 
             H1Recenergy->Fill( addchannels /44.9513);
         } //end for loop events
 

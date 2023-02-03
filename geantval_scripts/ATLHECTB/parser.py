@@ -303,8 +303,11 @@ class Test(BaseParser):
                 if addchannel > 0.:
                     # response.Fill((addchannel/energy) /
                     #              (10.*np.mean(sampfractions)))
-                    response.Fill((addchannel/fullerecenergies[index]) /
+                    response.Fill((addchannel/(1.008*fullerecenergies[index])) /
                                   (10.*np.mean(sampfractions)))
+                    #1.08 correction because the response is pi/e is obtained as ratio
+                    #of peak for pi and e reconstructed energies, and Andrey Kiriyunin
+                    #has 0.6%-1.0% higher e- peak values due to recursive fitting 
                     recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
                     H1F1.Fill(addchannelF1)
                     H1F2.Fill(addchannelF2)
