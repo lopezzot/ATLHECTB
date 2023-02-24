@@ -72,14 +72,14 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
 
     //Collect energy deposited and Birk energy deposited in lAr gaps
     //
-    if ( matName == "G4_lAr" ){
+    if ( matName == "G4_lAr" && volName == "ATLHECTB::Slice" ){ //ATLHECTB::Slice check needed because ATLHECModule is G4_lAr too
         G4int modulecpNo = step->GetPreStepPoint()->GetTouchable()->GetCopyNumber(2);
         G4double stepl = step->GetStepLength()/10.; //cm
         G4double edep = step->GetTotalEnergyDeposit(); //MeV
         if ( stepl > 0. && edep > 0. ){
             fEventAction->AddelAr( edep );
             fEventAction->AddBirkelAr( fSCalculator->ApplyBirks( edep, stepl ) );
-               
+
             //Fill by Layer
             //
             G4ThreeVector origin(0.,0.,0.);
@@ -87,6 +87,7 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step){
             GetHistory()->GetTopTransform().Inverse().TransformPoint(origin);
             G4ThreeVector hitpos = step->GetPreStepPoint()->GetPosition();
             G4ThreeVector relhitpos = hitpos-sliceorigin;
+
             if ( cpNo < 8 && step->GetTrack()->GetGlobalTime()-14. <= 75.){ //layer 1
                 G4int index = fSCalculator->IndexL1( hitpos.getEta(), relhitpos.getX() );
                 fEventAction->AddL1BirkeLayer( modulecpNo, index, 
