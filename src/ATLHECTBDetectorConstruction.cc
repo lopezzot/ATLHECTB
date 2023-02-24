@@ -633,7 +633,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                            fCheckOverlaps);
 
     firstAbsorberPositionZ = firstAbsorber[3]/2.- depthSize[3]/2.0;
-    /*physiAbsorber[1] = new*/ G4PVPlacement(0,
+    /*physiAbsorber[1] =*/ new G4PVPlacement(0,
  	                                 G4ThreeVector(0,absorberPosY,
                                          firstAbsorberPositionZ),
                                          absorberName,
