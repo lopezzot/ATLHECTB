@@ -30,10 +30,10 @@ void ATLHECTBanalysis1_v2p5(){
     }
     //emanalysis( emenergies, emfiles );
 
-    //Reconstrcuted energies for em runs (G4.10.7.p03, v2.4)
+    //Reconstrcuted energies for em runs (G4.10.7.p01, v2.5)
     //For missing energy points (30, 60, 120, 180 and 200 GeV) using 0.99*beamenergy
     //
-    vector<double> recemenergies = {19.806,0.99*30.,39.6413,49.5737,0.99*60.,79.3491,99.156,118.14,146.592,0.99*180.,0.99*200};
+    vector<double> recemenergies = {19.8165,0.99*30.,39.6759,49.6068,0.99*60.,79.3625,99.2147,118.158,146.643,0.99*180.,0.99*200};
 
     // Analysis of pi- data
     // energies 20, 30, 40, 50, 60, 80, 100, 120, 150, 180, 200 GeV
@@ -51,7 +51,7 @@ void ATLHECTBanalysis1_v2p5(){
 
     //Analysis to select channels for e- analysis
     //
-    //ecalibrate(147.8,"ATLHECTBout_Run17.root");    
+    //ecalibrate(147.8,"ATLHECTBout_Run17.root"); 
 
 }
 

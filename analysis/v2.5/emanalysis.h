@@ -141,14 +141,14 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
 	    //channels selected with ecalibrate.h
             //
             for (unsigned int i = 0; i<M2L1BelAr->size(); i++){
-                if ( i==2 || i==3 || i==5 ) { //M2L1
+                if ( i==1 || i==2 || i==3 || i==5 ) { //M2L1
                     channels += 1;
                     addchannels += M2L1BelAr->at(i);
                     H1Signals->Fill( M2L1BelAr->at(i)) ;
                 }
             }
             for (unsigned int i = 0; i<M2L2BelAr->size(); i++){
-                if ( i== 3 || 1==4 || i==5 ) { //M2L2
+                if ( i== 3 || i==5 ) { //M2L2
                     channels += 1;
                     addchannels+= M2L2BelAr->at(i);
                     H1Signals->Fill( M2L2BelAr->at(i)); 
@@ -167,7 +167,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             // average response 
 	    //
             H1Response->Fill( addchannels / (edep/1000.) ); 
-            H1Recenergy->Fill( (addchannels / 44.9) ); //updated for v2.5 G410.7.1 using SampFraction 
+            H1Recenergy->Fill( (addchannels / 44.88) ); //updated for v2.5 G410.7.1 using SampFraction 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];

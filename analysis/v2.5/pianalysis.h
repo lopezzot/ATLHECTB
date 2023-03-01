@@ -183,7 +183,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
             }
             for (unsigned int i = 0; i<M2L3BelAr->size(); i++){
                 if ( i==2 || i==3 || i==4 || i==5 || i==6 ||
-                     i==7 || i==8 || i==9 ) { //M2L3 //M2L3 1 close to treshold
+                     i==7 || i==8 || i==9 ) { //M2L3 //M2L3 1 and M2L3 8 close to treshold
                     channels += 1;
                     addchannels+= 2.*M2L3BelAr->at(i);
                     addchannelsF3 += 2.*M2L3BelAr->at(i);
@@ -203,7 +203,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
                 }
             }
             for (unsigned int i = 0; i<M2L4BelAr->size(); i++){
-                if ( i==2 || i==3 || i==4 || i==5 || i==6 || i==7 ) { //M2L4 
+                if ( i==2 || i==3 || i==4 || i==5 || i==6 || i==7 ) { //M2L4 //M2L4 1 close to treshold 
                     channels += 1;
                     addchannels+= 2.*M2L4BelAr->at(i);
                     addchannelsF4 += 2.*M2L4BelAr->at(i);
@@ -225,9 +225,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
             H1Channels->Fill(channels);
             //Using SF from emanalysis for calibration
             //
-            //H1Response->Fill( (addchannels / pienergies[RunNo])/44.9); //pi/e
-            H1Response->Fill( (addchannels / recemenergies[RunNo])/44.9); //pi/e
-            H1Recenergy->Fill( addchannels /44.9);
+            //H1Response->Fill( (addchannels / pienergies[RunNo])/44.88); //pi/e
+            H1Response->Fill( (addchannels / recemenergies[RunNo])/44.88); //pi/e
+            H1Recenergy->Fill( addchannels /44.88);
         } //end for loop events
 
         energies[RunNo] = pienergies[RunNo];
