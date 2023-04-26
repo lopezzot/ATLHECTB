@@ -84,13 +84,13 @@ class Test(BaseParser):
                              str(energy), 2000, 0., 200.)
             for evt in tree:
                 addchannel = 0
+                addchannel += evt.M2L1BirkeLayer[1] #M2L1
                 addchannel += evt.M2L1BirkeLayer[2]
                 addchannel += evt.M2L1BirkeLayer[3]
                 addchannel += evt.M2L1BirkeLayer[5]
-                addchannel += evt.M2L2BirkeLayer[3]
+                addchannel += evt.M2L2BirkeLayer[3] #M2L2
                 addchannel += evt.M2L2BirkeLayer[5]
-                addchannel += evt.M3L1BirkeLayer[3]
-                addchannel += evt.M3L2BirkeLayer[5]
+                addchannel += evt.M3L1BirkeLayer[2] #M3L1
                 recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
             xfitmin = recenergy.GetXaxis().GetBinCenter(
                 recenergy.GetMaximumBin())-1.2*recenergy.GetStdDev()
@@ -203,12 +203,12 @@ class Test(BaseParser):
                 addchannelF1 += evt.M2L1BirkeLayer[4]
                 addchannelF1 += evt.M2L1BirkeLayer[5]
 
-                addchannel += evt.M3L1BirkeLayer[1]  # M3L1
-                addchannel += evt.M3L1BirkeLayer[3]
-                addchannel += evt.M3L1BirkeLayer[5]
-                addchannelF1 += evt.M3L1BirkeLayer[1]  # M3L1
-                addchannelF1 += evt.M3L1BirkeLayer[3]
-                addchannelF1 += evt.M3L1BirkeLayer[5]
+                addchannel += evt.M3L1BirkeLayer[0]  # M3L1
+                addchannel += evt.M3L1BirkeLayer[2]
+                addchannel += evt.M3L1BirkeLayer[4]
+                addchannelF1 += evt.M3L1BirkeLayer[0]  # M3L1
+                addchannelF1 += evt.M3L1BirkeLayer[2]
+                addchannelF1 += evt.M3L1BirkeLayer[4]
 
                 addchannel += evt.M2L2BirkeLayer[2]  # M2L2
                 addchannel += evt.M2L2BirkeLayer[3]
@@ -227,87 +227,90 @@ class Test(BaseParser):
                 addchannelF2 += evt.M2L2BirkeLayer[8]
                 addchannelF2 += evt.M2L2BirkeLayer[9]
 
-                addchannel += evt.M1L2BirkeLayer[2]  # M1L2
-                addchannel += evt.M1L2BirkeLayer[4]
-                addchannel += evt.M1L2BirkeLayer[6]
-                addchannel += evt.M1L2BirkeLayer[8]
-                addchannelF2 += evt.M1L2BirkeLayer[2]  # M1L2
-                addchannelF2 += evt.M1L2BirkeLayer[4]
-                addchannelF2 += evt.M1L2BirkeLayer[6]
-                addchannelF2 += evt.M1L2BirkeLayer[8]
+                addchannel += evt.M1L2BirkeLayer[3]  # M1L2
+                addchannel += evt.M1L2BirkeLayer[5]
+                addchannel += evt.M1L2BirkeLayer[7]
+                addchannelF2 += evt.M1L2BirkeLayer[3]  # M1L2
+                addchannelF2 += evt.M1L2BirkeLayer[5]
+                addchannelF2 += evt.M1L2BirkeLayer[7]
 
-                addchannel += evt.M3L2BirkeLayer[3]  # M3L2
+                addchannel += evt.M3L2BirkeLayer[2]  # M3L2
+                addchannel += evt.M3L2BirkeLayer[3] 
+                addchannel += evt.M3L2BirkeLayer[4] 
                 addchannel += evt.M3L2BirkeLayer[5]
+                addchannel += evt.M3L2BirkeLayer[6]
                 addchannel += evt.M3L2BirkeLayer[7]
-                addchannel += evt.M3L2BirkeLayer[9]
-                addchannelF2 += evt.M3L2BirkeLayer[3]  # M3L2
+                addchannel += evt.M3L2BirkeLayer[8]
+                addchannelF2 += evt.M3L2BirkeLayer[2]  # M3L2
+                addchannelF2 += evt.M3L2BirkeLayer[3]
+                addchannelF2 += evt.M3L2BirkeLayer[4]
                 addchannelF2 += evt.M3L2BirkeLayer[5]
+                addchannelF2 += evt.M3L2BirkeLayer[6]
                 addchannelF2 += evt.M3L2BirkeLayer[7]
-                addchannelF2 += evt.M3L2BirkeLayer[9]
+                addchannelF2 += evt.M3L2BirkeLayer[8]
 
-                addchannel += 2.*evt.M2L3BirkeLayer[4]  # M2L3
+                addchannel += 2.*evt.M2L3BirkeLayer[2]  # M2L3
+                addchannel += 2.*evt.M2L3BirkeLayer[3]
+                addchannel += 2.*evt.M2L3BirkeLayer[4]
                 addchannel += 2.*evt.M2L3BirkeLayer[5]
                 addchannel += 2.*evt.M2L3BirkeLayer[6]
                 addchannel += 2.*evt.M2L3BirkeLayer[7]
                 addchannel += 2.*evt.M2L3BirkeLayer[8]
                 addchannel += 2.*evt.M2L3BirkeLayer[9]
-                addchannel += 2.*evt.M2L3BirkeLayer[10]
-                addchannel += 2.*evt.M2L3BirkeLayer[11]
-                addchannelF3 += 2.*evt.M2L3BirkeLayer[4]  # M2L3
+                addchannelF3 += 2.*evt.M2L3BirkeLayer[2]  # M2L3
+                addchannelF3 += 2.*evt.M2L3BirkeLayer[3]
+                addchannelF3 += 2.*evt.M2L3BirkeLayer[4]
                 addchannelF3 += 2.*evt.M2L3BirkeLayer[5]
                 addchannelF3 += 2.*evt.M2L3BirkeLayer[6]
                 addchannelF3 += 2.*evt.M2L3BirkeLayer[7]
                 addchannelF3 += 2.*evt.M2L3BirkeLayer[8]
                 addchannelF3 += 2.*evt.M2L3BirkeLayer[9]
-                addchannelF3 += 2.*evt.M2L3BirkeLayer[10]
-                addchannelF3 += 2.*evt.M2L3BirkeLayer[11]
 
-                addchannel += 2.*evt.M1L3BirkeLayer[4]  # M1L3
-                addchannel += 2.*evt.M1L3BirkeLayer[6]
-                addchannel += 2.*evt.M1L3BirkeLayer[8]
-                addchannel += 2.*evt.M1L3BirkeLayer[10]
-                addchannelF3 += 2.*evt.M1L3BirkeLayer[4]  # M1L3
-                addchannelF3 += 2.*evt.M1L3BirkeLayer[6]
-                addchannelF3 += 2.*evt.M1L3BirkeLayer[8]
-                addchannelF3 += 2.*evt.M1L3BirkeLayer[10]
+                addchannel += 2.*evt.M1L3BirkeLayer[3]  # M1L3
+                addchannel += 2.*evt.M1L3BirkeLayer[5]
+                addchannel += 2.*evt.M1L3BirkeLayer[7]
+                addchannelF3 += 2.*evt.M1L3BirkeLayer[3]  # M1L3
+                addchannelF3 += 2.*evt.M1L3BirkeLayer[5]
+                addchannelF3 += 2.*evt.M1L3BirkeLayer[7]
 
-                addchannel += 2.*evt.M3L3BirkeLayer[5]  # M3L3
+                addchannel += 2.*evt.M3L3BirkeLayer[2]  # M3L3
+                addchannel += 2.*evt.M3L3BirkeLayer[3]
+                addchannel += 2.*evt.M3L3BirkeLayer[4]
+                addchannel += 2.*evt.M3L3BirkeLayer[5]
+                addchannel += 2.*evt.M3L3BirkeLayer[6]
                 addchannel += 2.*evt.M3L3BirkeLayer[7]
-                addchannel += 2.*evt.M3L3BirkeLayer[9]
-                addchannel += 2.*evt.M3L3BirkeLayer[11]
-                addchannelF3 += 2.*evt.M3L3BirkeLayer[5]  # M3L3
+                addchannel += 2.*evt.M3L3BirkeLayer[8]
+                addchannelF3 += 2.*evt.M3L3BirkeLayer[2]  # M3L3
+                addchannelF3 += 2.*evt.M3L3BirkeLayer[3]
+                addchannelF3 += 2.*evt.M3L3BirkeLayer[4]
+                addchannelF3 += 2.*evt.M3L3BirkeLayer[5]
+                addchannelF3 += 2.*evt.M3L3BirkeLayer[6]
                 addchannelF3 += 2.*evt.M3L3BirkeLayer[7]
-                addchannelF3 += 2.*evt.M3L3BirkeLayer[9]
-                addchannelF3 += 2.*evt.M3L3BirkeLayer[11]
+                addchannelF3 += 2.*evt.M3L3BirkeLayer[8]
 
-                addchannel += 2.*evt.M2L4BirkeLayer[6]  # M2L4
+                addchannel += 2.*evt.M2L4BirkeLayer[2]  # M2L4
+                addchannel += 2.*evt.M2L4BirkeLayer[3]
+                addchannel += 2.*evt.M2L4BirkeLayer[4]
+                addchannel += 2.*evt.M2L4BirkeLayer[5]
+                addchannel += 2.*evt.M2L4BirkeLayer[6]
                 addchannel += 2.*evt.M2L4BirkeLayer[7]
-                addchannel += 2.*evt.M2L4BirkeLayer[8]
-                addchannel += 2.*evt.M2L4BirkeLayer[9]
-                addchannel += 2.*evt.M2L4BirkeLayer[10]
-                addchannel += 2.*evt.M2L4BirkeLayer[11]
-                addchannelF4 += 2.*evt.M2L4BirkeLayer[6]  # M2L4
+                addchannelF4 += 2.*evt.M2L4BirkeLayer[2]  # M2L4
+                addchannelF4 += 2.*evt.M2L4BirkeLayer[3]
+                addchannelF4 += 2.*evt.M2L4BirkeLayer[4]
+                addchannelF4 += 2.*evt.M2L4BirkeLayer[5]
+                addchannelF4 += 2.*evt.M2L4BirkeLayer[6]
                 addchannelF4 += 2.*evt.M2L4BirkeLayer[7]
-                addchannelF4 += 2.*evt.M2L4BirkeLayer[8]
-                addchannelF4 += 2.*evt.M2L4BirkeLayer[9]
-                addchannelF4 += 2.*evt.M2L4BirkeLayer[10]
-                addchannelF4 += 2.*evt.M2L4BirkeLayer[11]
 
-                addchannel += 2.*evt.M3L4BirkeLayer[7]  # M3L4
-                addchannel += 2.*evt.M3L4BirkeLayer[9]
-                addchannel += 2.*evt.M3L4BirkeLayer[11]
-                addchannelF4 += 2.*evt.M3L4BirkeLayer[7]  # M3L4
-                addchannelF4 += 2.*evt.M3L4BirkeLayer[9]
-                addchannelF4 += 2.*evt.M3L4BirkeLayer[11]
+                addchannel += 2.*evt.M3L4BirkeLayer[2]  # M3L4
+                addchannel += 2.*evt.M3L4BirkeLayer[4]
+                addchannel += 2.*evt.M3L4BirkeLayer[6]
+                addchannelF4 += 2.*evt.M3L4BirkeLayer[2]  # M3L4
+                addchannelF4 += 2.*evt.M3L4BirkeLayer[4]
+                addchannelF4 += 2.*evt.M3L4BirkeLayer[6]
 
                 if addchannel > 0.:
-                    # response.Fill((addchannel/energy) /
-                    #              (10.*np.mean(sampfractions)))
-                    response.Fill((addchannel/(1.008*fullerecenergies[index])) /
+                    response.Fill((addchannel/fullerecenergies[index]) /
                                   (10.*np.mean(sampfractions)))
-                    #1.08 correction because the response is pi/e is obtained as ratio
-                    #of peak for pi and e reconstructed energies, and Andrey Kiriyunin
-                    #has 0.6%-1.0% higher e- peak values due to recursive fitting 
                     recenergy.Fill(addchannel/(10.*np.mean(sampfractions)))
                     H1F1.Fill(addchannelF1)
                     H1F2.Fill(addchannelF2)
@@ -340,17 +343,18 @@ class Test(BaseParser):
             F2.append(H1F2.GetMean()/Fmean)
             F3.append(H1F3.GetMean()/Fmean)
             F4.append(H1F4.GetMean()/Fmean)
-            L0.append((28.05/2.)*H1F1.GetMean()/Fmean +
-                      (28.05+53.6/2.)*H1F2.GetMean()/Fmean +
-                      (28.05+53.6+53.35/2.)*H1F3.GetMean()/Fmean +
-                      (28.05+53.6+53.35+46.8/2)*H1F4.GetMean()/Fmean)
-
             depths = [28.05/2., 28.05+53.6/2., 28.05 +
                       53.6+53.35/2., 28.05+53.6+53.35+46.8/2]
-            residual = (depths[0]*H1F1.GetMean()/Fmean)**2+(depths[1]*H1F2.GetMean()/Fmean
-                                                      )**2+(depths[2]*H1F3.GetMean()/Fmean
-                                                      )**2+(depths[3]*H1F4.GetMean()/Fmean)**2
-            sigmaL0.append(2.*(residual/4.)**0.5)
+
+            L0.append(depths[0]*H1F1.GetMean()/Fmean +
+                      depths[1]*H1F2.GetMean()/Fmean +
+                      depths[2]*H1F3.GetMean()/Fmean +
+                      depths[3]*H1F4.GetMean()/Fmean)
+
+            sigmaL0.append( (F1[index]*(depths[0]-L0[index])**2+
+                             F2[index]*(depths[1]-L0[index])**2+
+                             F3[index]*(depths[2]-L0[index])**2+ 
+                             F4[index]*(depths[3]-L0[index])**2)**0.5 )
 
         print "--->pi- pi/e: " + str(responses) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
         print "--->pi- avg pi/e: " + str(np.mean(responses))

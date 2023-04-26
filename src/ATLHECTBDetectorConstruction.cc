@@ -384,8 +384,8 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
     G4int gapNumber[7] = {8, 8, 8, 4, 4, 4, 4};
     //LArHECkaptonPosition, kptpos
     G4double kaptonPosition[3] = {0.204175*cm, 0.425*cm, 0.645825*cm};
-    //LArHECkaptonWidth, dptwid
-    G4double kaptonWidth[3] = {0.014*cm, 0.033*cm, 0.0333*cm};
+    //LArHECkaptonWidth, kptwid
+    G4double kaptonWidth[3] = {0.014*cm, 0.0333*cm, 0.014*cm};
     //LArHECrodPosX, rodposx
     G4double tieRodPositionX[4] = {0.*cm, 5.5*cm, 7.5*cm, 9.5*cm};
     //LArHECrodPosY, rodposr
@@ -633,7 +633,7 @@ G4VPhysicalVolume* ATLHECTBDetectorConstruction::DefineVolumes(){
                                            fCheckOverlaps);
 
     firstAbsorberPositionZ = firstAbsorber[3]/2.- depthSize[3]/2.0;
-    /*physiAbsorber[1] = new*/ G4PVPlacement(0,
+    /*physiAbsorber[1] =*/ new G4PVPlacement(0,
  	                                 G4ThreeVector(0,absorberPosY,
                                          firstAbsorberPositionZ),
                                          absorberName,

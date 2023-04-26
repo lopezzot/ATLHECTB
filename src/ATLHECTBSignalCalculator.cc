@@ -139,9 +139,9 @@ G4int ATLHECTBSignalCalculator::IndexL1(const G4double& eta,
     index = 20;
   } else if (2.7 < eta && eta < 2.9) {
     index = 21;
-  } else if (2.9 < eta && eta < 3.0) {
+  } else if (2.9 < eta && eta < 3.1) {
     index = 22;
-  } else if (3.0 < eta) {
+  } else if (3.1 < eta) {
     index = 23;
   } else {
     index = 0;
@@ -154,67 +154,67 @@ G4int ATLHECTBSignalCalculator::IndexL2(const G4double& eta,
                                         const G4double& relX) {
   G4int index;
 
-  if (1.5 < eta && eta < 1.55) {
+  if (1.5 < eta && eta < 1.6) {
     if (relX > 0) {
       index = 0;
     } else {
       index = 1;
     }
-  } else if (1.55 < eta && eta < 1.65) {
+  } else if (1.6 < eta && eta < 1.7) {
     if (relX > 0) {
       index = 2;
     } else {
       index = 3;
     }
-  } else if (1.65 < eta && eta < 1.75) {
+  } else if (1.7 < eta && eta < 1.8) {
     if (relX > 0) {
       index = 4;
     } else {
       index = 5;
     }
-  } else if (1.75 < eta && eta < 1.85) {
+  } else if (1.8 < eta && eta < 1.9) {
     if (relX > 0) {
       index = 6;
     } else {
       index = 7;
     }
-  } else if (1.85 < eta && eta < 1.95) {
+  } else if (1.9 < eta && eta < 2.0) {
     if (relX > 0) {
       index = 8;
     } else {
       index = 9;
     }
-  } else if (1.95 < eta && eta < 2.05) {
+  } else if (2.0 < eta && eta < 2.1) {
     if (relX > 0) {
       index = 10;
     } else {
       index = 11;
     }
-  } else if (2.05 < eta && eta < 2.15) {
+  } else if (2.1 < eta && eta < 2.2) {
     if (relX > 0) {
       index = 12;
     } else {
       index = 13;
     }
-  } else if (2.15 < eta && eta < 2.25) {
+  } else if (2.2 < eta && eta < 2.3) {
     if (relX > 0) {
       index = 14;
     } else {
       index = 15;
     }
-  } else if (2.25 < eta && eta < 2.35) {
+  } else if (2.3 < eta && eta < 2.4) {
     if (relX > 0) {
       index = 16;
     } else {
       index = 17;
     }
-  } else if (2.35 < eta && eta < 2.45) {
+  } else if (2.4 < eta && eta < 2.5) {
     if (relX > 0) {
       index = 18;
     } else {
       index = 19;
     }
-  } else if (2.45 < eta && eta < 2.7) {
+  } else if (2.5 < eta && eta < 2.7) {
     index = 20;
   } else if (2.7 < eta && eta < 2.9) {
     index = 21;
@@ -231,65 +231,65 @@ G4int ATLHECTBSignalCalculator::IndexL3(const G4double& eta,
                                         const G4double& relX) {
   G4int index;
 
-  if (1.5 < eta && eta < 1.55) {
+  if (1.6 < eta && eta < 1.7) {
     if (relX > 0) {
       index = 0;
     } else {
       index = 1;
     }
-  } else if (1.55 < eta && eta < 1.65) {
+  } else if (1.7 < eta && eta < 1.8) {
     if (relX > 0) {
       index = 2;
     } else {
       index = 3;
     }
-  } else if (1.65 < eta && eta < 1.75) {
+  } else if (1.8 < eta && eta < 1.9) {
     if (relX > 0) {
       index = 4;
     } else {
       index = 5;
     }
-  } else if (1.75 < eta && eta < 1.85) {
+  } else if (1.9 < eta && eta < 2.0) {
     if (relX > 0) {
       index = 6;
     } else {
       index = 7;
     }
-  } else if (1.85 < eta && eta < 1.95) {
+  } else if (2.0 < eta && eta < 2.1) {
     if (relX > 0) {
       index = 8;
     } else {
       index = 9;
     }
-  } else if (1.95 < eta && eta < 2.05) {
+  } else if (2.1 < eta && eta < 2.2) {
     if (relX > 0) {
       index = 10;
     } else {
       index = 11;
     }
-  } else if (2.05 < eta && eta < 2.15) {
+  } else if (2.2 < eta && eta < 2.3) {
     if (relX > 0) {
       index = 12;
     } else {
       index = 13;
     }
-  } else if (2.15 < eta && eta < 2.25) {
+  } else if (2.3 < eta && eta < 2.4) {
     if (relX > 0) {
       index = 14;
     } else {
       index = 15;
     }
-  } else if (2.25 < eta && eta < 2.35) {
+  } else if (2.4 < eta && eta < 2.5) {
     if (relX > 0) {
       index = 16;
     } else {
       index = 17;
     }
-  } else if (2.35 < eta && eta < 2.6) {
+  } else if (2.5 < eta && eta < 2.7) {
     index = 18;
-  } else if (2.6 < eta && eta < 2.8) {
+  } else if (2.7 < eta && eta < 2.9) {
     index = 19;
-  } else if (2.8 < eta) {
+  } else if (2.9 < eta) {
     index = 20;
   } else {
     index = 0;
@@ -302,61 +302,61 @@ G4int ATLHECTBSignalCalculator::IndexL4(const G4double& eta,
                                         const G4double& relX) {
   G4int index;
 
-  if (1.5 < eta && eta < 1.55) {
+  if (1.7 < eta && eta < 1.8) {
     if (relX > 0) {
       index = 0;
     } else {
       index = 1;
     }
-  } else if (1.55 < eta && eta < 1.65) {
+  } else if (1.8 < eta && eta < 1.9) {
     if (relX > 0) {
       index = 2;
     } else {
       index = 3;
     }
-  } else if (1.65 < eta && eta < 1.75) {
+  } else if (1.9 < eta && eta < 2.0) {
     if (relX > 0) {
       index = 4;
     } else {
       index = 5;
     }
-  } else if (1.75 < eta && eta < 1.85) {
+  } else if (2.0 < eta && eta < 2.1) {
     if (relX > 0) {
       index = 6;
     } else {
       index = 7;
     }
-  } else if (1.85 < eta && eta < 1.95) {
+  } else if (2.1 < eta && eta < 2.2) {
     if (relX > 0) {
       index = 8;
     } else {
       index = 9;
     }
-  } else if (1.95 < eta && eta < 2.05) {
+  } else if (2.2 < eta && eta < 2.3) {
     if (relX > 0) {
       index = 10;
     } else {
       index = 11;
     }
-  } else if (2.05 < eta && eta < 2.15) {
+  } else if (2.3 < eta && eta < 2.4) {
     if (relX > 0) {
       index = 12;
     } else {
       index = 13;
     }
-  } else if (2.15 < eta && eta < 2.25) {
+  } else if (2.4 < eta && eta < 2.5) {
     if (relX > 0) {
       index = 14;
     } else {
       index = 15;
     }
-  } else if (2.25 < eta && eta < 2.35) {
+  } else if (2.5 < eta && eta < 2.7) {
     index = 16;
-  } else if (2.35 < eta && eta < 2.6) {
+  } else if (2.7 < eta && eta < 2.9) {
     index = 17;
-  } else if (2.6 < eta && eta < 2.8) {
+  } else if (2.9 < eta && eta < 3.1) {
     index = 18;
-  } else if (2.8 < eta) {
+  } else if (3.1 < eta) {
     index = 19;
   } else {
     index = 0;
