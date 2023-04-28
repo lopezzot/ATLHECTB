@@ -320,7 +320,7 @@ class Test(BaseParser):
             # Response
             #
             respxfitmin = response.GetMean()-1.5*response.GetStdDev()
-            respxfitmax = response.GetMean()+0.5*response.GetStdDev()
+            respxfitmax = response.GetMean()+1.5*response.GetStdDev()
             F1Response = TF1("rgaus", "gaus(0)", respxfitmin, respxfitmax)
             response.Fit(F1Response, "QR")
             responses.append(response.GetFunction("rgaus").GetParameter(1))
