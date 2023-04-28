@@ -61,7 +61,7 @@
 The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests to perform Geant4 regression testing, physics lists comparison and validation against test-beam data. It is also an example of how to use a Geant4 application with Geant Val and how to automatically test it using Github Actions. 
 - ⏰ Start date: 11 May 2021 
 - 📌 Status: from v1.0 on ATLHECTB is available for data production, from v2.0 on ATLHECTB is available on Geant Val
-- :page_facing_up: Citation: if you want to use the code read the [LICENSE](https://github.com/lopezzot/ATLHECTB/blob/main/LICENSE) and cite [![DOI:10.3390/instruments6030041](https://zenodo.org/badge/DOI/10.3390/instruments6030041.svg)](https://doi.org/10.3390/instruments6030041)
+- Citation: if you want to use the code read the [LICENSE](https://github.com/lopezzot/ATLHECTB/blob/main/LICENSE) and cite [![DOI:10.3390/instruments6030041](https://zenodo.org/badge/DOI/10.3390/instruments6030041.svg)](https://doi.org/10.3390/instruments6030041)
 
 <!--Authors and contacts-->
 ## Authors and contacts
@@ -71,7 +71,7 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 <!--Documentation and results-->
 ## Documentation and results
 ### Selected articles
-- :page_facing_up: Pezzotti, L.; Kiryunin, A.; Konstantinov, D.; Ribon, A.; Strizenec, P.; on behalf of the Geant4 Collaboration. Including Calorimeter Test Beams in Geant-val—The Physics Validation Testing Suite of Geant4. Instruments 2022, 6, 41.
+- Pezzotti, L.; Kiryunin, A.; Konstantinov, D.; Ribon, A.; Strizenec, P.; on behalf of the Geant4 Collaboration. Including Calorimeter Test Beams in Geant-val—The Physics Validation Testing Suite of Geant4. Instruments 2022, 6, 41.
 [![DOI:10.3390/instruments6030041](https://zenodo.org/badge/DOI/10.3390/instruments6030041.svg)](https://doi.org/10.3390/instruments6030041)
 
 ### Selected presentations
