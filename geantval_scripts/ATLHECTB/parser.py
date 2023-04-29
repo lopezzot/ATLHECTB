@@ -356,6 +356,13 @@ class Test(BaseParser):
                              F3[index]*(depths[2]-L0[index])**2+ 
                              F4[index]*(depths[3]-L0[index])**2)**0.5 )
 
+            #The statistical error on L0 and sigmaL0 associated with different
+            #random seeds was estimated to be of the order of 0.5%
+            #therefore I add +-0.5% of the L0 (sigmaL0) value as statistical error
+            #
+            erL0 = [0.005*x for x in L0]
+            ersigmaL0 = [0.005*x for x in sigmaL0]
+
         print "--->pi- pi/e: " + str(responses) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
         print "--->pi- avg pi/e: " + str(np.mean(responses))
         print "--->pi- resolutions: " + str(resolutions) + " %"
@@ -417,9 +424,9 @@ class Test(BaseParser):
                       xAxisName="<E_{Beam}> [GeV]",
                       yAxisName="L_{0} [cm]",
                       xValues=penergies,
-                      yValues=L0
-                      # yStatErrorsMinus=,
-                      # yStatErrorsPlus=
+                      yValues=L0,
+                      yStatErrorsPlus=erL0,
+                      yStatErrorsMinus=erL0
                       )
 
         # Create JSON output files for sigmaL0 (graph)
@@ -435,9 +442,9 @@ class Test(BaseParser):
                       xAxisName="<E_{Beam}> [GeV]",
                       yAxisName="#sigma_{L} [cm]",
                       xValues=penergies,
-                      yValues=sigmaL0
-                      # yStatErrorsMinus=,
-                      # yStatErrorsPlus=
+                      yValues=sigmaL0,
+                      yStatErrorsPlus=ersigmaL0,
+                      yStatErrorsMinus=ersigmaL0
                       )
 
         # ------------------------------------------------------------
