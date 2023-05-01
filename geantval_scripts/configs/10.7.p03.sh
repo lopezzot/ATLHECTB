@@ -1,7 +1,7 @@
 #!/bin/bash
 
 VERSION="10.7.p03"
-PLATFORM="x86_64-centos7-gcc8-optdeb"
+PLATFORM="x86_64-centos7-gcc8-optdeb-MT"
 
 
 # Geant4 libraries
