@@ -5,39 +5,43 @@
 // \start date: 11 May 2021
 //**************************************************
 
-//Includers from project files
+// Includers from project files
 //
 #include "ATLHECTBActionInitialization.hh"
+
 #include "ATLHECTBDetectorConstruction.hh"
+#include "ATLHECTBEventAction.hh"
 #include "ATLHECTBPrimaryGeneratorAction.hh"
 #include "ATLHECTBRunAction.hh"
-#include "ATLHECTBEventAction.hh"
 #include "ATLHECTBSteppingAction.hh"
 
-//Define constructor
+// Define constructor
 //
-ATLHECTBActionInitialization::ATLHECTBActionInitialization( /*ATLHECTBDetectorConstruction* detConstruction*/ )
-    : G4VUserActionInitialization()//,
-      /*fDetConstruction( detConstruction )*/ 
+ATLHECTBActionInitialization::ATLHECTBActionInitialization(
+  /*ATLHECTBDetectorConstruction* detConstruction*/)
+  : G4VUserActionInitialization()  //,
+/*fDetConstruction( detConstruction )*/
 {}
 
-//Define deconstruction
+// Define deconstruction
 //
 ATLHECTBActionInitialization::~ATLHECTBActionInitialization() {}
 
-//Define Build() and BuildForMaster() methods
+// Define Build() and BuildForMaster() methods
 //
-void ATLHECTBActionInitialization::BuildForMaster() const {
-    auto eventAction = new ATLHECTBEventAction;
-    SetUserAction( new ATLHECTBRunAction( eventAction ) );
+void ATLHECTBActionInitialization::BuildForMaster() const
+{
+  auto eventAction = new ATLHECTBEventAction;
+  SetUserAction(new ATLHECTBRunAction(eventAction));
 }
 
-void ATLHECTBActionInitialization::Build() const {
-    SetUserAction( new ATLHECTBPrimaryGeneratorAction );
-    auto eventAction = new ATLHECTBEventAction;
-    SetUserAction( new ATLHECTBRunAction( eventAction ) );
-    SetUserAction( eventAction );
-    SetUserAction( new ATLHECTBSteppingAction( /*fDetConstruction,*/ eventAction ) ); 
+void ATLHECTBActionInitialization::Build() const
+{
+  SetUserAction(new ATLHECTBPrimaryGeneratorAction);
+  auto eventAction = new ATLHECTBEventAction;
+  SetUserAction(new ATLHECTBRunAction(eventAction));
+  SetUserAction(eventAction);
+  SetUserAction(new ATLHECTBSteppingAction(/*fDetConstruction,*/ eventAction));
 }
 
 //**************************************************
