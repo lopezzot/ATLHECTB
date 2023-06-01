@@ -5,32 +5,31 @@
 // \start date: 11 May 2021
 //**************************************************
 
-//Prevent including header multiple times
+// Prevent including header multiple times
 //
 #ifndef ATLHECTBPrimaryGeneratorAction_h
-#define ATLHECTBPrimaryGeneratorAction_h 1
+#  define ATLHECTBPrimaryGeneratorAction_h 1
 
-//Includers from Geant4
+// Includers from Geant4
 //
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
+#  include "G4VUserPrimaryGeneratorAction.hh"
+#  include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
 
-class ATLHECTBPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
-    
-    public:
-        ATLHECTBPrimaryGeneratorAction();
-        virtual ~ATLHECTBPrimaryGeneratorAction();
+class ATLHECTBPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  public:
+    ATLHECTBPrimaryGeneratorAction();
+    virtual ~ATLHECTBPrimaryGeneratorAction();
 
-        virtual void GeneratePrimaries( G4Event* event );
+    virtual void GeneratePrimaries(G4Event* event);
 
-        void SetRandomFlag( G4bool value ); //to check what this does
+    void SetRandomFlag(G4bool value);  // to check what this does
 
-    private:
-        G4ParticleGun* fParticleGun;
-
+  private:
+    G4ParticleGun* fParticleGun;
 };
 
 #endif

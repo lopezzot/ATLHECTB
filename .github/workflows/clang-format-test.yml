@@ -1,0 +1,35 @@
+name: clang-format-test
+# Workflow CI to check clang-format.
+# Important: it uses clang-format@16 on macos-latest 
+# and the .clang-format file included in the repo,
+# using a different clang-format version might lead
+# to issues.
+on: [push]
+jobs:
+  clang-format-test:
+    runs-on: macos-latest
+    steps:
+      - name: Check trigger 
+        run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: Check runner
+        run: echo "This job is running on ${{ runner.os }}."
+      - name: Check runner OS
+        run: sw_vers -productVersion
+      - name: Check repo and branch
+        run: echo "Branch is ${{ github.ref }} and repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: brew install clang-format@16
+        run: brew install clang-format@16
+      - name: Dump clang-format location and version
+        run: |
+          which clang-format
+          clang-format --version
+      - name: Check clang-format over ATLHEBTB.cc
+        run: clang-format --dry-run --Werror ATLHECTB.cc
+      - name: Check clang-format over include/*.hh
+        run: clang-format --dry-run --Werror include/*.hh
+      - name: Check clang-format over src/*.cc
+        run: clang-format --dry-run --Werror src/*.cc
+      - name: Check job status
+        run: echo "Job is ${{ job.status }}."
