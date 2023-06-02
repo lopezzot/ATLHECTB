@@ -10,6 +10,11 @@
 //
 #include "ATLHECTBActionInitialization.hh"
 #include "ATLHECTBDetectorConstruction.hh"
+#ifdef G4_USE_FLUKA
+// include the FTFP_BERT PL custmized with fluka
+// hadron inelastic process
+#include "G4_CernFLUKAHadronInelastic_FTFP_BERT.hh"
+#endif
 
 // Includers from Geant4
 //
@@ -36,7 +41,6 @@
 // Includers from FLUKAIntegration
 //
 #ifdef G4_USE_FLUKA
-#include "G4_HP_CernFLUKAHadronInelastic_PhysicsList.hh"
 #include "FLUKAParticleTable.hh"
 #endif
 
@@ -165,6 +169,7 @@ int main(int argc, char** argv)
     PrintPLFactoryUsageError::PLFactoryUsageError();
     return 1;
   }
+
 #ifndef G4_USE_FLUKA
   auto physList = physListFactory->GetReferencePhysList(custom_pl);
   physList->RegisterPhysics(new G4StepLimiterPhysics());
@@ -173,7 +178,7 @@ int main(int argc, char** argv)
   // physList->RegisterPhysics(nCut);
   runManager->SetUserInitialization(physList);
 #else
-  auto physList = new G4_HP_CernFLUKAHadronInelastic_PhysicsList();
+  auto physList = new G4_CernFLUKAHadronInelastic_FTFP_BERT;
   runManager->SetUserInitialization(physList);
    // Initialize FLUKA <-> G4 particles conversions tables.
    fluka_particle_table::initialize();
