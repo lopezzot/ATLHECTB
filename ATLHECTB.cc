@@ -33,6 +33,13 @@
 #  include "G4FTFTunings.hh"
 #endif
 
+// Includers from FLUKAIntegration
+//
+#ifdef G4_USE_FLUKA
+#include "G4_HP_CernFLUKAHadronInelastic_PhysicsList.hh"
+#include "FLUKAParticleTable.hh"
+#endif
+
 // Includers from C++ STL
 //
 #include <string>
@@ -158,15 +165,24 @@ int main(int argc, char** argv)
     PrintPLFactoryUsageError::PLFactoryUsageError();
     return 1;
   }
+#ifndef G4_USE_FLUKA
   auto physList = physListFactory->GetReferencePhysList(custom_pl);
   physList->RegisterPhysics(new G4StepLimiterPhysics());
   // auto nCut = new G4NeutronTrackingCut("neutronTrackingCut", 1);
   // nCut->SetTimeLimit(290.*ns);
   // physList->RegisterPhysics(nCut);
   runManager->SetUserInitialization(physList);
+#else
+  auto physList = new G4_HP_CernFLUKAHadronInelastic_PhysicsList();
+  runManager->SetUserInitialization(physList);
+   // Initialize FLUKA <-> G4 particles conversions tables.
+   fluka_particle_table::initialize();
+#endif //#ifndef G4_USE_FLUKA
 
 // Set FTF tunings (only => Geant4-11.1.0)
+// prevent FTF tunings usage when FLUKA is used
 //
+#ifndef G4_USE_FLUKA
 #if G4VERSION_NUMBER >= 1110  // => Geant4-11.1.0
   if (UseFTFTune) {
     auto FTFTunings = G4FTFTunings::Instance();
@@ -183,6 +199,7 @@ int main(int argc, char** argv)
       return 1;
     }
   }
+#endif
 #endif
 
   // ActionInitialization part
