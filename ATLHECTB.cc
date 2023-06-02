@@ -13,7 +13,7 @@
 #ifdef G4_USE_FLUKA
 // include the FTFP_BERT PL custmized with fluka
 // hadron inelastic process
-#include "G4_CernFLUKAHadronInelastic_FTFP_BERT.hh"
+#  include "G4_CernFLUKAHadronInelastic_FTFP_BERT.hh"
 #endif
 
 // Includers from Geant4
@@ -41,7 +41,7 @@
 // Includers from FLUKAIntegration
 //
 #ifdef G4_USE_FLUKA
-#include "FLUKAParticleTable.hh"
+#  include "FLUKAParticleTable.hh"
 #endif
 
 // Includers from C++ STL
@@ -121,7 +121,7 @@ int main(int argc, char** argv)
   }  // end of converting arguments
 
 #ifndef G4_USE_FLUKA
-#if G4VERSION_NUMBER >= 1110  // >= Geant4-11.1.0
+#  if G4VERSION_NUMBER >= 1110  // >= Geant4-11.1.0
   G4bool UseFTFTune = false;
   G4int FTFTuneIndex = 99;
   if (custom_pl.find("tune") != std::string::npos) {
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
     G4cout << "----------> Using FTF alternative tune index: " << FTFTuneIndex
            << " and PL: " << custom_pl << " <----------" << G4endl;
   }
-#endif
+#  endif
 #endif
 
   // Activate interaction mode if no macro card is provided and define UI session
@@ -184,15 +184,15 @@ int main(int argc, char** argv)
 #else
   auto physList = new G4_CernFLUKAHadronInelastic_FTFP_BERT;
   runManager->SetUserInitialization(physList);
-   // Initialize FLUKA <-> G4 particles conversions tables.
-   fluka_particle_table::initialize();
-#endif //#ifndef G4_USE_FLUKA
+  // Initialize FLUKA <-> G4 particles conversions tables.
+  fluka_particle_table::initialize();
+#endif  // #ifndef G4_USE_FLUKA
 
 // Set FTF tunings (only => Geant4-11.1.0)
 // prevent FTF tunings usage when FLUKA is used
 //
 #ifndef G4_USE_FLUKA
-#if G4VERSION_NUMBER >= 1110  // => Geant4-11.1.0
+#  if G4VERSION_NUMBER >= 1110  // => Geant4-11.1.0
   if (UseFTFTune) {
     auto FTFTunings = G4FTFTunings::Instance();
     if (FTFTuneIndex == 0)
@@ -208,7 +208,7 @@ int main(int argc, char** argv)
       return 1;
     }
   }
-#endif
+#  endif
 #endif
 
   // ActionInitialization part
