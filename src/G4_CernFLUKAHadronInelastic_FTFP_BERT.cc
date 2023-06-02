@@ -4,7 +4,7 @@
 // G4_CernFLUKAHadronInelastic_FTFP_BERT class
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
 //          @lopezzot
-// \start date: 2 June 2021
+// \start date: 2 June 2023
 //**************************************************
 
 /*Note:
@@ -42,7 +42,7 @@ FLUKA interface included in geant4-11.1.ref05.
 G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4int ver)
 {
   if (ver > 0) {
-    G4cout << "<<< Geant4 Physics List simulation engine: FTFP_BERT PL customized with "
+    G4cout << "Geant4 Physics List simulation engine: FTFP_BERT PL customized with "
               "FLUKAHadronInelasticPhysicsConstructor"
            << G4endl;
     G4cout << G4endl;
