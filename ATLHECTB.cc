@@ -120,6 +120,7 @@ int main(int argc, char** argv)
     }
   }  // end of converting arguments
 
+#ifndef G4_USE_FLUKA
 #if G4VERSION_NUMBER >= 1110  // >= Geant4-11.1.0
   G4bool UseFTFTune = false;
   G4int FTFTuneIndex = 99;
@@ -132,6 +133,7 @@ int main(int argc, char** argv)
     G4cout << "----------> Using FTF alternative tune index: " << FTFTuneIndex
            << " and PL: " << custom_pl << " <----------" << G4endl;
   }
+#endif
 #endif
 
   // Activate interaction mode if no macro card is provided and define UI session
@@ -164,11 +166,13 @@ int main(int argc, char** argv)
   auto DetConstruction = new ATLHECTBDetectorConstruction();
   runManager->SetUserInitialization(DetConstruction);
 
+#ifndef G4_USE_FLUKA
   auto physListFactory = new G4PhysListFactory;
   if (!physListFactory->IsReferencePhysList(custom_pl)) {  // if custom_pl is not a PLname exit
     PrintPLFactoryUsageError::PLFactoryUsageError();
     return 1;
   }
+#endif
 
 #ifndef G4_USE_FLUKA
   auto physList = physListFactory->GetReferencePhysList(custom_pl);
