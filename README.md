@@ -47,6 +47,7 @@
         <li><a href="#submit-a-job-with-htcondor-on-lxplus">Submit a job with HTCondor on lxplus</a></li>
         <li><a href="#get-atlas-hec-geo-parameters-from-mysql-database">Get ATLAS HEC geo parameters from mysql database</a></li>
         <li><a href="#dump-atlhectb-gdml-geometry-description-file">Dump ATLHECTB GDML geometry description file</a></li>
+        <li><a href="#use-flukacern-hadron-inelastic-process">Use Fluka.Cern hadron inelastic process</a></li>
       </ul>
     </li>
     </li><li><a href="#geant4-and-github-actions">Geant4 and Github Actions</a></li>  
@@ -370,6 +371,34 @@ We support GDML geometry description. By default it is not active, to activate i
       fDumpGDMLgeo(true){}
    ```
 At the first execution, it will create the ATLHECTBgeo.gdml file with the up to date GDML geometry description.
+
+### Use Fluka.Cern hadron inelastic process
+`Geant4-11.1-ref05` introduces a Fluka.Cern interface to use the Fluka.Cern hadron inelastic process in any geant4 application as explained in `examples/extended/hadronic/FlukaCern`. The following are my instructions to use this repo with a customized FTFP_BERT physics list using it. It assumes that cvmfs is mounted.
+1. Install fluka4-3.3
+   ```sh
+   source /cvmfs/sft.cern.ch/lcg/contrib/gcc/10.1.0/x86_64-centos7/setup.sh
+   cd fluka4-3.3 && make -j 4
+   cd src/ && make cpp_headers
+   mkdir /path-to/fluka4-3.3-install && make install DESTDIR=/path-to/fluka4-3.3-install/
+   PATH="/users/lopezzot/fluka4-3.3-install/bin/":$PATH
+   ```
+2. Setup `geant4-11.1.ref05` and compile the fluka interface as in the example
+   ```sh
+   source /cvmfs/geant4.cern.ch/geant4/11.1.ref05/x86_64-centos7-gcc10-optdeb-MT/CMake-setup.sh 
+   source /cvmfs/geant4.cern.ch/geant4/11.1.ref05/x86_64-centos7-gcc10-optdeb-MT/bin/geant4.sh 
+   cd FlukaCern/FlukaInterface/
+   make interface
+   make env
+   source env_FLUKA_G4_interface.sh 
+   ```
+3. Build and execute ATLHECTB
+   ```sh
+   git clone https://github.com/lopezzot/ATLHECTB.git
+   mkdir ATLHECTB-build && cd ATLHECTB-build
+   /cvmfs/sft.cern.ch/lcg/contrib/CMake/3.23.2/Linux-x86_64/bin/cmake -DG4_USE_FLUKA=1 ../ATLHECTB/
+   make
+   ```
+   NOTE: the Fluka.Cern interface can only be used in single-threaded mode.
 
 **[⬆ back to top](#atlhectb)**
 
