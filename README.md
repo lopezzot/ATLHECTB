@@ -398,6 +398,7 @@ At the first execution, it will create the ATLHECTBgeo.gdml file with the up to 
    /cvmfs/sft.cern.ch/lcg/contrib/CMake/3.23.2/Linux-x86_64/bin/cmake -DG4_USE_FLUKA=1 ../ATLHECTB/
    make
    ```
+   NOTE: the Fluka.Cern interface can only be used in single-threaded mode.
 
 **[⬆ back to top](#atlhectb)**
 
