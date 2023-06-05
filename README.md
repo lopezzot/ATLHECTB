@@ -374,7 +374,7 @@ At the first execution, it will create the ATLHECTBgeo.gdml file with the up to 
 
 ### Use Fluka.Cern hadron inelastic process
 `Geant4-11.1-ref05` introduces a Fluka.Cern interface to use the Fluka.Cern hadron inelastic process in any geant4 application as explained in `examples/extended/hadronic/FlukaCern`. The following are my instructions to use this repo with a customized FTFP_BERT physics list using it. It assumes that cvmfs is mounted.
-1. Install fluka4-3.3
+1. Install Fluka.Cern from source code (example with fluka4-3.3)
    ```sh
    source /cvmfs/sft.cern.ch/lcg/contrib/gcc/10.1.0/x86_64-centos7/setup.sh
    cd fluka4-3.3 && make -j 4
