@@ -1,5 +1,5 @@
 # ATLHECTB
-**A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.**
+***A Geant4 simulation of the ATLAS hadronic end-cap calorimeter beam tests.***
 
 ![example workflow](https://github.com/lopezzot/ATLHECTB/actions/workflows/geant4-test.yml/badge.svg)
 ![example workflow](https://github.com/lopezzot/ATLHECTB/actions/workflows/clang-format-test.yml/badge.svg)
