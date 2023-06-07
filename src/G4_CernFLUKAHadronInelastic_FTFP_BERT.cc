@@ -18,6 +18,7 @@ FLUKA interface included in geant4-11.1.ref05.
 // Includers from project files
 //
 #  include "G4_CernFLUKAHadronInelastic_FTFP_BERT.hh"
+
 #  include "FLUKAHadronInelasticPhysics.hh"
 
 // Includers from Geant4
