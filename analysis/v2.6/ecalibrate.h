@@ -1,10 +1,10 @@
 //**************************************************
 // \file ecalibrate.h
-// \brief: Analysis #1 of ATLHECTB v2.5 
+// \brief: Analysis #1 of ATLHECTB v2.6 
 //         for e- channels 
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
 //          @lopezzot
-// \start date: 26 february 2023
+// \start date: 10 July 2023
 //**************************************************
 
 #ifndef ecalibrate_H
