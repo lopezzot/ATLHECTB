@@ -18,7 +18,7 @@
 #include "ecalibrate.h"
 #include "picalibrate.h"
 
-void ATLHECTBanalysis1_v2p5(){
+void ATLHECTBanalysis1_v2p6(){
      
     // Analysis of e- data
     // energies 20, 40, 50, 80, 100, 119.1, 147.8 GeV
