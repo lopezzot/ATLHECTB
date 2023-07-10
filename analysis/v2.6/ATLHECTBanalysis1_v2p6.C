@@ -1,6 +1,6 @@
 //**************************************************
 // \file ATLHECTBanalysis1_v2p6.C
-// \brief: Analysis #1 of ATLHECTB v2.5 
+// \brief: Analysis #1 of ATLHECTB v2.6 
 // \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
 //          @lopezzot
 // \start date: 5 July 2023
