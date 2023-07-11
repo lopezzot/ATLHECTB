@@ -28,7 +28,7 @@ void ATLHECTBanalysis1_v2p6(){
     for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    emanalysis( emenergies, emfiles );
+    //emanalysis( emenergies, emfiles );
 
     //Reconstrcuted energies for em runs (G4.11.1.ref05, v2.6)
     //For missing energy points (30, 60, 120, 180 and 200 GeV) using 0.99*beamenergy
@@ -43,7 +43,7 @@ void ATLHECTBanalysis1_v2p6(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //pianalysis( pienergies, pifiles, recemenergies );
+    pianalysis( pienergies, pifiles, recemenergies );
 
     //Analysis to select channels for pi- analysis
     //
