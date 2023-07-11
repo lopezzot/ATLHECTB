@@ -226,8 +226,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
             //Using SF from emanalysis for calibration
             //
             //H1Response->Fill( (addchannels / pienergies[RunNo])/44.88); //pi/e
-            H1Response->Fill( (addchannels / recemenergies[RunNo])/49.2432 ); //updated for v2.6 G411.1.ref05 using SampFraction 
-            H1Recenergy->Fill( addchannels /49.2432 ); //updated for v2.6 G411.1.ref05 using SampFraction 
+            H1Response->Fill( (addchannels / recemenergies[RunNo])/44.9565 ); //updated for v2.6 G411.1.ref05 using SampFraction 
+            H1Recenergy->Fill( addchannels /44.9565 ); //updated for v2.6 G411.1.ref05 using SampFraction 
         } //end for loop events
 
         energies[RunNo] = pienergies[RunNo];
@@ -407,7 +407,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASresponse->SetMarkerStyle(8);
     G1ATLASresponse->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1ATLASresponse->GetYaxis()->SetTitle("#pi/e");
-    G1ATLASresponse->GetYaxis()->SetRangeUser(0.75,0.9);
+    G1ATLASresponse->GetYaxis()->SetRangeUser(0.7,0.9);
     G1ATLASresponse->GetXaxis()->SetRangeUser(0.,220.);
     G1ATLASresponse->SetTitle("");
     G1ATLASresponse->SetName("pi-ATLASresponse");
@@ -818,7 +818,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     delete outputfile;
     // Final print out
     //
-    double k;
+    double k = 0.;
     for (unsigned int i = 0; i<pienergies.size(); i++){
         k += responses[i];
     }
