@@ -33,7 +33,7 @@ void ATLHECTBanalysis1_v2p6(){
     //Reconstrcuted energies for em runs (G4.11.1.ref05, v2.6)
     //For missing energy points (30, 60, 120, 180 and 200 GeV) using 0.99*beamenergy
     //
-    vector<double> recemenergies = {19.8678,0.99*30.,39.7708,49.7229,0.99*60.,79.5503,99.4456,118.41,146.933,0.99*180.,0.99*200}; //**Updated (G4.11.1.ref05 v2.6) **
+    vector<double> recemenergies = {19.833,0.99*30.,39.6916,49.6423,0.99*60.,79.418,99.2707,118.209,146.685,0.99*180.,0.99*200}; //**Updated (G4.11.1.ref05 v2.6) **
 
     // Analysis of pi- data
     // energies 20, 30, 40, 50, 60, 80, 100, 120, 150, 180, 200 GeV
