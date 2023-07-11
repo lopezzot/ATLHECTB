@@ -35,7 +35,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<emenergies[RunNo]<<endl;  
         //Initiate objects through single Run
         //   
-        string filename = "Data1/"+emfiles[RunNo];
+        string filename = "FLUKAComparison/FTFP_BERT_v2.6/"+emfiles[RunNo];
         double energy = emenergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
@@ -167,7 +167,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             // average response 
 	    //
             H1Response->Fill( addchannels / (edep/1000.) ); 
-            H1Recenergy->Fill( (addchannels / 44.88) ); //updated for v2.5 G410.7.1 using SampFraction 
+            H1Recenergy->Fill( (addchannels / 49.2432) ); //updated for v2.6 G411.1.ref05 using SampFraction 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
