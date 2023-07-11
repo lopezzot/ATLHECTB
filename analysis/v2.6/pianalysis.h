@@ -226,8 +226,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
             //Using SF from emanalysis for calibration
             //
             //H1Response->Fill( (addchannels / pienergies[RunNo])/44.88); //pi/e
-            H1Response->Fill( (addchannels / recemenergies[RunNo])/44.88); //pi/e
-            H1Recenergy->Fill( addchannels /44.88);
+            H1Response->Fill( (addchannels / recemenergies[RunNo])/49.2432 ); //updated for v2.6 G411.1.ref05 using SampFraction 
+            H1Recenergy->Fill( addchannels /49.2432 ); //updated for v2.6 G411.1.ref05 using SampFraction 
         } //end for loop events
 
         energies[RunNo] = pienergies[RunNo];
