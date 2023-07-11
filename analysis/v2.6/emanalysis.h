@@ -266,7 +266,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     Sampfractionlegend->SetLineWidth(0);
     //Sampfractionlegend->SetHeader("Sampling fraction e-", "C");
     Sampfractionlegend->AddEntry(G1Sampfraction,
-            "#splitline{ATLHECTB v2.5 }{Geant4.11.1.ref05 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v2.6 }{Geant4.11.1.ref05 FTFP_BERT }","ep");
     Sampfractionlegend->Draw("same");
     C1Sampfraction->Write();
     delete C1Sampfraction;
@@ -336,7 +336,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     legend->AddEntry(G1ATLASenres,
         "#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}", "ep");
     legend->AddEntry(G1energyresolution,
-            "#splitline{ATLHECTB v2.5 }{Geant4.11.1.ref05 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v2.6 }{Geant4.11.1.ref05 FTFP_BERT }","ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
     p2->cd();
