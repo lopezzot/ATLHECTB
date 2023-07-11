@@ -167,7 +167,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
             // average response 
 	    //
             H1Response->Fill( addchannels / (edep/1000.) ); 
-            H1Recenergy->Fill( (addchannels / 49.2432) ); //updated for v2.6 G411.1.ref05 using SampFraction 
+            H1Recenergy->Fill( (addchannels / 44.9565) ); //updated for v2.6 G411.1.ref05 using SampFraction 
         } //end for loop events
 
         energies[RunNo] = emenergies[RunNo];
@@ -266,7 +266,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     Sampfractionlegend->SetLineWidth(0);
     //Sampfractionlegend->SetHeader("Sampling fraction e-", "C");
     Sampfractionlegend->AddEntry(G1Sampfraction,
-            "#splitline{ATLHECTB v2.5 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v2.5 }{Geant4.11.1.ref05 FTFP_BERT }","ep");
     Sampfractionlegend->Draw("same");
     C1Sampfraction->Write();
     delete C1Sampfraction;
@@ -336,7 +336,7 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
     legend->AddEntry(G1ATLASenres,
         "#splitline{ATLAS HEC }{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}", "ep");
     legend->AddEntry(G1energyresolution,
-            "#splitline{ATLHECTB v2.5 }{Geant4.10.7.p01 FTFP_BERT }","ep");
+            "#splitline{ATLHECTB v2.5 }{Geant4.11.1.ref05 FTFP_BERT }","ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
     p2->cd();
@@ -367,15 +367,15 @@ void emanalysis( const vector<double>& emenergies, const vector<string>& emfiles
 
     // Final print out
     //
-    double k;
+    double k = 0.;
     for (unsigned int i = 0; i<emenergies.size(); i++){
         k += responses[i];
     }
-    double r;
+    double r = 0.;
     for (unsigned int i = 0; i<emenergies.size(); i++){
 	r += Sampfraction[i];
     }
-		
+
     cout<<"->Average sampling fraction to e-: "<<r/double(emenergies.size())<<"%"<<endl;
     cout<<"->Average response to e-: "<<k/double(emenergies.size())<<" a.u./GeV"<<endl;
     cout<<"->Reconstructed energies for 20,40,50,80,100,119.1,147.8 GeV e-: "<<endl;
