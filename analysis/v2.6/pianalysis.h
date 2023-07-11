@@ -42,7 +42,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<pienergies[RunNo]<<endl;  
         //Initiate objects through single Run
         //   
-        string filename = "Data1/"+pifiles[RunNo];
+        string filename = "FLUKAComparison/FTFP_BERT_v2.6/"+pifiles[RunNo];
         double energy = pienergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
@@ -359,7 +359,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     Freslegend->AddEntry(G1energyresolution,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     Freslegend->SetLineWidth(0);
     Freslegend->Draw("same");
@@ -424,7 +424,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     legend->AddEntry(G1responses,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     legend->SetLineWidth(0);
     legend->Draw("same");
@@ -493,7 +493,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     F1legend->AddEntry(G1F1,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F1legend->SetLineWidth(0);
     F1legend->Draw("same");
@@ -551,7 +551,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     F2legend->AddEntry(G1F2,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F2legend->SetLineWidth(0);
     F2legend->Draw("same");
@@ -610,7 +610,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     F3legend->AddEntry(G1F3,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F3legend->SetLineWidth(0);
     F3legend->Draw("same");
@@ -670,7 +670,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     F4legend->AddEntry(G1F4,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     F4legend->SetLineWidth(0);
     F4legend->Draw("same");
@@ -735,7 +735,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     L0legend->AddEntry(G1L0,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     L0legend->SetLineWidth(0);
     L0legend->Draw("same");
@@ -790,7 +790,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     sigmaL0legend->AddEntry(G1sigmaL0,
-    "#splitline{ATLHECTB v2.5 }{#splitline{Geant4.10.7.p01 FTFP_BERT }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     sigmaL0legend->SetLineWidth(0);
     sigmaL0legend->Draw("same");
