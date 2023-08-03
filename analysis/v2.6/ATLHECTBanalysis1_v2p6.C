@@ -17,8 +17,10 @@
 #include "pianalysis.h"
 #include "ecalibrate.h"
 #include "picalibrate.h"
+#include "FLUKA_comparison.h"
 
 void ATLHECTBanalysis1_v2p6(){
+    bool FLUKA_Comparison = true; //Set to true to compare with FLUKA
      
     // Analysis of e- data
     // energies 20, 40, 50, 80, 100, 119.1, 147.8 GeV
@@ -43,7 +45,14 @@ void ATLHECTBanalysis1_v2p6(){
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    pianalysis( pienergies, pifiles, recemenergies );
+    if (FLUKA_Comparison) {
+        pianalysis(pienergies, pifiles, recemenergies, false);
+        pianalysis(pienergies, pifiles, recemenergies, true);
+        FLUKA_comparison();
+    }
+    else {
+        pianalysis( pienergies, pifiles, recemenergies, false);
+    }
 
     //Analysis to select channels for pi- analysis
     //
