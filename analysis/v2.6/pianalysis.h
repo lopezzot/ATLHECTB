@@ -377,7 +377,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     
     if (FLUKA) {
     Freslegend->AddEntry(G1energyresolution,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
@@ -452,7 +452,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "ep");
     if (FLUKA) {
     Freslegend->AddEntry(G1responses,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
@@ -530,7 +530,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "ep");
     if (FLUKA) {
     F1legend->AddEntry(G1F1,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
@@ -595,7 +595,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "ep");
     if (FLUKA) {
     F2legend->AddEntry(G1F2,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
@@ -661,7 +661,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "ep");
     if (FLUKA) {
     F3legend->AddEntry(G1F3,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
@@ -728,7 +728,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "ep");
     if (FLUKA) {
     F4legend->AddEntry(G1F4,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
@@ -803,7 +803,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "ep");
     if (FLUKA) {
     L0legend->AddEntry(G1L0,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
@@ -870,7 +870,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "ep");
     if (FLUKA) {
     sigmaL0legend->AddEntry(G1sigmaL0,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA }{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
