@@ -1,8 +1,8 @@
 //**************************************************
-// \file pianalysis.h
+// \file FLUKA_comparison.h
 // \brief: Analysis #1 of ATLHECTB v2.6 
 //         for pi-   
-// \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
+// \author: Michele D'Andrea (CERN EP-SFT-sim)
 //          @lopezzot
 // \start date: 3 August 2023
 //**************************************************
@@ -21,27 +21,23 @@ void FLUKA_comparison(){
     //Energy resolution plot------------------------------------------
     //
     //#######---------Importing data from files-----------#######
+    auto FLUKA_file = new TFile("ATLHECTBanalysispi_FLUKA.root");
+    auto G4_file = new TFile("ATLHECTBanalysispi.root");
     
     //------FLUKA & RATIO---------
-    auto G4_EnergyRes_fluka_file = new TFile("ATLHECTBanalysispi_FLUKA.root");
-    auto FLUKA_EnergyRes = (TGraphErrors*)G4_EnergyRes_fluka_file->Get("piMinus_energyresolution");
+    auto FLUKA_EnergyRes = (TGraphErrors*)FLUKA_file->Get("piMinus_energyresolution");
     FLUKA_EnergyRes -> SetMarkerColor(kCyan -3);
     FLUKA_EnergyRes -> SetLineColor(kCyan -3);
-    auto FLUKA_EnergyRes_ratio = (TGraphErrors*)G4_EnergyRes_fluka_file->Get("piMinus_ATLASenergyresolutionRatio");
+    auto FLUKA_EnergyRes_ratio = (TGraphErrors*)FLUKA_file->Get("piMinus_ATLASenergyresolutionRatio");
     FLUKA_EnergyRes_ratio -> SetMarkerColor(kCyan -3);
     FLUKA_EnergyRes_ratio -> SetLineColor(kCyan -3);
-    G4_EnergyRes_fluka_file->Close();
 
     //------G4.11.1.ref05 / ATLAS & RATIO---------
-    auto G4_EnergyRes_file = new TFile("ATLHECTBanalysispi.root");
-    auto G4_EnergyRes = (TGraphErrors*)G4_EnergyRes_file->Get("piMinus_energyresolution");
-    G4_EnergyRes -> SetMarkerColor(kRed);
-    G4_EnergyRes -> SetLineColor(kRed);
-    auto ATLAS_EnergyRes = (TGraphErrors*)G4_EnergyRes_file->Get("piMinus_ATLASenergyresolution");
-    auto G4_EnergyRes_ratio = (TGraphErrors*)G4_EnergyRes_file->Get("piMinus_ATLASenergyresolutionRatio");
+    auto G4_EnergyRes = (TGraphErrors*)G4_file->Get("piMinus_energyresolution");
+    auto ATLAS_EnergyRes = (TGraphErrors*)G4_file->Get("piMinus_ATLASenergyresolution");
+    auto G4_EnergyRes_ratio = (TGraphErrors*)G4_file->Get("piMinus_ATLASenergyresolutionRatio");
     G4_EnergyRes_ratio -> SetMarkerColor(kRed);
     G4_EnergyRes_ratio -> SetLineColor(kRed);
-    G4_EnergyRes_file->Close();
 
     outputfile->cd();
 
@@ -65,7 +61,7 @@ void FLUKA_comparison(){
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     Freslegend->AddEntry(FLUKA_EnergyRes,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA 2011.2c.7}{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH}{w/ Birks Law}}",
     "ep");
     Freslegend->SetLineWidth(0);
     Freslegend->Draw("same");
@@ -75,7 +71,7 @@ void FLUKA_comparison(){
     FLUKA_EnergyRes_ratio->Draw("same P");
 
     C1res->Write();
-    C1res->SaveAs("plots/piMinus_EnergyRes_Comparison.pdf");
+    //C1res->SaveAs("plots/piMinus_EnergyRes_Comparison.pdf");
     delete p1res, p2res;
     delete G4_EnergyRes, ATLAS_EnergyRes, FLUKA_EnergyRes, G4_EnergyRes_ratio, FLUKA_EnergyRes_ratio;
     delete C1res;
@@ -85,25 +81,19 @@ void FLUKA_comparison(){
     //#######---------Importing data from files-----------#######
 
     //------FLUKA & RATIO---------
-    auto G4_Response_fluka_file = new TFile("ATLHECTBanalysispi_FLUKA.root");
-    auto FLUKA_Response = (TGraphErrors*)G4_Response_fluka_file->Get("piMinus_responses");
+    auto FLUKA_Response = (TGraphErrors*)FLUKA_file->Get("piMinus_responses");
     FLUKA_Response -> SetMarkerColor(kCyan -3);
     FLUKA_Response -> SetLineColor(kCyan -3);
-    auto FLUKA_Response_ratio = (TGraphErrors*)G4_Response_fluka_file->Get("piMinus_ATLASresponseRatio");
+    auto FLUKA_Response_ratio = (TGraphErrors*)FLUKA_file->Get("piMinus_ATLASresponseRatio");
     FLUKA_Response_ratio -> SetMarkerColor(kCyan -3);
     FLUKA_Response_ratio -> SetLineColor(kCyan -3);
-    G4_Response_fluka_file->Close();
 
     //------G4.11.1.ref05 / ATLAS & RATIO---------
-    auto G4_Response_file = new TFile("ATLHECTBanalysispi.root");
-    auto G4_Response = (TGraphErrors*)G4_Response_file->Get("piMinus_responses");
-    G4_Response -> SetMarkerColor(kRed);
-    G4_Response -> SetLineColor(kRed);
-    auto ATLAS_Response = (TGraphErrors*)G4_Response_file->Get("piMinus_ATLASresponse");
-    auto G4_Response_ratio = (TGraphErrors*)G4_Response_file->Get("piMinus_ATLASresponseRatio");
+    auto G4_Response = (TGraphErrors*)G4_file->Get("piMinus_responses");
+    auto ATLAS_Response = (TGraphErrors*)G4_file->Get("piMinus_ATLASresponse");
+    auto G4_Response_ratio = (TGraphErrors*)G4_file->Get("piMinus_ATLASresponseRatio");
     G4_Response_ratio -> SetMarkerColor(kRed);
     G4_Response_ratio -> SetLineColor(kRed);
-    G4_Response_file->Close();
     
     outputfile->cd();
 
@@ -127,7 +117,7 @@ void FLUKA_comparison(){
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     Fresplegend->AddEntry(FLUKA_Response,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA 2011.2c.7}{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH}{w/ Birks Law}}",
     "ep");
     Fresplegend->SetLineWidth(0);
     Fresplegend->Draw("same");
@@ -137,7 +127,7 @@ void FLUKA_comparison(){
     FLUKA_Response_ratio->Draw("same P");
 
     C1resp->Write();
-    C1resp->SaveAs("plots/piMinus_Response_Comparison.pdf");
+    //C1resp->SaveAs("plots/piMinus_Response_Comparison.pdf");
     delete p1resp, p2resp;
     delete G4_Response, ATLAS_Response, FLUKA_Response, G4_Response_ratio, FLUKA_Response_ratio;
     delete C1resp;
@@ -147,25 +137,20 @@ void FLUKA_comparison(){
     //#######---------Importing data from files-----------#######
 
     //------FLUKA & RATIO---------
-    auto G4_L0_fluka_file = new TFile("ATLHECTBanalysispi_FLUKA.root");
-    auto FLUKA_L0 = (TGraphErrors*)G4_L0_fluka_file->Get("piMinus_L0");
+    auto FLUKA_L0 = (TGraphErrors*)FLUKA_file->Get("piMinus_L0");
     FLUKA_L0 -> SetMarkerColor(kCyan -3);
     FLUKA_L0 -> SetLineColor(kCyan -3);
-    auto FLUKA_L0_ratio = (TGraphErrors*)G4_L0_fluka_file->Get("piMinus_ATLASL0Ratio");
+    auto FLUKA_L0_ratio = (TGraphErrors*)FLUKA_file->Get("piMinus_ATLASL0Ratio");
     FLUKA_L0_ratio -> SetMarkerColor(kCyan -3);
     FLUKA_L0_ratio -> SetLineColor(kCyan -3);
-    G4_L0_fluka_file->Close();
 
     //------G4.11.1.ref05 / ATLAS & RATIO---------
-    auto G4_L0_file = new TFile("ATLHECTBanalysispi.root");
-    auto G4_L0 = (TGraphErrors*)G4_L0_file->Get("piMinus_L0");
-    G4_L0 -> SetMarkerColor(kRed);
-    G4_L0 -> SetLineColor(kRed);
-    auto ATLAS_L0 = (TGraphErrors*)G4_L0_file->Get("piMinus_ATLASL0");
-    auto G4_L0_ratio = (TGraphErrors*)G4_L0_file->Get("piMinus_ATLASL0Ratio");
+    //auto G4_L0_file = new TFile("ATLHECTBanalysispi.root");
+    auto G4_L0 = (TGraphErrors*)G4_file->Get("piMinus_L0");
+    auto ATLAS_L0 = (TGraphErrors*)G4_file->Get("piMinus_ATLASL0");
+    auto G4_L0_ratio = (TGraphErrors*)G4_file->Get("piMinus_ATLASL0Ratio");
     G4_L0_ratio -> SetMarkerColor(kRed);
     G4_L0_ratio -> SetLineColor(kRed);
-    G4_L0_file->Close();
 
     outputfile->cd();
 
@@ -189,7 +174,7 @@ void FLUKA_comparison(){
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     FL0legend->AddEntry(FLUKA_L0,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA 2011.2c.7}{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH}{w/ Birks Law}}",
     "ep");
     FL0legend->SetLineWidth(0);
     FL0legend->Draw("same");
@@ -199,7 +184,7 @@ void FLUKA_comparison(){
     FLUKA_L0_ratio->Draw("same P");
 
     C1L0->Write();
-    C1L0->SaveAs("plots/piMinus_L0_Comparison.pdf");
+    //C1L0->SaveAs("plots/piMinus_L0_Comparison.pdf");
     delete p1L0, p2L0;
     delete G4_L0, ATLAS_L0, FLUKA_L0, G4_L0_ratio, FLUKA_L0_ratio;
     delete C1L0;
@@ -209,25 +194,20 @@ void FLUKA_comparison(){
     //#######---------Importing data from files-----------#######
 
     //------FLUKA & RATIO---------
-    auto G4_sigmaL0_fluka_file = new TFile("ATLHECTBanalysispi_FLUKA.root");
-    auto FLUKA_sigmaL0 = (TGraphErrors*)G4_sigmaL0_fluka_file->Get("piMinus_sigmaL0");
+    auto FLUKA_sigmaL0 = (TGraphErrors*)FLUKA_file->Get("piMinus_sigmaL0");
     FLUKA_sigmaL0 -> SetMarkerColor(kCyan -3);
     FLUKA_sigmaL0 -> SetLineColor(kCyan -3);
-    auto FLUKA_sigmaL0_ratio = (TGraphErrors*)G4_sigmaL0_fluka_file->Get("piMinus_ATLASsigmaL0Ratio");
+    auto FLUKA_sigmaL0_ratio = (TGraphErrors*)FLUKA_file->Get("piMinus_ATLASsigmaL0Ratio");
     FLUKA_sigmaL0_ratio -> SetMarkerColor(kCyan -3);
     FLUKA_sigmaL0_ratio -> SetLineColor(kCyan -3);
-    G4_sigmaL0_fluka_file->Close();
 
     //------G4.11.1.ref05 / ATLAS & RATIO---------
-    auto G4_sigmaL0_file = new TFile("ATLHECTBanalysispi.root");
-    auto G4_sigmaL0 = (TGraphErrors*)G4_sigmaL0_file->Get("piMinus_sigmaL0");
-    G4_sigmaL0 -> SetMarkerColor(kRed);
-    G4_sigmaL0 -> SetLineColor(kRed);
-    auto ATLAS_sigmaL0 = (TGraphErrors*)G4_sigmaL0_file->Get("piMinus_ATLASsigmaL0");
-    auto G4_sigmaL0_ratio = (TGraphErrors*)G4_sigmaL0_file->Get("piMinus_ATLASsigmaL0Ratio");
+    //auto G4_sigmaL0_file = new TFile("ATLHECTBanalysispi.root");
+    auto G4_sigmaL0 = (TGraphErrors*)G4_file->Get("piMinus_sigmaL0");
+    auto ATLAS_sigmaL0 = (TGraphErrors*)G4_file->Get("piMinus_ATLASsigmaL0");
+    auto G4_sigmaL0_ratio = (TGraphErrors*)G4_file->Get("piMinus_ATLASsigmaL0Ratio");
     G4_sigmaL0_ratio -> SetMarkerColor(kRed);
     G4_sigmaL0_ratio -> SetLineColor(kRed);
-    G4_sigmaL0_file->Close();
 
     outputfile->cd();
 
@@ -251,7 +231,7 @@ void FLUKA_comparison(){
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     FsigmaL0legend->AddEntry(FLUKA_sigmaL0,
-    "#splitline{ATLHECTB v2.6 }{#splitline{FLUKA 2011.2c.7}{w/ Birks Law}}",
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH}{w/ Birks Law}}",
     "ep");
     FsigmaL0legend->SetLineWidth(0);
     FsigmaL0legend->Draw("same");
@@ -261,7 +241,7 @@ void FLUKA_comparison(){
     FLUKA_sigmaL0_ratio->Draw("same P");
 
     C1sigmaL0->Write();
-    C1sigmaL0->SaveAs("plots/piMinus_sigmaL0_Comparison.pdf");
+    //C1sigmaL0->SaveAs("plots/piMinus_sigmaL0_Comparison.pdf");
     delete p1sigmaL0, p2sigmaL0;
     delete G4_sigmaL0, ATLAS_sigmaL0, FLUKA_sigmaL0, G4_sigmaL0_ratio, FLUKA_sigmaL0_ratio;
     delete C1sigmaL0;
@@ -269,7 +249,6 @@ void FLUKA_comparison(){
 
 
     outputfile->Close();
-    delete outputfile;
 
 }
 
