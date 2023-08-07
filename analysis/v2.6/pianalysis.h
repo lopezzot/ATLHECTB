@@ -10,12 +10,18 @@
 #ifndef pianalysis_H
 #define pianalysis_H
 
-void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles, const vector<double>& recemenergies ){
+void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles, const vector<double>& recemenergies, bool FLUKA){
 
     //Initiate objects through all the analysis
     //
     cout<<"ATLHECTB analysis of pi- runs"<<endl;
-    auto outputfile = new TFile( "ATLHECTBanalysispi.root", "RECREATE" );
+    auto outputfile = new TFile();
+    if (FLUKA){
+        outputfile = new TFile( "ATLHECTBanalysispi_FLUKA.root", "RECREATE" );
+    }
+    else {
+        outputfile = new TFile( "ATLHECTBanalysispi.root", "RECREATE" );
+    }
     double energies[pienergies.size()];
     double responses[pienergies.size()];
     double erresponses[pienergies.size()];
@@ -35,14 +41,21 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     double erF4[pienergies.size()];
     double L0[pienergies.size()];
     double sigmaL0[pienergies.size()];
+    string filename = "";
     
     //For loop over Runs (energies)
     //
     for (unsigned int RunNo = 0; RunNo<pifiles.size(); RunNo++ ){
         cout<<"---> Analysis run # "<<RunNo<<", energy(GeV) "<<pienergies[RunNo]<<endl;  
         //Initiate objects through single Run
-        //   
-        string filename = "FLUKAComparison/FTFP_BERT_v2.6/"+pifiles[RunNo];
+        //
+        if (FLUKA){
+            filename = "FLUKAComparison/FLUKA_v2.6/"+pifiles[RunNo];
+        }
+        else {
+            filename = "FLUKAComparison/FTFP_BERT_v2.6/"+pifiles[RunNo];
+        }
+        cout << filename << endl;
         double energy = pienergies[RunNo];
         TFile* file = TFile::Open( filename.c_str(), "READ" );
         TTree* tree = (TTree*)file->Get( "ATLHECTBout" );
@@ -82,51 +95,51 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
 
         //total leak (world+crostat)
         //
-        auto H1Leak = new TH1F("pi-ELeak", "pi-ELeak",
+        auto H1Leak = new TH1F("piMinus_ELeak", "piMinus_ELeak",
                               nBins*10, 0., pienergies[RunNo]/5. );
         //total signal no cuts
         //
-        auto H1TotS = new TH1F("pi-TotS", "pi-TotS",
+        auto H1TotS = new TH1F("piMinus_TotS", "piMinus_TotS",
                               nBins*20, 0., pienergies[RunNo]*100. );
         //total signal no Birks
         //
-        auto H1TotnoBS = new TH1F("pi-noBTotS", "pi-noBTotS",
+        auto H1TotnoBS = new TH1F("piMinus_noBTotS", "piMinus_noBTotS",
                               nBins*20, 0., pienergies[RunNo]*100. );
         //total vis energy deposited
         //
-        auto H1Econt = new TH1F("pi-Econt", "pi-Econt", 
+        auto H1Econt = new TH1F("piMinus_Econt", "piMinus_Econt", 
                               nBins*10, 0., pienergies[RunNo]*2 );
         //total energy (vis+leak)
         //
-        auto H1Etot = new TH1F("pi-Etot", "pi-Etot",
+        auto H1Etot = new TH1F("piMinus_Etot", "piMinus_Etot",
                                nBins*10, 0., pienergies[RunNo]*2 );
         //number of channels over cut
         //
-        auto H1Channels = new TH1I("pi-Channels", "pi-Channels",
+        auto H1Channels = new TH1I("piMinus_Channels", "piMinus_Channels",
                                    88, 0, 88 ); 
         //disribution of signals per channel over cut
         //
-        auto H1Signals = new TH1F("pi-Signals", "pi-Signal",
+        auto H1Signals = new TH1F("piMinus_Signals", "piMinus_Signal",
                                    nBins*2, 0., 5000. );
         //sum of signals over cut
         //
-        auto H1TotCutSignal = new TH1F("pi-CutTotS", "pi-CutTotS",
+        auto H1TotCutSignal = new TH1F("piMinus_CutTotS", "piMinus_CutTotS",
                                       nBins*20, 0., pienergies[RunNo]*100 ); 
         //response
         //
-        auto H1Response = new TH1F("pi-Response","pi-Response",
+        auto H1Response = new TH1F("piMinus_Response","piMinus_Response",
                                    2*150, 0., 1.5 );
         //reconstructed energy
         //
-        auto H1Recenergy = new TH1F( "pi-Reconstructedenergy",
-                "pi-Reconstructedenergy", nBins*10, 0., 200. );
+        auto H1Recenergy = new TH1F( "piMinus_Reconstructedenergy",
+                "piMinus_Reconstructedenergy", nBins*10, 0., 200. );
 
         //F1 fraction of energy first layer, same for F2, F3 and F4
         //
-        auto H1F1 = new TH1F("pi-F1","pi-F1",nBins*80,0.,8000.);
-        auto H1F2 = new TH1F("pi-F2","pi-F2",nBins*80,0.,8000.);
-        auto H1F3 = new TH1F("pi-F3","pi-F3",nBins*80,0.,8000.);
-        auto H1F4 = new TH1F("pi-F4","pi-F4",nBins*80,0.,8000.);
+        auto H1F1 = new TH1F("piMinus_F1","piMinus_F1",nBins*80,0.,8000.);
+        auto H1F2 = new TH1F("piMinus_F2","piMinus_F2",nBins*80,0.,8000.);
+        auto H1F3 = new TH1F("piMinus_F3","piMinus_F3",nBins*80,0.,8000.);
+        auto H1F4 = new TH1F("piMinus_F4","piMinus_F4",nBins*80,0.,8000.);
 
         //For loop over events
         //
@@ -313,8 +326,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1recenergies->SetMarkerStyle(8); 
     G1recenergies->SetMarkerColor(kRed);
     G1recenergies->SetLineColor(kRed);
-    G1recenergies->SetName("pi-recenergies");
-    G1recenergies->SetTitle("pi-recenergies");
+    G1recenergies->SetName("piMinus_recenergies");
+    G1recenergies->SetTitle("piMinus_recenergies");
     G1recenergies->GetYaxis()->SetTitle("#pi / e");
     G1recenergies->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1recenergies->Draw("AP");
@@ -330,8 +343,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1energyresolution->GetYaxis()->SetTitle("#sigma_{0}/E_{0} [%]");
     G1energyresolution->GetYaxis()->SetRangeUser(0.,20.);
     G1energyresolution->GetXaxis()->SetRangeUser(0.,220.);
-    G1energyresolution->SetTitle("pi-energyresolution");
-    G1energyresolution->SetName("pi-energyresolution");
+    G1energyresolution->SetTitle("piMinus_energyresolution");
+    G1energyresolution->SetName("piMinus_energyresolution");
     G1energyresolution->Write();
     double ATLASres[11] = {13.465587044534415,13.465587044534415,11.546558704453442,
                            11.279352226720649,11.060728744939272,10.137651821862349,
@@ -346,7 +359,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASres->GetXaxis()->SetRangeUser(0.,220.);
     G1ATLASres->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1ATLASres->GetYaxis()->SetTitle("#sigma_{0}/E_{0} [%]");
-    auto C1res = new TCanvas("pi-Canvas_resolution", "", 700, 900);
+    G1ATLASres->SetTitle("piMinus_ATLASenergyresolution");    
+    G1ATLASres->SetName("piMinus_ATLASenergyresolution");
+    G1ATLASres->Write();
+    auto C1res = new TCanvas("piMinus_Canvas_resolution", "", 700, 900);
     auto *p2res = new TPad("p2","p2",0.,0.02,1.,0.32); p2res->Draw();
     auto *p1res = new TPad("p1","p1",0.,0.3,1.,1.);  p1res->Draw();
     p1res->cd();
@@ -358,9 +374,18 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     Freslegend->AddEntry(G1ATLASres,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
+    
+    if (FLUKA) {
+    Freslegend->AddEntry(G1energyresolution,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
+    "ep");
+    }
+    else {
     Freslegend->AddEntry(G1energyresolution,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
+    }
+
     Freslegend->SetLineWidth(0);
     Freslegend->Draw("same");
     p2res->cd();
@@ -377,7 +402,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     ratiores->GetYaxis()->SetLabelSize(0.09);ratiores->GetXaxis()->SetLabelSize(0.09);
     ratiores->GetYaxis()->SetTitleSize(0.09);ratiores->GetYaxis()->SetTitleOffset(0.65);
     ratiores->GetYaxis()->SetRangeUser(0.7,1.2);
+    ratiores->SetName("piMinus_ATLASenergyresolutionRatio");
     ratiores->Draw("AP");
+    ratiores->Write();
     C1res->Write();
     delete p1res; delete p2res, delete ratiores;
     delete C1res;
@@ -393,8 +420,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1responses->SetMarkerStyle(8); 
     G1responses->SetMarkerColor(kRed);
     G1responses->SetLineColor(kRed);
-    G1responses->SetName("pi-responses");
-    G1responses->SetTitle("pi-responses");
+    G1responses->SetName("piMinus_responses");
+    G1responses->SetTitle("piMinus_responses");
     G1responses->GetYaxis()->SetTitle("#pi / e");
     G1responses->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     double ATLASresponse[7] = {0.777, 0.796, 0.8026, 0.819, 0.825, 0.829, 0.840};
@@ -410,9 +437,9 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASresponse->GetYaxis()->SetRangeUser(0.7,0.9);
     G1ATLASresponse->GetXaxis()->SetRangeUser(0.,220.);
     G1ATLASresponse->SetTitle("");
-    G1ATLASresponse->SetName("pi-ATLASresponse");
+    G1ATLASresponse->SetName("piMinus_ATLASresponse");
     G1ATLASresponse->Write();
-    auto C1piresponse = new TCanvas("pi-Canvas_response", "", 700, 900);
+    auto C1piresponse = new TCanvas("piMinus_Canvas_response", "", 700, 900);
     auto *p2resp = new TPad("p2","p2",0.,0.02,1.,0.32); p2resp->Draw();
     auto *p1resp = new TPad("p1","p1",0.,0.3,1.,1.);  p1resp->Draw();
     p1resp->cd();
@@ -423,9 +450,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     legend->AddEntry(G1ATLASresponse,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
-    legend->AddEntry(G1responses,
-    "#splitline{ATLHECTB v2.6 }{#splitline{Geant.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
+    if (FLUKA) {
+    Freslegend->AddEntry(G1responses,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
+    }
+    else {
+    Freslegend->AddEntry(G1responses,
+    "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
+    "ep");
+    }
     legend->SetLineWidth(0);
     legend->Draw("same");
     p2resp->cd();
@@ -449,6 +483,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     ratioresp->GetYaxis()->SetTitleOffset(0.65);
     ratioresp->GetYaxis()->SetRangeUser(0.7,1.2);
     ratioresp->Draw("AP");
+    ratioresp->SetName("piMinus_ATLASresponseRatio");
+    ratioresp->Write();
     C1piresponse->Write();
     delete p1resp; delete p2resp; delete ratioresp;
     delete C1piresponse;
@@ -463,8 +499,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1F1->SetMarkerStyle(8); 
     G1F1->SetMarkerColor(kRed);
     G1F1->SetLineColor(kRed);
-    G1F1->SetName("pi-F1");
-    G1F1->SetTitle("pi-F1");
+    G1F1->SetName("piMinus_F1");
+    G1F1->SetTitle("piMinus_F1");
     G1F1->GetYaxis()->SetTitle("Signal Layer 1 / Signal");
     G1F1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F1->Write();
@@ -480,7 +516,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASF1->GetYaxis()->SetRangeUser(0.2,0.4);
     G1ATLASF1->GetYaxis()->SetTitle("Signal Layer 1 / Signal");
     G1ATLASF1->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1F1 = new TCanvas("pi-Canvas_F1", "", 700, 900);
+    auto C1F1 = new TCanvas("piMinus_Canvas_F1", "", 700, 900);
     auto *p2F1 = new TPad("p2","p2",0.,0.02,1.,0.32); p2F1->Draw();
     auto *p1F1 = new TPad("p1","p1",0.,0.3,1.,1.);  p1F1->Draw();
     p1F1->cd();
@@ -492,9 +528,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     F1legend->AddEntry(G1ATLASF1,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
+    if (FLUKA) {
+    F1legend->AddEntry(G1F1,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
+    "ep");
+    }
+    else {
     F1legend->AddEntry(G1F1,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
+    }
     F1legend->SetLineWidth(0);
     F1legend->Draw("same");
     p2F1->cd();
@@ -522,8 +565,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1F2->SetMarkerStyle(8); 
     G1F2->SetMarkerColor(kRed);
     G1F2->SetLineColor(kRed);
-    G1F2->SetName("pi-F2");
-    G1F2->SetTitle("pi-F2");
+    G1F2->SetName("piMinus_F2");
+    G1F2->SetTitle("piMinus_F2");
     G1F2->GetYaxis()->SetTitle("F");
     G1F2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F2->Write();
@@ -538,7 +581,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASF2->GetYaxis()->SetRangeUser(0.5,0.6);
     G1ATLASF2->GetYaxis()->SetTitle("Signal Layer 2 / Signal");
     G1ATLASF2->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1F2 = new TCanvas("pi-Canvas_F2", "", 700, 900);
+    auto C1F2 = new TCanvas("piMinus_Canvas_F2", "", 700, 900);
     auto *p2F2 = new TPad("p2","p2",0.,0.02,1.,0.32); p2F2->Draw();
     auto *p1F2 = new TPad("p1","p1",0.,0.3,1.,1.);  p1F2->Draw();
     p1F2->cd();
@@ -550,9 +593,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     F2legend->AddEntry(G1ATLASF2,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
+    if (FLUKA) {
+    F2legend->AddEntry(G1F2,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
+    "ep");
+    }
+    else {
     F2legend->AddEntry(G1F2,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
+    }
     F2legend->SetLineWidth(0);
     F2legend->Draw("same");
     p2F2->cd();
@@ -581,8 +631,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1F3->SetMarkerStyle(8); 
     G1F3->SetMarkerColor(kRed);
     G1F3->SetLineColor(kRed);
-    G1F3->SetName("pi-F3");
-    G1F3->SetTitle("pi-F3");
+    G1F3->SetName("piMinus_F3");
+    G1F3->SetTitle("piMinus_F3");
     G1F3->GetYaxis()->SetTitle("F");
     G1F3->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F3->Write();
@@ -597,7 +647,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASF3->GetYaxis()->SetRangeUser(0.08,0.2);
     G1ATLASF3->GetYaxis()->SetTitle("Signal Layer 3 / Signal");
     G1ATLASF3->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1F3 = new TCanvas("pi-Canvas_F3", "", 700, 900);
+    auto C1F3 = new TCanvas("piMinus_Canvas_F3", "", 700, 900);
     auto *p2F3 = new TPad("p2","p2",0.,0.02,1.,0.32); p2F3->Draw();
     auto *p1F3 = new TPad("p1","p1",0.,0.3,1.,1.);  p1F3->Draw();
     p1F3->cd();
@@ -609,9 +659,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     F3legend->AddEntry(G1ATLASF3,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
+    if (FLUKA) {
+    F3legend->AddEntry(G1F3,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
+    "ep");
+    }
+    else {
     F3legend->AddEntry(G1F3,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
+    }
     F3legend->SetLineWidth(0);
     F3legend->Draw("same");
     p2F3->cd();
@@ -640,8 +697,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1F4->SetMarkerStyle(8); 
     G1F4->SetMarkerColor(kRed);
     G1F4->SetLineColor(kRed);
-    G1F4->SetName("pi-F4");
-    G1F4->SetTitle("pi-F4");
+    G1F4->SetName("piMinus_F4");
+    G1F4->SetTitle("piMinus_F4");
     G1F4->GetYaxis()->SetTitle("F");
     G1F4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1F4->Write();
@@ -658,7 +715,7 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASF4->GetYaxis()->SetRangeUser(0.0,0.06);
     G1ATLASF4->GetYaxis()->SetTitle("Signal Layer4 / Signal");
     G1ATLASF4->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1F4 = new TCanvas("pi-Canvas_F4", "", 700, 900);
+    auto C1F4 = new TCanvas("piMinus_Canvas_F4", "", 700, 900);
     auto *p2 = new TPad("p2","p2",0.,0.02,1.,0.32); p2->Draw();
     auto *p1 = new TPad("p1","p1",0.,0.3,1.,1.);  p1->Draw();
     p1->cd();
@@ -669,9 +726,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     F4legend->AddEntry(G1ATLASF4,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
+    if (FLUKA) {
+    F4legend->AddEntry(G1F4,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
+    "ep");
+    }
+    else {
     F4legend->AddEntry(G1F4,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
+    }
     F4legend->SetLineWidth(0);
     F4legend->Draw("same");
     p2->cd();
@@ -703,8 +767,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1L0->SetMarkerStyle(8); 
     G1L0->SetMarkerColor(kRed);
     G1L0->SetLineColor(kRed);
-    G1L0->SetName("pi-L0");
-    G1L0->SetTitle("pi-L0");
+    G1L0->SetName("piMinus_L0");
+    G1L0->SetTitle("piMinus_L0");
     G1L0->GetYaxis()->SetTitle("L_{0} [cm]");
     G1L0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1L0->Write();
@@ -722,7 +786,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASL0->GetYaxis()->SetRangeUser(42.,62.);
     G1ATLASL0->GetYaxis()->SetTitle("L_{0} [cm]");
     G1ATLASL0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1L0 = new TCanvas("pi-Canvas_L0", "", 700, 900);
+    G1ATLASL0->SetName("piMinus_ATLASL0");
+    G1ATLASL0->SetTitle("piMinus_ATLASL0");
+    G1ATLASL0->Write();
+    auto C1L0 = new TCanvas("piMinus_Canvas_L0", "", 700, 900);
     auto *p2L0 = new TPad("p2","p2",0.,0.02,1.,0.32); p2L0->Draw();
     auto *p1L0 = new TPad("p1","p1",0.,0.3,1.,1.);  p1L0->Draw();
     p1L0->cd();
@@ -734,9 +801,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     L0legend->AddEntry(G1ATLASL0,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
+    if (FLUKA) {
+    L0legend->AddEntry(G1L0,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
+    "ep");
+    }
+    else {
     L0legend->AddEntry(G1L0,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
+    }
     L0legend->SetLineWidth(0);
     L0legend->Draw("same");
     p2L0->cd();
@@ -751,6 +825,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     ratioL0->GetYaxis()->SetTitleSize(0.09); ratioL0->GetYaxis()->SetTitleOffset(0.65);
     ratioL0->GetYaxis()->SetRangeUser(0.8,1.5);
     ratioL0->Draw("AP");
+    ratioL0->SetName("piMinus_ATLASL0Ratio");
+    ratioL0->Write();
     C1L0->Write();
     delete ratioL0; delete p1L0; delete p2L0;
     delete C1L0;
@@ -762,8 +838,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1sigmaL0->SetMarkerStyle(8); 
     G1sigmaL0->SetMarkerColor(kRed);
     G1sigmaL0->SetLineColor(kRed);
-    G1sigmaL0->SetName("pi-sigmaL0");
-    G1sigmaL0->SetTitle("pi-sigmaL0");
+    G1sigmaL0->SetName("piMinus_sigmaL0");
+    G1sigmaL0->SetTitle("piMinus_sigmaL0");
     G1sigmaL0->GetYaxis()->SetTitle("#sigma_{L} [cm]");
     G1sigmaL0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
     G1sigmaL0->Write();
@@ -778,7 +854,10 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     G1ATLASsigmaL0->GetYaxis()->SetRangeUser(30.,38.);
     G1ATLASsigmaL0->GetYaxis()->SetTitle("#sigma_{L} [cm]");
     G1ATLASsigmaL0->GetXaxis()->SetTitle("<E_{Beam}> [GeV]");
-    auto C1sigmaL0 = new TCanvas("pi-Canvas_sigmaL0", "", 700, 900);
+    G1ATLASsigmaL0->SetName("piMinus_ATLASsigmaL0");
+    G1ATLASsigmaL0->SetTitle("piMinus_ATLASsigmaL0");
+    G1ATLASsigmaL0->Write();
+    auto C1sigmaL0 = new TCanvas("piMinus_Canvas_sigmaL0", "", 700, 900);
     auto *p2sigmaL0 = new TPad("p2","p2",0.,0.02,1.,0.32); p2sigmaL0->Draw();
     auto *p1sigmaL0 = new TPad("p1","p1",0.,0.3,1.,1.);  p1sigmaL0->Draw();
     p1sigmaL0->cd();
@@ -789,9 +868,16 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     sigmaL0legend->AddEntry(G1ATLASsigmaL0,
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
+    if (FLUKA) {
+    sigmaL0legend->AddEntry(G1sigmaL0,
+    "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
+    "ep");
+    }
+    else {
     sigmaL0legend->AddEntry(G1sigmaL0,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
+    }
     sigmaL0legend->SetLineWidth(0);
     sigmaL0legend->Draw("same");
     p2sigmaL0->cd();
@@ -808,6 +894,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     ratiosigmaL0->GetYaxis()->SetTitleOffset(0.65);
     ratiosigmaL0->GetYaxis()->SetRangeUser(0.8,1.2);
     ratiosigmaL0->Draw("AP");
+    ratiosigmaL0->SetName("piMinus_ATLASsigmaL0Ratio");
+    ratiosigmaL0->Write();
     C1sigmaL0->Write();
     delete ratiosigmaL0, delete p1sigmaL0, delete p2sigmaL0;
     delete C1sigmaL0;
@@ -822,8 +910,8 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     for (unsigned int i = 0; i<pienergies.size(); i++){
         k += responses[i];
     }
-    cout<<"->Average response to pi-: "<<k/double(pienergies.size())<<" a.u./GeV"<<endl;
-    cout<<"ATLHECTB end of analysis of pi- runs"<<endl;
+    cout<<"->Average response to piMinus_: "<<k/double(pienergies.size())<<" a.u./GeV"<<endl;
+    cout<<"ATLHECTB end of analysis of piMinus_ runs"<<endl;
     
 };
 
