@@ -451,12 +451,12 @@ void pianalysis( const vector<double>& pienergies, const vector<string>& pifiles
     "#splitline{ATLAS HEC}{#splitline{Test beam 2000/2001}{ATL-LARG-PUB-2022-001}}",
     "ep");
     if (FLUKA) {
-    Freslegend->AddEntry(G1responses,
+    legend->AddEntry(G1responses,
     "#splitline{ATLHECTB v2.6 }{#splitline{GH }{w/ Birks Law}}",
     "ep");
     }
     else {
-    Freslegend->AddEntry(G1responses,
+    legend->AddEntry(G1responses,
     "#splitline{ATLHECTB v2.6 }{#splitline{Geant4.11.1.ref05 FTFP_BERT }{w/ Birks Law}}",
     "ep");
     }
