@@ -19,7 +19,7 @@
 #include "picalibrate.h"
 #include "FLUKA_comparison.h"
 
-void ATLHECTBanalysis1_v2p6(bool FLUKA_Comparison){
+void ATLHECTBanalysis1_v2p6(bool FLUKA_Comparison = false){
      
     // Analysis of e- data
     // energies 20, 40, 50, 80, 100, 119.1, 147.8 GeV
@@ -29,7 +29,7 @@ void ATLHECTBanalysis1_v2p6(bool FLUKA_Comparison){
     for ( unsigned int i=11; i<18; i++ ){
         emfiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //emanalysis( emenergies, emfiles );
+    emanalysis( emenergies, emfiles );
 
     //Reconstrcuted energies for em runs (G4.11.1.ref05, v2.6)
     //For missing energy points (30, 60, 120, 180 and 200 GeV) using 0.99*beamenergy
