@@ -3,7 +3,6 @@
 // \brief: Analysis #1 of ATLHECTB v2.6 
 //         for pi-   
 // \author: Michele D'Andrea (CERN EP-SFT-sim)
-//          @lopezzot
 // \start date: 3 August 2023
 //**************************************************
 
@@ -67,6 +66,7 @@ void FLUKA_comparison(){
     Freslegend->Draw("same");
     
     p2res->cd();
+    gPad->SetLeftMargin(0.15);
     G4_EnergyRes_ratio->Draw("AP");
     FLUKA_EnergyRes_ratio->Draw("same P");
 
@@ -123,6 +123,7 @@ void FLUKA_comparison(){
     Fresplegend->Draw("same");
 
     p2resp->cd();
+    gPad->SetLeftMargin(0.15);
     G4_Response_ratio->Draw("AP");
     FLUKA_Response_ratio->Draw("same P");
 
@@ -180,6 +181,7 @@ void FLUKA_comparison(){
     FL0legend->Draw("same");
 
     p2L0->cd();
+    gPad->SetLeftMargin(0.15);
     G4_L0_ratio->Draw("AP");
     FLUKA_L0_ratio->Draw("same P");
 
@@ -237,6 +239,7 @@ void FLUKA_comparison(){
     FsigmaL0legend->Draw("same");
     
     p2sigmaL0->cd();
+    gPad->SetLeftMargin(0.15);
     G4_sigmaL0_ratio->Draw("AP");
     FLUKA_sigmaL0_ratio->Draw("same P");
 
@@ -245,8 +248,6 @@ void FLUKA_comparison(){
     delete p1sigmaL0, p2sigmaL0;
     delete G4_sigmaL0, ATLAS_sigmaL0, FLUKA_sigmaL0, G4_sigmaL0_ratio, FLUKA_sigmaL0_ratio;
     delete C1sigmaL0;
-
-
 
     outputfile->Close();
 
