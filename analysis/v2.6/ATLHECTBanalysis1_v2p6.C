@@ -19,8 +19,7 @@
 #include "picalibrate.h"
 #include "FLUKA_comparison.h"
 
-void ATLHECTBanalysis1_v2p6(){
-    bool FLUKA_Comparison = true; //Set to true to compare with FLUKA
+void ATLHECTBanalysis1_v2p6(bool FLUKA_Comparison){
      
     // Analysis of e- data
     // energies 20, 40, 50, 80, 100, 119.1, 147.8 GeV
