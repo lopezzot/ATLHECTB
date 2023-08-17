@@ -47,7 +47,7 @@ void ATLHECTBanalysis(const string folder,const string version,const string g4ve
     emoutput emdata = emanalysis( emenergies, emfiles, folder, emMClegend );
     //Second call to emanalysis with correct SF value, final plots are
     //now recreated and correct
-    emanalysis( emenergies, emfiles, folder, emMClegend, emdata.avgSF*10. );
+    emdata = emanalysis( emenergies, emfiles, folder, emMClegend, emdata.avgSF*10. );
     emdata.print();
 
     //Reconstrcuted energies for em runs
