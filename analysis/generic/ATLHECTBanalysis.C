@@ -8,6 +8,9 @@
 
 //Usage: root 'ATLHECTBanalysis.C(folderpath/,version,g4version,physicslist)'
 //e.g. root -l 'ATLHECTBanalysis.C("Data1/","2.6","11.1.ref05","FTFP_BERT")'
+//
+//If hadronic data are generated with the Fluka interface add "true"
+//as the last macro argument
 
 //Includers from C++
 //
@@ -21,13 +24,15 @@
 #include "ecalibrate.h"
 #include "picalibrate.h"
 
-void ATLHECTBanalysis(const string folder,const string version,const string g4version,const string pl){
+void ATLHECTBanalysis(const string folder,const string version,const string g4version,const string pl, const bool isFluka=false){
  
     //This is a generic analysis therefore the legend for MC data
     //must be taken as input
     //e.g. "#splitline{ATLHECTB v2.6 }{Geant4.11.1.ref05 FTFP_BERT }"
     //
-    const string MClegend = "#splitline{ATLHECTB "+version+ "}{Geant4-"+g4version+" "+pl+ "}";
+    const string emMClegend = "#splitline{ATLHECTB "+version+ "}{Geant4-"+g4version+" "+pl+ "}";
+    string piMClegend = emMClegend;
+    if(isFluka) piMClegend = "#splitline{ATLHECTB "+version+ "}{FLUKA}";
 
     // Analysis of e- data
     // energies 20, 40, 50, 80, 100, 119.1, 147.8 GeV
@@ -39,11 +44,11 @@ void ATLHECTBanalysis(const string folder,const string version,const string g4ve
     }
     //First call to emanalysis to extract emdata, using dummy 44.95 value for SF
     //will be called again later with correct value
-    emoutput emdata = emanalysis( emenergies, emfiles, folder, MClegend );
-    emdata.print();
+    emoutput emdata = emanalysis( emenergies, emfiles, folder, emMClegend );
     //Second call to emanalysis with correct SF value, final plots are
     //now recreated and correct
-    emanalysis( emenergies, emfiles, folder, MClegend, emdata.avgSF*10. );
+    emanalysis( emenergies, emfiles, folder, emMClegend, emdata.avgSF*10. );
+    emdata.print();
 
     //Reconstrcuted energies for em runs
     //For missing energy points (30, 60, 120, 180 and 200 GeV) using 0.99*beamenergy
@@ -60,7 +65,10 @@ void ATLHECTBanalysis(const string folder,const string version,const string g4ve
     for ( unsigned int i=0; i<11; i++ ){
         pifiles.push_back( "ATLHECTBout_Run"+std::to_string(i)+".root" );
     }
-    //pianalysis( pienergies, pifiles, recemenergies, folder, false);
+    //Last argument is FLUKA(bool). If true assumes the g4-to-fluka interface
+    //was used to generate the data.
+    //
+    pianalysis( pienergies, pifiles, recemenergies, folder, emdata.avgSF*10., piMClegend, isFluka);
 
     //Analysis to select channels for pi- analysis
     //
