@@ -65,7 +65,9 @@ ATLHECTBRunAction::ATLHECTBRunAction(ATLHECTBEventAction* eventAction)
 //
 ATLHECTBRunAction::~ATLHECTBRunAction()
 {
-  // delete G4AnalysisManager::Instance(); //no need to delete AnalysisManager after Geant4-11.0
+#if G4VERSION_NUMBER < 1100
+  delete G4AnalysisManager::Instance();  // not needed for G4 v11 and up
+#endif
 }
 
 // Define BeginOfRunAction() and EndOfRunAction() methods
