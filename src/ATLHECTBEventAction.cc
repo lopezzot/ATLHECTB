@@ -10,7 +10,9 @@
 #include "ATLHECTBEventAction.hh"
 
 #include "ATLHECTBRunAction.hh"
-#include "SpectrumAnalyzer.hh"
+#ifdef ATLHECTB_LEAKANALYSIS
+#  include "SpectrumAnalyzer.hh"
+#endif
 
 // Includers from Geant4
 //
