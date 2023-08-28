@@ -234,6 +234,9 @@ Parser options
    * -t integer: pass number of threads for multi-thread execution (example -t 3, default t=2)
    * -pl Physics_List: select Geant4 physics list (example -pl FTFP_BERT)
    * It is possible to select alternative FTF tunings with PL_tuneID (example -pl FTFP_BERT_tune0) [only for Geant4-11.1.0 or higher]
+
+Custom CMake options
+   * `WITH_LEAKAGEANALYSIS`: if set to `ON` include the usage of the `SpectrumAnalysis` singleton to study the particle leakage (default `OFF`)
 5. (optional) It is possible to install the executable in `bin` under `CMAKE_INSTALL_PREFIX`
    ```sh
    cmake -DCMAKE_INSTALL_PREFIX=/absolute-path-to-installdir/ -DGeant4_DIR=/absolute_path_to/geant4.10.07_p01-install/lib/Geant4-10.7.1/ relative_path_to/ATLHECTB/

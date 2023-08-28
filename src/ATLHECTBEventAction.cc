@@ -10,6 +10,7 @@
 #include "ATLHECTBEventAction.hh"
 
 #include "ATLHECTBRunAction.hh"
+#include "SpectrumAnalyzer.hh"
 
 // Includers from Geant4
 //
@@ -114,6 +115,10 @@ void ATLHECTBEventAction::BeginOfEventAction(const G4Event*)
   for (unsigned int i = 0; i < 20; i++) {
     M3L4BirkeLayer.push_back(0.);
   }
+
+#ifdef ATLHECTB_LEAKANALYSIS
+  SpectrumAnalyzer::GetInstance()->ClearEventFields();
+#endif
 }
 
 void ATLHECTBEventAction::EndOfEventAction(const G4Event*)
@@ -133,6 +138,10 @@ void ATLHECTBEventAction::EndOfEventAction(const G4Event*)
   analysisManager->FillNtupleDColumn(5, elAr);
   analysisManager->FillNtupleDColumn(6, BirkelAr);
   analysisManager->AddNtupleRow();
+
+#ifdef ATLHECTB_LEAKANALYSIS
+  SpectrumAnalyzer::GetInstance()->FillEventFields();
+#endif
 }
 
 //**************************************************

@@ -10,6 +10,7 @@
 #include "ATLHECTBRunAction.hh"
 
 #include "ATLHECTBEventAction.hh"
+#include "SpectrumAnalyzer.hh"
 
 // Includers from Geant4
 //
@@ -59,6 +60,10 @@ ATLHECTBRunAction::ATLHECTBRunAction(ATLHECTBEventAction* eventAction)
   analysisManager->CreateNtupleDColumn("M2L4BirkeLayer", fEventAction->GetM2L4BirkeLayer());
   analysisManager->CreateNtupleDColumn("M3L4BirkeLayer", fEventAction->GetM3L4BirkeLayer());
   analysisManager->FinishNtuple();
+
+#ifdef ATLHECTB_LEAKANALYSIS
+  SpectrumAnalyzer::GetInstance()->CreateNtupleAndScorer("ke");
+#endif
 }
 
 // Define deconstructor
@@ -91,6 +96,10 @@ void ATLHECTBRunAction::EndOfRunAction(const G4Run*)
 
   analysisManager->Write();
   analysisManager->CloseFile();
+
+#ifdef ATLHECTB_LEAKANALYSIS
+  SpectrumAnalyzer::GetInstance()->ClearNtupleID();
+#endif
 }
 
 //**************************************************

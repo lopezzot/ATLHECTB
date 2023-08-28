@@ -1,0 +1,94 @@
+//**************************************************
+// \file SpectrumAnalyzer.cc
+// \brief: Definition of SpectrumAnalyzer class
+// \author: Lorenzo Pezzotti (CERN EP-SFT-sim)
+//          @lopezzot
+// \start date: 28 August 2023
+//**************************************************
+
+// Includers from project files
+//
+#include "SpectrumAnalyzer.hh"
+
+// Includers from Geant4
+//
+#include "G4Version.hh"
+#if G4VERSION_NUMBER < 1100
+#  include "g4root.hh"
+#else
+#  include "G4AnalysisManager.hh"
+#endif
+#include "G4Step.hh"
+
+// #define DEBUG
+
+void SpectrumAnalyzer::CreateNtupleAndScorer(const G4String scName)
+{
+  auto AM = G4AnalysisManager::Instance();
+
+  ntupleID = AM->CreateNtuple("Spectrum", "Spectrum");
+  AM->CreateNtupleDColumn("neutronScore");
+  AM->CreateNtupleDColumn("protonScore");
+  AM->CreateNtupleDColumn("pionScore");
+  AM->CreateNtupleDColumn("gammaScore");
+  AM->CreateNtupleDColumn("electronScore");
+  AM->FinishNtuple();
+
+  // Define scorer type
+  scorerName = scName;
+  if (scorerName == "te") {
+    scorer = GetTE;
+  }
+  if (scorerName == "momentum") {
+    scorer = GetMomentum;
+  }
+  else if (scorerName == "ke") {
+    scorer = GetKE;
+  }
+  else {
+    scorer = GetTE;
+  }  // default case
+}
+
+void SpectrumAnalyzer::FillEventFields() const
+{
+  auto AM = G4AnalysisManager::Instance();
+  AM->FillNtupleDColumn(ntupleID, 0, neutronScore);
+  AM->FillNtupleDColumn(ntupleID, 1, protonScore);
+  AM->FillNtupleDColumn(ntupleID, 2, pionScore);
+  AM->FillNtupleDColumn(ntupleID, 3, gammaScore);
+  AM->FillNtupleDColumn(ntupleID, 4, electronScore);
+  AM->AddNtupleRow(ntupleID);
+}
+
+void SpectrumAnalyzer::Analyze(const G4Step* step)
+{
+  auto PDGID = step->GetTrack()->GetParticleDefinition()->GetPDGEncoding();
+  auto val = scorer(step);
+  if (PDGID == 2112 || PDGID == -2112) {
+    neutronScore += val;
+  }
+  else if (PDGID == 2212 || PDGID == 2212) {
+    protonScore += val;
+  }
+  else if (PDGID == 211 || PDGID == 211) {
+    pionScore += val;
+  }
+  else if (PDGID == 22) {
+    gammaScore += val;
+  }
+  else if (PDGID == -11 || PDGID == 11) {
+    electronScore += val;
+  }
+  else {
+  }
+
+#ifdef DEBUG
+  G4cout << "-->SpectrumAnalyzer::Analyze, scorer name " << scorerName << " " << PDGID << " "
+         << step->GetTrack()->GetParticleDefinition()->GetParticleName() << " Total Energy "
+         << GetTE(step) << " Momentum " << GetMomentum(step) << " Kinetic Energy " << GetKE(step)
+         << G4endl;
+#endif
+}
+
+//**************************************************
