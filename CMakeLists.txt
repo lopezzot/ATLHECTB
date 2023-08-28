@@ -22,6 +22,16 @@ else()
     find_package(Geant4 REQUIRED)
 endif()
 
+#Option to enable leakage particle spectrum analysis
+#
+option(WITH_LEAKAGEANALYSIS "enable SpectrumAnalysis on leakage" OFF)
+if(WITH_LEAKAGEANALYSIS)
+    add_compile_definitions(ATLHECTB_LEAKANALYSIS)
+    message(STATUS "WITH_LEAKAGEANALYSIS = ON : building with ATLHECTB_LEAKANALYSIS compiler definition.")
+else()
+    message(STATUS "WITH_LEAKAGEANALYSIS = OFF : building without ATLHECTB_LEAKANALYSIS compiler definition.")
+endif()
+
 #Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})

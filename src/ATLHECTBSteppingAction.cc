@@ -11,6 +11,7 @@
 
 #include "ATLHECTBDetectorConstruction.hh"
 #include "ATLHECTBEventAction.hh"
+#include "SpectrumAnalyzer.hh"
 
 // Includers from Geant4
 //
@@ -49,6 +50,9 @@ void ATLHECTBSteppingAction::UserSteppingAction(const G4Step* step)
   //
   if (!step->GetTrack()->GetNextVolume()) {
     fEventAction->Addeleak(step->GetTrack()->GetKineticEnergy());
+#ifdef ATLHECTB_LEAKANALYSIS
+    SpectrumAnalyzer::GetInstance()->Analyze(step);
+#endif
   }
 
   // Collect energy deposited in test beam prototype
