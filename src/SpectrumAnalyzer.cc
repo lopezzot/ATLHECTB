@@ -32,6 +32,7 @@ void SpectrumAnalyzer::CreateNtupleAndScorer(const G4String scName)
   AM->CreateNtupleDColumn("pionScore");
   AM->CreateNtupleDColumn("gammaScore");
   AM->CreateNtupleDColumn("electronScore");
+  AM->CreateNtupleDColumn("othersScore");
   AM->FinishNtuple();
 
   // Define scorer type
@@ -58,6 +59,7 @@ void SpectrumAnalyzer::FillEventFields() const
   AM->FillNtupleDColumn(ntupleID, 2, pionScore);
   AM->FillNtupleDColumn(ntupleID, 3, gammaScore);
   AM->FillNtupleDColumn(ntupleID, 4, electronScore);
+  AM->FillNtupleDColumn(ntupleID, 5, othersScore);
   AM->AddNtupleRow(ntupleID);
 }
 
@@ -81,6 +83,7 @@ void SpectrumAnalyzer::Analyze(const G4Step* step)
     electronScore += val;
   }
   else {
+    othersScore += val;
   }
 
 #ifdef DEBUG

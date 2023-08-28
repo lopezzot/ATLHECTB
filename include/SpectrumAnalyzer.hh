@@ -44,7 +44,7 @@ class SpectrumAnalyzer
     inline void ClearEventFields()
     {
       neutronScore = 0.;
-      protonScore = 0., pionScore = 0., gammaScore = 0., electronScore = 0.;
+      protonScore = 0., pionScore = 0., gammaScore = 0., electronScore = 0., othersScore = 0.;
     }
     void FillEventFields() const;
     // Step-wise methods
@@ -63,6 +63,7 @@ class SpectrumAnalyzer
     G4double pionScore;
     G4double gammaScore;
     G4double electronScore;
+    G4double othersScore;
 
     // Scoring quantities
     inline static G4double GetMomentum(const G4Step* step)
