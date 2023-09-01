@@ -18,6 +18,7 @@
 #else
 #  include "G4AnalysisManager.hh"
 #endif
+#include "G4ParticleTable.hh"
 #include "G4Step.hh"
 
 // #define DEBUG
@@ -67,19 +68,31 @@ void SpectrumAnalyzer::Analyze(const G4Step* step)
 {
   auto PDGID = step->GetTrack()->GetParticleDefinition()->GetPDGEncoding();
   auto val = scorer(step);
-  if (PDGID == 2112 || PDGID == -2112) {
+
+  auto pTable = G4ParticleTable::GetParticleTable();
+  const G4int neutronID = pTable->FindParticle("neutron")->GetPDGEncoding();
+  const G4int antineutronID = pTable->FindParticle("anti_neutron")->GetPDGEncoding();
+  const G4int protonID = pTable->FindParticle("proton")->GetPDGEncoding();
+  const G4int antiprotonID = pTable->FindParticle("anti_proton")->GetPDGEncoding();
+  const G4int pionplusID = pTable->FindParticle("pi+")->GetPDGEncoding();
+  const G4int pionminusID = pTable->FindParticle("pi-")->GetPDGEncoding();
+  const G4int electronID = pTable->FindParticle("e-")->GetPDGEncoding();
+  const G4int positronID = pTable->FindParticle("e+")->GetPDGEncoding();
+  const G4int gammaID = pTable->FindParticle("gamma")->GetPDGEncoding();
+
+  if (PDGID == neutronID || PDGID == antineutronID) {
     neutronScore += val;
   }
-  else if (PDGID == 2212 || PDGID == 2212) {
+  else if (PDGID == protonID || PDGID == antiprotonID) {
     protonScore += val;
   }
-  else if (PDGID == 211 || PDGID == 211) {
+  else if (PDGID == pionplusID || PDGID == pionminusID) {
     pionScore += val;
   }
-  else if (PDGID == 22) {
+  else if (PDGID == gammaID) {
     gammaScore += val;
   }
-  else if (PDGID == -11 || PDGID == 11) {
+  else if (PDGID == electronID || PDGID == positronID) {
     electronScore += val;
   }
   else {
