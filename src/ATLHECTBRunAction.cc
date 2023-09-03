@@ -98,10 +98,6 @@ void ATLHECTBRunAction::EndOfRunAction(const G4Run*)
 
   analysisManager->Write();
   analysisManager->CloseFile();
-
-#ifdef ATLHECTB_LEAKANALYSIS
-  SpectrumAnalyzer::GetInstance()->ClearNtupleID();
-#endif
 }
 
 //**************************************************
