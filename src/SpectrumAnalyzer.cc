@@ -41,7 +41,7 @@ void SpectrumAnalyzer::CreateNtupleAndScorer(const G4String scName)
   if (scorerName == "te") {
     scorer = GetTE;
   }
-  if (scorerName == "momentum") {
+  else if (scorerName == "momentum") {
     scorer = GetMomentum;
   }
   else if (scorerName == "ke") {
