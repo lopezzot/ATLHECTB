@@ -10,18 +10,18 @@
 
 // Includers from project files
 //
-#include "SpectrumAnalyzer.hh"
+#  include "SpectrumAnalyzer.hh"
 
 // Includers from Geant4
 //
-#include "G4Version.hh"
-#if G4VERSION_NUMBER < 1100
-#  include "g4root.hh"
-#else
-#  include "G4AnalysisManager.hh"
-#endif
-#include "G4ParticleTable.hh"
-#include "G4Step.hh"
+#  include "G4Version.hh"
+#  if G4VERSION_NUMBER < 1100
+#    include "g4root.hh"
+#  else
+#    include "G4AnalysisManager.hh"
+#  endif
+#  include "G4ParticleTable.hh"
+#  include "G4Step.hh"
 
 // #define DEBUG
 
@@ -42,19 +42,19 @@ void SpectrumAnalyzer::CreateNtupleAndScorer(const G4String scName)
   scorerName = scName;
   if (scorerName == "te") {
     scorer = GetTE;
-    G4cout<<"SpectrumAnalyzer scoring total energy"<<G4endl;
+    G4cout << "SpectrumAnalyzer scoring total energy" << G4endl;
   }
   else if (scorerName == "momentum") {
     scorer = GetMomentum;
-    G4cout<<"SpectrumAnalyzer scoring momentum"<<G4endl;
+    G4cout << "SpectrumAnalyzer scoring momentum" << G4endl;
   }
   else if (scorerName == "ke") {
     scorer = GetKE;
-    G4cout<<"SpectrumAnalyzer scoring kinetic energy"<<G4endl;
+    G4cout << "SpectrumAnalyzer scoring kinetic energy" << G4endl;
   }
   else {
     scorer = GetTE;
-    G4cout<<"SpectrumAnalyzer scoring total energy"<<G4endl;
+    G4cout << "SpectrumAnalyzer scoring total energy" << G4endl;
   }  // default case
 }
 
@@ -105,14 +105,14 @@ void SpectrumAnalyzer::Analyze(const G4Step* step)
     othersScore += val;
   }
 
-#ifdef DEBUG
+#  ifdef DEBUG
   G4cout << "-->SpectrumAnalyzer::Analyze, scorer name " << scorerName << " " << PDGID << " "
          << step->GetTrack()->GetParticleDefinition()->GetParticleName() << " Total Energy "
          << GetTE(step) << " Momentum " << GetMomentum(step) << " Kinetic Energy " << GetKE(step)
          << G4endl;
-#endif
+#  endif
 }
 
-#endif // ATLHECTB_LEAKANALYSIS
+#endif  // ATLHECTB_LEAKANALYSIS
 
 //**************************************************

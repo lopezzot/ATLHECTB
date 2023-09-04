@@ -13,17 +13,17 @@
 
 #ifdef ATLHECTB_LEAKANALYSIS
 
-#ifndef SpectrumAnalyzer_h
-#  define SpectrumAnalyzer_h
+#  ifndef SpectrumAnalyzer_h
+#    define SpectrumAnalyzer_h
 
 // Includers from Geant4
 //
-#  include "G4Step.hh"
-#  include "G4ThreadLocalSingleton.hh"
+#    include "G4Step.hh"
+#    include "G4ThreadLocalSingleton.hh"
 
 // Includers from C++
 //
-#  include <functional>
+#    include <functional>
 
 class SpectrumAnalyzer
 {
@@ -87,7 +87,7 @@ class SpectrumAnalyzer
     void operator=(SpectrumAnalyzer const&) = delete;
 };
 
-#endif  // SpectrumAnalyzer_h
+#  endif  // SpectrumAnalyzer_h
 #endif  // ATLHECTB_LEAKANALYSIS
 
 //**************************************************
