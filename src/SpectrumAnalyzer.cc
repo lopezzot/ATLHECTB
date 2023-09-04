@@ -6,6 +6,8 @@
 // \start date: 28 August 2023
 //**************************************************
 
+#ifdef ATLHECTB_LEAKANALYSIS
+
 // Includers from project files
 //
 #include "SpectrumAnalyzer.hh"
@@ -106,5 +108,7 @@ void SpectrumAnalyzer::Analyze(const G4Step* step)
          << G4endl;
 #endif
 }
+
+#endif // ATLHECTB_LEAKANALYSIS
 
 //**************************************************
