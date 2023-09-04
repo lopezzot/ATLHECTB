@@ -42,15 +42,19 @@ void SpectrumAnalyzer::CreateNtupleAndScorer(const G4String scName)
   scorerName = scName;
   if (scorerName == "te") {
     scorer = GetTE;
+    G4cout<<"SpectrumAnalyzer scoring total energy"<<G4endl;
   }
   else if (scorerName == "momentum") {
     scorer = GetMomentum;
+    G4cout<<"SpectrumAnalyzer scoring momentum"<<G4endl;
   }
   else if (scorerName == "ke") {
     scorer = GetKE;
+    G4cout<<"SpectrumAnalyzer scoring kinetic energy"<<G4endl;
   }
   else {
     scorer = GetTE;
+    G4cout<<"SpectrumAnalyzer scoring total energy"<<G4endl;
   }  // default case
 }
 
