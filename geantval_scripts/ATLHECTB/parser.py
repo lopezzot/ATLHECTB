@@ -45,15 +45,15 @@ class Test(BaseParser):
         pienergies = [float(x["ENERGY"]) for x in pijobs]
         pifiles = [os.path.join(x["path"], "ATLHECTBout_Run0.root")
                    for x in pijobs]
-        print "Found "+str(len(jobs))+" runs in jobs:"
-        print "--->" + str(len(ectrjobs)) + " jobs with e-, energies (GeV): " + str(ectrenergies) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+        print("Found "+str(len(jobs))+" runs in jobs:")
+        print("--->" + str(len(ectrjobs)) + " jobs with e-, energies (GeV): " + str(ectrenergies) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs])))
         # print "------> files: ", ectrfiles
-        print "--->" + str(len(pijobs)) + " jobs with pi-, energies (GeV): " + str(pienergies) + " ,physlist: " + str(set([x["PHYSLIST"] for x in pijobs]))
+        print("--->" + str(len(pijobs)) + " jobs with pi-, energies (GeV): " + str(pienergies) + " ,physlist: " + str(set([x["PHYSLIST"] for x in pijobs])))
         # print "------> files: ", pifiles
 
         # e- analysis
         #
-        print "Running e- analysis"
+        print("Running e- analysis")
         sampfractions = []
         ersampfractions = []
         resolutions = []
@@ -71,8 +71,8 @@ class Test(BaseParser):
                                     * 100)  # percent value
             sampfractions.append(H1sampfraction.GetMean())
             ersampfractions.append(H1sampfraction.GetMeanError())
-        print "--->e- sampling fraction: " + str(sampfractions) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
-        print "--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+        print("--->e- sampling fraction: " + str(sampfractions) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs])))
+        print("--->e- avg sampling fraction: " + str(np.mean(sampfractions)) + "%" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs])))
         outfile = TFile.Open("OUTe-"+str(ectrjobs[0]["PHYSLIST"])+".root", "RECREATE")
         for energy in eenergies:
             # Find e- job with corresponding energy
@@ -107,9 +107,9 @@ class Test(BaseParser):
             erecenergies.append(recenergy.GetFunction("gaus").GetParameter(1))
             outfile.cd()
             recenergy.Write()
-        print "--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
-        print "--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
-        print "-->e- reconstructed energies: " + str(erecenergies) + ",physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
+        print("--->e- sampling terms in resolution: " + str(resolutions) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs])))
+        print("--->e- avg sampling term in resolution: " + str(np.mean(resolutions)) + " %GeV^{1/2}" + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs])))
+        print("-->e- reconstructed energies: " + str(erecenergies) + ",physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs])))
 
         # This contains e- reconstructed energies or 99% of beam energy
         # if no data are available
@@ -159,7 +159,7 @@ class Test(BaseParser):
 
         # pi- analysis
         #
-        print "Running pi- analysis"
+        print("Running pi- analysis")
         responses = []
         erresponses = []
         resolutions = []
@@ -363,16 +363,16 @@ class Test(BaseParser):
             erL0 = [0.005*x for x in L0]
             ersigmaL0 = [0.005*x for x in sigmaL0]
 
-        print "--->pi- pi/e: " + str(responses) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs]))
-        print "--->pi- avg pi/e: " + str(np.mean(responses))
-        print "--->pi- resolutions: " + str(resolutions) + " %"
-        print "--->pi- avg resolution: " + str(np.mean(resolutions)) + " %"
-        print "--->pi- F1: " + str(F1)
-        print "--->pi- F2: " + str(F2)
-        print "--->pi- F3: " + str(F3)
-        print "--->pi- F4: " + str(F4)
-        print "--->pi- L0 [cm]: " + str(L0)
-        print "--->pi- sigmaL0 [cm]: " + str(sigmaL0)
+        print("--->pi- pi/e: " + str(responses) + " ,physlist: " + str(set([x["PHYSLIST"] for x in ectrjobs])))
+        print("--->pi- avg pi/e: " + str(np.mean(responses)))
+        print("--->pi- resolutions: " + str(resolutions) + " %")
+        print("--->pi- avg resolution: " + str(np.mean(resolutions)) + " %")
+        print("--->pi- F1: " + str(F1))
+        print("--->pi- F2: " + str(F2))
+        print("--->pi- F3: " + str(F3))
+        print("--->pi- F4: " + str(F4))
+        print("--->pi- L0 [cm]: " + str(L0))
+        print("--->pi- sigmaL0 [cm]: " + str(sigmaL0))
 
         # Create JSON output files for pi- energy resolution (graph)
         #
