@@ -76,6 +76,7 @@ The project targets a standalone Geant4 simulation of the ATLAS hadronic end-cap
 [![DOI:10.3390/instruments6030041](https://zenodo.org/badge/DOI/10.3390/instruments6030041.svg)](https://doi.org/10.3390/instruments6030041)
 
 ### Selected presentations
+- 🗣️ CALOR2024 22/5/2024, [**Validating Geant4 against calorimeters beam tests**](https://indico.cern.ch/event/1339557/contributions/5898513/attachments/2860143/5004975/lopezzot_CALOR2024.pdf)
 - 🗣️ CERN EP-SFT Group Meeting 22/4/2024, [**End of Fellowship Report**](https://indico.cern.ch/event/1395384/contributions/5865083/attachments/2841640/4967534/lopezzot_epsft_22_4_2024.pdf)
 - 🗣️ Geant4 Collaboration Meeting 2023 25-29/9/2023, [**Validation of Geant4 physics via calorimeter test-beams in geant-val**](https://indico.cern.ch/event/1307331/contributions/5581219/attachments/2721132/4728358/lopezzot_ValidationCalorimeters_G4CM23.pdf)
 - 🗣️ ATLAS Simulation Group Meeting 5/9/2023 (ATLAS restricted), [**Testing ATLAS calorimeters with Geant4 and FLUKA.CERN**](https://indico.cern.ch/event/1321227/contributions/5565265/attachments/2709186/4704111/lopezzot_ATLASsim_5_9_2023.pdf)
